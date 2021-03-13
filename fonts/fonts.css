@@ -1,0 +1,57 @@
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-regular-pro.woff2");
+  font-stretch: normal;
+  font-weight: 400;
+}
+
+/*@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-medium-pro.woff2");
+  font-stretch: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-semibold-pro.woff2");
+  font-stretch: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-bold-pro.woff2");
+  font-stretch: normal;
+  font-weight: 700;
+}*/
+
+
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-condensed-regular-pro.woff2");
+  font-weight: 400;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-condensed-medium-pro.woff2");
+  font-weight: 500;
+  font-stretch: condensed;
+}
+
+
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-compressed-regular-pro.woff2");
+  font-weight: 400;
+  font-stretch: extra-condensed;
+}
+
+@font-face {
+  font-family: "Pantograph";
+  src: url("./colophon/pantograph-compressed-medium-pro.woff2");
+  font-weight: 500;
+  font-stretch: extra-condensed;
+}
