@@ -97,7 +97,7 @@ const typography = new Typography({
 
       'h2': {
         marginTop: rhythm(1),
-        ...adjustFontSizeTo(rhythm(2.25))
+        ...adjustFontSizeTo(rhythm(2.66))
       },
       
       'h3': {

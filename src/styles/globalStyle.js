@@ -29,6 +29,13 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
+  hr {
+    margin: ${rhythm(3)} 0;
+    height: 4px;
+    border-radius: 2px;
+    background: ${props => props.theme.bg4} 
+  }
+
   [class*=card] {
    .gatsby-image-wrapper [data-main-image] {
       border-radius: 6px 6px 0 0;
@@ -39,8 +46,14 @@ const GlobalStyle = createGlobalStyle`
       border-radius: 0 !important;
   }
 
-  .gatsby-image-wrapper:not(:last-of-type) {
-    // margin-bottom: ${rhythm(1)}
+  figure .gatsby-image-wrapper:not(:last-of-type) {
+    margin-bottom: ${rhythm(1)}
+  }
+
+  @keyframes rotate {
+    to {
+      transform rotate(360deg)
+    }
   }
 `
 
