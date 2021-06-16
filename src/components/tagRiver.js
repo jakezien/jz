@@ -3,7 +3,8 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { chunkArray } from "../utils/functions"
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated, to } from 'react-spring'
+import { useDrag } from 'react-use-gesture'
 import Tag from "./tag"
 
 const StyledDiv = styled.div`
@@ -16,6 +17,8 @@ const StyledUl = styled(animated.ul)`
   white-space: nowrap;
   position: absolute;
   backface-visibility: hidden;
+  user-select: none;
+  cursor: grab;
 `
 
 const StyledLi = styled.li`
@@ -37,6 +40,7 @@ const SpacerUl = styled.ul`
 const TagRiver = (props) => {
 
   const [paused, setPaused] = useState(false)
+  const [pxPerPct, setPxPerPct] = useState()
 
   const pauseAnimation = () => {
     setPaused(true)
@@ -54,6 +58,8 @@ const TagRiver = (props) => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    setPxPerPct(window.innerWidth/100)
+
     let mediaQuery = window.matchMedia('(prefers-reduced-motion)')
     mediaQuery.addEventListener('change', handleReducedMotionChange);
     
@@ -62,7 +68,6 @@ const TagRiver = (props) => {
       mediaQuery.removeEventListener('change', handleReducedMotionChange)
     };
   });
-
 
   const springProps = useSpring({
     config: { duration: 120000 },
@@ -80,36 +85,55 @@ const TagRiver = (props) => {
     pause: paused 
   })
   
+  // const [{translateX}, api] = useSpring(() => ({
+  //   config: { duration: 120000 },
+  //   from: '0%',
+  //   translateX:'-50%',
+  //   loop:true
+  // }))
 
+  const [{l, r}, api] = useSpring(() => ({
+    config: { duration: 12000 },
+    from: {l:-50, r:0},
+    to:   {l:0, r:-50},
+    loop: true
+  }))
 
-
-
+  const bind = useDrag(({active, movement: [mx, my]}) => {console.log(mx, pxPerPct);api.start({
+      l: active ? -1 * mx/pxPerPct : 0,
+      r: active ?  mx/pxPerPct : -50,
+      immediate: true,
+    })})
 
   const {children} = props;
   let childrenArray = React.Children.toArray(children)
-
   if (!childrenArray.length) {
     console.log('nokids')
     return null;
   }
-
   childrenArray = React.Children.toArray(childrenArray[0].props.children)
-
   let chunkedItems = chunkArray(childrenArray, Math.ceil(childrenArray.length/4));
 
   return (
     <StyledDiv>
-      {chunkedItems.map((list, listIndex) => {return(
+      {chunkedItems.map((list, listIndex) => {
+      return(
         <div key={listIndex}>
-        <StyledUl style={listIndex%2 ? reverseSpringProps : springProps}>
-          {list.map((item, itemIndex) => {return(
-            <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-          )})}
-          {list.map((item, itemIndex) => {return(
-            <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-          )})}
-        </StyledUl>
-        <SpacerUl aria-hidden="true"><StyledLi><Tag>&nbsp</Tag></StyledLi></SpacerUl>
+          <StyledUl {...bind()} style={{
+
+            transform: to([l,r, listIndex], (l,r,i) => {
+              return i%2 ? `translateX(${l}%)` : `translateX(${r}%)`
+            })
+
+          }}> 
+            {list.map((item, itemIndex) => {return(
+              <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+            )})}
+            {list.map((item, itemIndex) => {return(
+              <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+            )})}
+          </StyledUl>
+          <SpacerUl aria-hidden="true"><StyledLi><Tag>&nbsp</Tag></StyledLi></SpacerUl>
         </div>
       )})}
     </StyledDiv>
