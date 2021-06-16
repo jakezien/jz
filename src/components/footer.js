@@ -30,7 +30,7 @@ const StyledDiv = styled.div`
 `
 
 const Footer = () => {
-  const mailto = () => {if (window) window.location.href='mailto:jakezien@hey.com?subject=Hello%20from%20your%20website'}
+  const mailto = () => {if (window) window.location.href='mailto:jz@jakezien.net?subject=Hello%20from%20your%20website'}
 
   return (
     <StyledFooter className="yellowBg">
