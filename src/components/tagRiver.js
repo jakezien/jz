@@ -55,10 +55,23 @@ const TagRiver = (props) => {
     else resumeAnimation()
   }
 
+  const handleWindowResize = () => {
+    console.log('devicePixelRatio', devicePixelRatio)
+    setPxPerPct(window.innerWidth/(100 / window.devicePixelRatio))
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.addEventListener('resize', handleWindowResize)
+    handleWindowResize();
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  })
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    setPxPerPct(window.innerWidth/100)
 
     let mediaQuery = window.matchMedia('(prefers-reduced-motion)')
     mediaQuery.addEventListener('change', handleReducedMotionChange);
@@ -93,17 +106,33 @@ const TagRiver = (props) => {
   // }))
 
   const [{l, r}, api] = useSpring(() => ({
-    config: { duration: 12000 },
-    from: {l:-50, r:0},
-    to:   {l:0, r:-50},
+    config: { duration: 120000 },
+    from: {l:0, r:-50},
+    to:   {l:-50, r:0},
     loop: true
   }))
 
-  const bind = useDrag(({active, movement: [mx, my]}) => {console.log(mx, pxPerPct);api.start({
-      l: active ? -1 * mx/pxPerPct : 0,
-      r: active ?  mx/pxPerPct : -50,
+  const bind = useDrag(state => {
+    const {active, memo, movement: [mx]} = state;
+    console.log(mx, pxPerPct, mx/pxPerPct, memo);
+    api.start({
+      // pause: true,
+      l: active ? -1 * mx/pxPerPct : l.get(),
+      r: active ? mx/pxPerPct : r.get(),
+      immediate: true
+    })
+    return {l, r};
+  })
+
+  const reverseBind = useDrag(({active, movement: [mx]}) => {
+    console.log(mx, pxPerPct, mx/pxPerPct);
+    api.start({
+      l: active ? mx/pxPerPct : -50,
+      r: active ? -1 * mx/pxPerPct : 0,
       immediate: true,
-    })})
+    })
+  })
+
 
   const {children} = props;
   let childrenArray = React.Children.toArray(children)
@@ -119,20 +148,35 @@ const TagRiver = (props) => {
       {chunkedItems.map((list, listIndex) => {
       return(
         <div key={listIndex}>
-          <StyledUl {...bind()} style={{
-
-            transform: to([l,r, listIndex], (l,r,i) => {
-              return i%2 ? `translateX(${l}%)` : `translateX(${r}%)`
-            })
-
-          }}> 
-            {list.map((item, itemIndex) => {return(
-              <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-            )})}
-            {list.map((item, itemIndex) => {return(
-              <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-            )})}
-          </StyledUl>
+          {listIndex%2 
+          ?
+            <StyledUl {...bind()} style={{
+              transform: to([r], (r) => {
+                return `translateX(${r}%)`
+              }),
+              background: 'red'
+            }}> 
+              {list.map((item, itemIndex) => {return(
+                <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+              )})}
+              {list.map((item, itemIndex) => {return(
+                <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+              )})}
+            </StyledUl> 
+          :
+            <StyledUl {...reverseBind()} style={{
+              transform: to([l], (l) => {
+                return `translateX(${l}%)`
+              })
+            }}> 
+              {list.map((item, itemIndex) => {return(
+                <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+              )})}
+              {list.map((item, itemIndex) => {return(
+                <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+              )})}
+            </StyledUl> 
+          }
           <SpacerUl aria-hidden="true"><StyledLi><Tag>&nbsp</Tag></StyledLi></SpacerUl>
         </div>
       )})}
