@@ -3,8 +3,8 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { chunkArray } from "../utils/functions"
-import { useSpring, animated, to } from 'react-spring'
-import { useDrag, useGesture } from 'react-use-gesture'
+import { motion } from 'framer-motion'
+
 import Tag from "./tag"
 
 const StyledDiv = styled.div`
@@ -12,7 +12,7 @@ const StyledDiv = styled.div`
   position: relative;
 `
 
-const StyledUl = styled(animated.ul)`
+const StyledUl = styled(motion.ul)`
   margin: 0;
   white-space: nowrap;
   position: absolute;
@@ -57,7 +57,7 @@ const TagRiver = (props) => {
 
   const handleWindowResize = () => {
     console.log('devicePixelRatio', devicePixelRatio)
-    setPxPerPct(window.innerWidth/4)
+    setPxPerPct(window.innerWidth/100)
   }
 
   useEffect(() => {
@@ -84,72 +84,8 @@ const TagRiver = (props) => {
 
 
 
-// ————————————————— sprangs and animation ————————————————— //
-  // const springProps = useSpring({
-  //   config: { duration: 120000 },
-  //   from: {transform:'translate3d(0%,0,0)'},
-  //   to: {transform:'translate3d(-50%,0,0)'},
-  //   loop: true,
-  //   pause: paused 
-  // })
+// ————————————————— animation ————————————————— //
 
-  // const reverseSpringProps = useSpring({
-  //   config: { duration: 120000 },
-  //   from: {transform:'translate3d(-50%,0,0)'},
-  //   to: {transform:'translate3d(0%,0,0)'},
-  //   loop: true,
-  //   pause: paused 
-  // })
-  
-  // const [{translateX}, api] = useSpring(() => ({
-  //   config: { duration: 120000 },
-  //   from: '0%',
-  //   translateX:'-50%',
-  //   loop:true
-  // }))
-
-  const [{l, r}, api] = useSpring(() => ({
-    config: { duration: 120000 },
-    from: {l:0, r:-50},
-    to: {l:-50, r:0},
-    loop: true
-  }))
-
-  const bind = useGesture({  
-    onDragStart: state => {
-      console.log('start', l.get(), r.get())
-      api.start({
-        pause: true,
-        config: {duration:undefined},
-        immediate: true
-      })
-    },
-    onDrag: state => {
-        const {args, active, memo, movement: [mx]} = state;
-        // console.log(l.get(), r.get(), mx, mx/pxPerPct);
-        // console.log('memo', memo)
-        let offset = mx/pxPerPct
-        // console.log('offset', offset, 'mx', mx)
-        api.start({
-          pause: false,
-          l: (typeof memo === undefined ? 0 : l.get()) + -1 * offset * args[0],
-          r: (typeof memo === undefined ? 0 : r.get()) + offset * args[0],
-          immediate: true
-        })
-        console.log('args', args, 'l:', l.get(), 'r:', r.get(), 'mx:', mx, 'offset:', offset)
-        return true
-      },
-    onDragEnd: state => {
-      console.log('end', l.get(), r.get())
-      api.start({
-        config: {duration:120000},
-        from: {l:l.get(), r:r.get()},
-        to: {l:-50, r:0},
-        loop: true,
-        immediate: false
-      })
-    }
-  })
 
 
 // ————————————————— chunk up them tags ————————————————— //
@@ -172,23 +108,29 @@ const TagRiver = (props) => {
         <div key={listIndex}>
           {listIndex%2 
           ?
-            <StyledUl {...bind(1)} style={{
-              transform: r.to((r) => {
-                return `translateX(${r}%)`
-              })
-            }}> 
-              {list.map((item, itemIndex) => {return(
-                <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-              )})}
-              {list.map((item, itemIndex) => {return(
-                <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-              )})}
+            <StyledUl
+              initial={{ x: "-50%" }}  
+              animate={{ x: "0%" }}
+              transition={{ type:"tween", duration:"10", ease:"linear" }}
+              style={{background:'red', padding:'4px'}}
+            > 
+              <motion.div              
+                drag="x"
+                style={{background:'blue'}}
+                onDrag={
+                  (event, info) => console.log(info)
+                }>
+                  {list.map((item, itemIndex) => {return(
+                    <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+                  )})}
+                  {list.map((item, itemIndex) => {return(
+                    <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
+                  )})}
+              </motion.div>
             </StyledUl> 
           :
-            <StyledUl {...bind(-1)} style={{
-              transform: l.to((l) => {
-                return `translateX(${l}%)`
-              })
+            <StyledUl  style={{
+              
             }}> 
               {list.map((item, itemIndex) => {return(
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
