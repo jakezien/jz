@@ -111,7 +111,7 @@ const TagRiver = (props) => {
             <StyledUl
               initial={{ x: "-50%" }}  
               animate={{ x: "0%" }}
-              transition={{ type:"tween", duration:"10", ease:"linear" }}
+              transition={{ type:"tween", duration:"120", ease:"linear" }}
               style={{background:'red', padding:'4px'}}
             > 
               <motion.div              
