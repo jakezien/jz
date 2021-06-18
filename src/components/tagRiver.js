@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { chunkArray } from "../utils/functions"
 import { useSpring, animated, to } from 'react-spring'
-import { useDrag } from 'react-use-gesture'
+import { useDrag, useGesture } from 'react-use-gesture'
 import Tag from "./tag"
 
 const StyledDiv = styled.div`
@@ -57,7 +57,7 @@ const TagRiver = (props) => {
 
   const handleWindowResize = () => {
     console.log('devicePixelRatio', devicePixelRatio)
-    setPxPerPct(window.innerWidth/(100 / window.devicePixelRatio))
+    setPxPerPct(window.innerWidth/4)
   }
 
   useEffect(() => {
@@ -72,7 +72,6 @@ const TagRiver = (props) => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-
     let mediaQuery = window.matchMedia('(prefers-reduced-motion)')
     mediaQuery.addEventListener('change', handleReducedMotionChange);
     
@@ -82,21 +81,25 @@ const TagRiver = (props) => {
     };
   });
 
-  const springProps = useSpring({
-    config: { duration: 120000 },
-    from: {transform:'translate3d(0%,0,0)'},
-    to: {transform:'translate3d(-50%,0,0)'},
-    loop: true,
-    pause: paused 
-  })
 
-  const reverseSpringProps = useSpring({
-    config: { duration: 120000 },
-    from: {transform:'translate3d(-50%,0,0)'},
-    to: {transform:'translate3d(0%,0,0)'},
-    loop: true,
-    pause: paused 
-  })
+
+
+// ————————————————— sprangs and animation ————————————————— //
+  // const springProps = useSpring({
+  //   config: { duration: 120000 },
+  //   from: {transform:'translate3d(0%,0,0)'},
+  //   to: {transform:'translate3d(-50%,0,0)'},
+  //   loop: true,
+  //   pause: paused 
+  // })
+
+  // const reverseSpringProps = useSpring({
+  //   config: { duration: 120000 },
+  //   from: {transform:'translate3d(-50%,0,0)'},
+  //   to: {transform:'translate3d(0%,0,0)'},
+  //   loop: true,
+  //   pause: paused 
+  // })
   
   // const [{translateX}, api] = useSpring(() => ({
   //   config: { duration: 120000 },
@@ -108,32 +111,48 @@ const TagRiver = (props) => {
   const [{l, r}, api] = useSpring(() => ({
     config: { duration: 120000 },
     from: {l:0, r:-50},
-    to:   {l:-50, r:0},
+    to: {l:-50, r:0},
     loop: true
   }))
 
-  const bind = useDrag(state => {
-    const {active, memo, movement: [mx]} = state;
-    console.log(mx, pxPerPct, mx/pxPerPct, memo);
-    api.start({
-      // pause: true,
-      l: active ? -1 * mx/pxPerPct : l.get(),
-      r: active ? mx/pxPerPct : r.get(),
-      immediate: true
-    })
-    return {l, r};
+  const bind = useGesture({  
+    onDragStart: state => {
+      console.log('start', l.get(), r.get())
+      api.start({
+        pause: true,
+        config: {duration:undefined},
+        immediate: true
+      })
+    },
+    onDrag: state => {
+        const {args, active, memo, movement: [mx]} = state;
+        // console.log(l.get(), r.get(), mx, mx/pxPerPct);
+        // console.log('memo', memo)
+        let offset = mx/pxPerPct
+        // console.log('offset', offset, 'mx', mx)
+        api.start({
+          pause: false,
+          l: (typeof memo === undefined ? 0 : l.get()) + -1 * offset * args[0],
+          r: (typeof memo === undefined ? 0 : r.get()) + offset * args[0],
+          immediate: true
+        })
+        console.log('args', args, 'l:', l.get(), 'r:', r.get(), 'mx:', mx, 'offset:', offset)
+        return true
+      },
+    onDragEnd: state => {
+      console.log('end', l.get(), r.get())
+      api.start({
+        config: {duration:120000},
+        from: {l:l.get(), r:r.get()},
+        to: {l:-50, r:0},
+        loop: true,
+        immediate: false
+      })
+    }
   })
 
-  const reverseBind = useDrag(({active, movement: [mx]}) => {
-    console.log(mx, pxPerPct, mx/pxPerPct);
-    api.start({
-      l: active ? mx/pxPerPct : -50,
-      r: active ? -1 * mx/pxPerPct : 0,
-      immediate: true,
-    })
-  })
 
-
+// ————————————————— chunk up them tags ————————————————— //
   const {children} = props;
   let childrenArray = React.Children.toArray(children)
   if (!childrenArray.length) {
@@ -143,6 +162,9 @@ const TagRiver = (props) => {
   childrenArray = React.Children.toArray(childrenArray[0].props.children)
   let chunkedItems = chunkArray(childrenArray, Math.ceil(childrenArray.length/4));
 
+
+
+// ————————————————— render ————————————————— //
   return (
     <StyledDiv>
       {chunkedItems.map((list, listIndex) => {
@@ -150,11 +172,10 @@ const TagRiver = (props) => {
         <div key={listIndex}>
           {listIndex%2 
           ?
-            <StyledUl {...bind()} style={{
-              transform: to([r], (r) => {
+            <StyledUl {...bind(1)} style={{
+              transform: r.to((r) => {
                 return `translateX(${r}%)`
-              }),
-              background: 'red'
+              })
             }}> 
               {list.map((item, itemIndex) => {return(
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
@@ -164,8 +185,8 @@ const TagRiver = (props) => {
               )})}
             </StyledUl> 
           :
-            <StyledUl {...reverseBind()} style={{
-              transform: to([l], (l) => {
+            <StyledUl {...bind(-1)} style={{
+              transform: l.to((l) => {
                 return `translateX(${l}%)`
               })
             }}> 
