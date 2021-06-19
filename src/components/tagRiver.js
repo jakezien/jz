@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useLayoutEffect, useState, useRef, createRef} from "react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { chunkArray } from "../utils/functions"
-import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useTransform, useAnimation } from 'framer-motion'
 
 import Tag from "./tag"
 
@@ -41,6 +41,8 @@ const TagRiver = (props) => {
 
   const [paused, setPaused] = useState(false)
   const [pxPerPct, setPxPerPct] = useState()
+  const refs = useRef([createRef(), createRef(), createRef(), createRef()])
+  const [rowWidths, setRowWidths] = useState([])
 
   const pauseAnimation = () => {
     setPaused(true)
@@ -85,6 +87,55 @@ const TagRiver = (props) => {
 
 
 // ————————————————— animation ————————————————— //
+  
+  // measure the width of the river rows
+  useLayoutEffect(() => {
+    let widths = [];
+    for (let i in refs.current) {
+      widths[i] =  refs.current[i].current.offsetWidth
+    }
+    console.log('widths', widths)
+    setRowWidths(widths)
+  }, [refs.current])
+
+  // create animations
+  const controls = useAnimation()
+
+  useEffect(() => {
+    if (typeof rowWidths[0] === undefined) return;
+
+    controls.set( i => {
+      let offset = rowWidths[i]/2
+      let negOffset = -1 * offset
+      console.log('SET', i, i%2, offset, negOffset)
+      return i%2 
+      ? ({
+          x: 0,
+        }) 
+      : ({
+          x: negOffset,
+        })
+    })
+    
+
+    controls.start( i => {
+      let offset = rowWidths[i]/2
+      let negOffset = -1 * offset
+      console.log(i, i%2, offset, negOffset)
+      return i%2 
+      ? ({
+          initial: 0,
+          x: negOffset,
+          transition:{ type:"tween", duration:"120", ease:"linear", repeat:Infinity }
+        }) 
+      : ({
+          initial: negOffset,
+          x: 0,
+          transition:{ type:"tween", duration:"120", ease:"linear", repeat:Infinity }
+        })
+    })
+  }, [rowWidths])
+
 
 
 // ————————————————— chunk up them tags ————————————————— //
@@ -102,20 +153,10 @@ const TagRiver = (props) => {
 // ————————————————— render ————————————————— //
   return (
     <StyledDiv>
-      {chunkedItems.map((list, listIndex) => {
+      {chunkedItems.map((list, i) => {
       return(
-        <div key={listIndex}>
-            <StyledUl
-              initial={{ x: -50 }}  
-              animate={{ x: 0 }}
-              transition={{ type:"tween", duration:"120", ease:"linear" }}
-              // style={{x:0}}
-              // drag="x"
-              // transformTemplate={({ x }) => `translateX(${parseFloat(x)/pxPerPct}%)`}
-              onDrag={
-                (event, info) => console.log(event, info)  
-              }
-            > 
+        <div key={i}>
+            <StyledUl custom={i} ref={refs.current[i]} animate={controls} drag="x"> 
               {list.map((item, itemIndex) => {return(
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
               )})}
