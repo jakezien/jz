@@ -3,7 +3,7 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { chunkArray } from "../utils/functions"
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
 
 import Tag from "./tag"
 
@@ -57,7 +57,7 @@ const TagRiver = (props) => {
 
   const handleWindowResize = () => {
     console.log('devicePixelRatio', devicePixelRatio)
-    setPxPerPct(window.innerWidth/100)
+    setPxPerPct(window.innerWidth/100 * devicePixelRatio * devicePixelRatio)
   }
 
   useEffect(() => {
@@ -87,7 +87,6 @@ const TagRiver = (props) => {
 // ————————————————— animation ————————————————— //
 
 
-
 // ————————————————— chunk up them tags ————————————————— //
   const {children} = props;
   let childrenArray = React.Children.toArray(children)
@@ -106,32 +105,17 @@ const TagRiver = (props) => {
       {chunkedItems.map((list, listIndex) => {
       return(
         <div key={listIndex}>
-          {listIndex%2 
-          ?
             <StyledUl
-              initial={{ x: "-50%" }}  
-              animate={{ x: "0%" }}
+              initial={{ x: -50 }}  
+              animate={{ x: 0 }}
               transition={{ type:"tween", duration:"120", ease:"linear" }}
-              style={{background:'red', padding:'4px'}}
+              // style={{x:0}}
+              // drag="x"
+              // transformTemplate={({ x }) => `translateX(${parseFloat(x)/pxPerPct}%)`}
+              onDrag={
+                (event, info) => console.log(event, info)  
+              }
             > 
-              <motion.div              
-                drag="x"
-                style={{background:'blue'}}
-                onDrag={
-                  (event, info) => console.log(info)
-                }>
-                  {list.map((item, itemIndex) => {return(
-                    <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-                  )})}
-                  {list.map((item, itemIndex) => {return(
-                    <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
-                  )})}
-              </motion.div>
-            </StyledUl> 
-          :
-            <StyledUl  style={{
-              
-            }}> 
               {list.map((item, itemIndex) => {return(
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
               )})}
@@ -139,7 +123,6 @@ const TagRiver = (props) => {
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
               )})}
             </StyledUl> 
-          }
           <SpacerUl aria-hidden="true"><StyledLi><Tag>&nbsp</Tag></StyledLi></SpacerUl>
         </div>
       )})}
