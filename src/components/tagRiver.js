@@ -100,37 +100,38 @@ const TagRiver = (props) => {
 
   // create animations
   const controls = useAnimation()
+  const mVals = [useMotionValue(0),useMotionValue(0),useMotionValue(0),useMotionValue(0)]
 
   useEffect(() => {
-    if (typeof rowWidths[0] === undefined) return;
+    if (typeof rowWidths[3] === undefined) return;
 
     controls.set( i => {
-      let offset = rowWidths[i]/2
-      let negOffset = -1 * offset
-      console.log('SET', i, i%2, offset, negOffset)
-      return i%2 
-      ? ({
-          x: 0,
-        }) 
-      : ({
-          x: negOffset,
-        })
+      console.log(rowWidths[i])
+      if (rowWidths[i] === undefined) return;
+
+      let negOffset = -1 * rowWidths[i]/2
+      console.log('SET', i, i%2, mVals[i].current)
+
+      if (i%2) mVals[i].set(negOffset)
+      console.log('SET', i, i%2, mVals[i].current)
+
+      return ({ x: mVals[i].current }) 
     })
     
 
     controls.start( i => {
       let offset = rowWidths[i]/2
       let negOffset = -1 * offset
-      console.log(i, i%2, offset, negOffset)
+      // console.log(i, i%2, offset, negOffset)
       return i%2 
       ? ({
-          initial: 0,
-          x: negOffset,
+          initial: negOffset,
+          x: 0,
           transition:{ type:"tween", duration:"120", ease:"linear", repeat:Infinity }
         }) 
       : ({
-          initial: negOffset,
-          x: 0,
+          initial: 0,
+          x: negOffset,
           transition:{ type:"tween", duration:"120", ease:"linear", repeat:Infinity }
         })
     })
@@ -156,7 +157,14 @@ const TagRiver = (props) => {
       {chunkedItems.map((list, i) => {
       return(
         <div key={i}>
-            <StyledUl custom={i} ref={refs.current[i]} animate={controls} drag="x"> 
+            <StyledUl 
+              custom={i} 
+              ref={refs.current[i]} 
+              animate={controls} 
+              drag="x"
+              style={{x:mVals[i]}}
+              onDrag={() => console.log(mVals[i].current)}
+            > 
               {list.map((item, itemIndex) => {return(
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
               )})}
