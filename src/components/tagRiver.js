@@ -3,8 +3,7 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { chunkArray } from "../utils/functions"
-import { motion, useMotionValue, useTransform, useAnimation, animate
- } from 'framer-motion'
+import { motion, useMotionValue, useTransform, useAnimation, animate, transform } from 'framer-motion'
 
 import Tag from "./tag"
 
@@ -44,6 +43,7 @@ const TagRiver = (props) => {
   const [pxPerPct, setPxPerPct] = useState()
   const refs = useRef([createRef(), createRef(), createRef(), createRef()])
   const [rowWidths, setRowWidths] = useState([])
+  const [rowOffsets, setRowOffsets] = useState([])
 
   const pauseAnimation = () => {
     setPaused(true)
@@ -94,12 +94,15 @@ const TagRiver = (props) => {
 
   // measure the width of the river rows
   useLayoutEffect(() => {
-    let widths = [];
+    let widths = []
+    let offsets = []
     for (let i in refs.current) {
       widths[i] =  refs.current[i].current.offsetWidth
+      offsets[i] = widths[i]/2
     }
-    console.log('widths', widths)
+    console.log('widths', widths, 'offsets', offsets)
     setRowWidths(widths)
+    setRowOffsets(offsets)
   }, [refs.current])
 
 
@@ -116,32 +119,38 @@ const TagRiver = (props) => {
 
   const timeline = useMotionValue(0);
   const xVals = [0,0,0,0];
+  let animationControls;
   console.log('widths', rowWidths)
 
   // ------- subscribe to timeline changes -------
-  useEffect(() => {
-    const unsubscribe = timeline.onChange((v) => console.log('timeline changed', v)) 
-    return () => {
-      unsubscribe()
-    }
-  })
+  // useEffect(() => {
+  //   const unsubscribe = timeline.onChange((v) => console.log('timeline changed', v)) 
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // })
 
   const setXVals = () => {
     for (let i=0; i<4; i++) {
-      let offset = rowWidths[i]/2
-      xVals[i] = useTransform(timeline, [0,1], [0, offset])
+      xVals[i] = useTransform(timeline, [0,1], [0, rowOffsets[i]])
     }
-
-    console.log('xVals', xVals)
   }
 
   const startTimeline = () => {
-    animate(timeline, 1, { type:"tween", duration:120, ease:"linear", repeat:Infinity })
+    return animate(timeline, 1, { type:"tween", duration:120, ease:"linear", repeat:Infinity })
   }
   
   if (typeof rowWidths[3] !== undefined) {
     setXVals();
-    startTimeline();
+    animationControls = startTimeline();
+  }
+
+  const setTimelineFromX = (i) => {
+    let x = xVals[i].current;
+    let rowOffset = rowOffsets[i]
+    let timelineVal = transform(x, [0, rowOffsets[i]], [0,1], {clamp:false})
+    console.log('x', x, 'rowOffset', rowOffset, 'timelineVal', timelineVal)
+    timeline.set(timelineVal)
   }
 
   // useEffect(() => {
@@ -230,7 +239,10 @@ const TagRiver = (props) => {
               ref={refs.current[i]} 
               drag="x"
               style={{x:xVals[i]}}
-              onDrag={() => console.log(xVals[i].current)}
+              onDrag={() => {
+                animationControls.stop()
+                setTimelineFromX(i)
+              }}
             > 
               {list.map((item, itemIndex) => {return(
                 <StyledLi key={itemIndex}><Tag>{item.props.children}</Tag></StyledLi>
