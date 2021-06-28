@@ -1,11 +1,11 @@
 ## The problem
-HEY's Set Aside box is handy for emails you need to keep around for later. They're not filed away in a folder you'll never remember to go back to; they stay in your headspace, but without cluttering your Imbox. But when you have a lot of stuff set aside, that pile on the corner of your desk *becomes* clutter — and finding something in it becomes digging. That's not "The HEY Way".
+HEY's Set Aside box is handy for emails you need to keep around for later. They're not filed away in a folder you'll never remember to go back to; they stay in your headspace, but without cluttering your Imbox. But when you have a lot of stuff set aside, that pile on the corner of your desk *becomes* clutter — and finding something in it becomes digging. That's not "The HEY Way".
 
-The prompt for this project described today's Set Aside board as a "junk drawer," which is apt. A junk drawer develops when a well-intentioned catchall becomes overgrown. And catchalls always tend to get weedy, because they strip their contents of context. This is the core problem that keeps Set Aside from fulfilling its potential, and why it can still feel like more of a workaround than a workflow. To uproot the problem, we must introduce ways to keep context alive within Set Aside.
+The prompt for this project described today's Set Aside board as a "junk drawer," which is apt. A junk drawer develops when a well-intentioned catchall becomes overgrown. But catchalls always tend to get weedy, because they strip their contents of context. This is the core problem that keeps Set Aside from fulfilling its potential, and why it can still feel like more of a workaround than a workflow. To uproot the problem, we must introduce ways to keep context alive within Set Aside.
 
 ## Being purposeful
 
-There's always a purpose for setting an email aside (or marking it unread, or flagging it, etc.). It's usually more important than the email itself. But software doesn't capture that context, so we store the purpose in our heads, and keep the emails around as strings around our fingers, keys to that mental index. When we look at them all, we feel the mental load of iterating over that index, jumping between contexts, pulling up the status of each item. Our software acts as a gigantic keyring, making us the custodians of all the unfinished business.
+There's always a purpose for setting an email aside (or marking it unread, or flagging it, etc.). It's usually more important than the email itself. But software doesn't capture that context, so we store the purpose in our heads, and hang on to the emails as strings around our fingers, keys to that mental index. When we look at them all, we feel the mental load of iterating over that index, jumping between contexts, pulling up the status of each item. Our software acts as a gigantic keyring, making us the custodians of all the unfinished business.
 
 ## HEY is halfway there
 
@@ -44,15 +44,21 @@ I went back to my list of ideas and tried the next one, time-based sections: *No
 
 In the bulk selection popup, and in the action bar at the bottom of `/topic/<id>` , we add a little "more" arrow to the Set Aside button. Just like the Yes button in The Screener, you can still just click Set Aside and be done.
 
-^^[image]: set aside buttons^^
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'sa-buttons', true)} alt="Sketch of the set aside buttons with their new arrows." />
+  <figcaption>Buttons that set things aside now have little "more options" arrows.</figcaption>
+</figure>
 
 But if you click the little arrow, you get a new popup that lets you be a little more specific:
 
-^^[image]: set aside popup^^
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'sa-popup', true)} alt="Sketch of the set aside popup menu." />
+  <figcaption>Just like The Screener's "Yes" button, clicking the arrow reveals a popup with more options.</figcaption>
+</figure>
 
 When you pick one of these options, the topic moves to the corresponding section of Set Aside. And just like clicking on today's Set Aside button, if you're in bulk selection, it ends; if you're on a topic, we take you back to the Imbox.
 
-On the keyboard, `A` still sets a message aside, but `shift-A` opens the popup, and then you can arrow-key `up` and `down` and make your choice with `return`.
+On the keyboard, `A` still sets a message aside, but `shift-A` opens the popup, and then you can arrow-key `↑` and `↓` and make your choice with `return`.
 
 
 ### The Set Aside board
@@ -61,30 +67,53 @@ In the Set Aside board, the section on top — just plain "Set Aside" — is whe
 
 But below that section, we now have four new sections, each with a divider and an icon: For Now, For Soon, For Later, and For Whenever. These are sorted like the section on top, most recently set aside first. Simple.
 
-^^[image: set aside sections]^^
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'sa-ui-desktop', true)} alt="Sketch of the set aside board with new sections." />
+  <figcaption>After a few more complex iterations, this vertical scroll of sections seemed the most straightforward.</figcaption>
+</figure>
 
 You can move topics between sections on the board by selecting them as above. Nice to have: drag and drop to move them, on devices with mice and on tablets. This opens the door to dragging cards around *within* sections for custom sorting, but that feels out of scope for this project.
 
 This might encourage people to set more stuff aside than before, so on small screens, we introduce a bit of navigation to jump-scroll down the page to the start of each section.
 
-^^[image: set aside subnav]^^
+<figure class="shadow">
+	<div className="two-up">
+	      <GatsbyImage image={imageByName(props, 'mobile-nav-0', true)} alt='Sketch of the "jump to section" navigation in the Set Aside board on small screens, as a horizontal bar at the bottom of the screen.' />
+	      <GatsbyImage image={imageByName(props, 'mobile-nav-1', true)} alt='Sketch of the "jump to section" navigation in the Set Aside board on small screens, as a vertical bar on the right of the screen.' />
+	</div>
+  <figcaption>Two options for "Jump-scroll to section" navigation on small screens. The horizontal one might feel too much like an action bar, so I kinda prefer the vertical one.</figcaption>
+</figure>
 
 The email preview cards have a few enhancements.
 - Notes to self are rendered with the blue gradient styling we see in the Imbox and `/topic/id` , so they're easier to distinguish from topics you've replied to. Notes to self add helpful context about what to do next on a thread, so it's important to see them in Set Aside.
 - For the same reason, Stickies are no longer just for the Imbox; they show up here, too, so you can remember why you set that message aside.
 - And to encourage people to take advantage of this, email cards also get a new affordance for adding a sticky without having to bulk select. Hopefully this isn't too much visual clutter; maybe on desktop this only appears on hover, though that might be weird too.
 
-^^[image: email card features]^^
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'card-features', true)} alt="Sketch of new features on email preview cards." />
+  <figcaption>Email preview cards show Notes to Self, Stickies, and include a new button to prompt you to add a sticky.</figcaption>
+</figure>
 
 Finally, at the top of the Set Aside board, there's a new "Filter by Label" button. This takes better advantage of another existing layer of context, so you can do things like quickly surface all the "Travel" emails you've set aside.
 
-^^[image: filter by label]^^
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'filter-0', true)} alt="Sketch of the new Filter by Label button on the Set Aside board." />
+  <figcaption>A new "Filter by Label" button lives in the upper right corner of the set aside board.</figcaption>
+</figure>
 
 When you click the button, you get the same popup that you see when assigning a label, but without the "+ New" field.
 
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'filter-popup', true)} alt="Sketch of the new Filter by Label popup menu." />
+  <figcaption>This is the same popup menu we see when assigning a Label, but without the "+ New" field.</figcaption>
+</figure>
+
 When you select a label, the popup goes away, the email list gets filtered, and the button text changes to say "Filtering by <label_name>" with a big X for clearing the filter. Clicking anywhere on the button clears the filter, so you have to clear the current filter before you can select a new one. And you can only filter by one label at a time.
 
-^^[image: clear filter]^^
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'filter-active', true)} alt="Sketch of the Set Aside board's state when a filter is active." />
+  <figcaption>When a filter is active, the button turns into a "Clear Filter" button, labeled with the active filter's name.</figcaption>
+</figure>
 
 Maybe this button `position:sticky` to the top as you scroll down the page.
 
@@ -95,6 +124,11 @@ Filtering doesn't persist between visits to Set Aside, so you can't get stuck in
 Nothing changes about the Imbox tray. It still just lists all your Set Asides, from all sections, in order.
 
 Nice to have: emails that are set aside to a particular section display that section's icon on their tray card. Emails that are just "plain" set aside don't get this special treatment.
+
+<figure class="shadow">
+  <GatsbyImage image={imageByName(props, 'imbox-tray', true)} alt="Sketch of Set Aside section icons in the Imbox tray's cards." />
+  <figcaption>This is a nice-to-have, but it is pretty nice — and the native apps already show the pin icon on these cards.</figcaption>
+</figure>
 
 ## Why I like this idea
 

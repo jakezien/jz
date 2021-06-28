@@ -181,3 +181,53 @@
   font-stretch: extra-expanded;
   font-weight: 700;
 }
+
+
+
+
+
+
+
+
+
+@font-face {
+  font-family: "Operator";
+  src: url("./operator/OperatorMonoSSmLig-Book.woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Operator";
+  src: url("./operator/OperatorMonoSSmLig-BookItalic.woff2");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Operator";
+  src: url("./operator/OperatorMonoSSmLig-Light.woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Operator";
+  src: url("./operator/OperatorMonoSSmLig-LightItalic.woff2");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Operator";
+  src: url("./operator/OperatorMonoSSmLig-Medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Operator";
+  src: url("./operator/OperatorMonoSSmLig-MediumItalic.woff2");
+  font-weight: 500;
+  font-style: italic;
+}

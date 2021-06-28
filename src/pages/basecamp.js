@@ -19,7 +19,10 @@ const StyledSection = styled(Section)`
   }
 `
 
+
 const Basecamp = ({ data, location }) => {
+  const imgNodes = data.allFile.nodes
+  
   return (
     <Layout location={location}>
 
@@ -31,7 +34,7 @@ const Basecamp = ({ data, location }) => {
       </Section>
     
       <StyledSection>
-        <MDXRenderer>{data.mdx.body}</MDXRenderer>
+        <MDXRenderer images={imgNodes}>{data.mdx.body}</MDXRenderer>
       </StyledSection>
 
     </Layout>
@@ -50,6 +53,14 @@ export const pageQuery = graphql`query {
     id
     slug
     body
+  }
+  allFile(filter: {extension: {regex: "/(jpg)|(jpeg)|(png)/"}, absolutePath: {regex: "\\/content/basecamp/"}}) {
+    nodes {
+      name
+      childImageSharp {
+        gatsbyImageData(layout: FULL_WIDTH, backgroundColor:"transparent", transformOptions:{fit:CONTAIN})
+      }
+    }
   }
 }  
 `
