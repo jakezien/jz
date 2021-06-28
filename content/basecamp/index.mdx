@@ -1,0 +1,119 @@
+## The problem
+HEY's Set Aside box is handy for emails you need to keep around for later. They're not filed away in a folder you'll never remember to go back to; they stay in your headspace, but without cluttering your Imbox. But when you have a lot of stuff set aside, that pile on the corner of your desk *becomes* clutter — and finding something in it becomes digging. That's not "The HEY Way".
+
+The prompt for this project described today's Set Aside board as a "junk drawer," which is apt. A junk drawer develops when a well-intentioned catchall becomes overgrown. And catchalls always tend to get weedy, because they strip their contents of context. This is the core problem that keeps Set Aside from fulfilling its potential, and why it can still feel like more of a workaround than a workflow. To uproot the problem, we must introduce ways to keep context alive within Set Aside.
+
+## Being purposeful
+
+There's always a purpose for setting an email aside (or marking it unread, or flagging it, etc.). It's usually more important than the email itself. But software doesn't capture that context, so we store the purpose in our heads, and keep the emails around as strings around our fingers, keys to that mental index. When we look at them all, we feel the mental load of iterating over that index, jumping between contexts, pulling up the status of each item. Our software acts as a gigantic keyring, making us the custodians of all the unfinished business.
+
+## HEY is halfway there
+
+*But wait* , you're thinking, *that's why we built Stickies and Notes to Self.* Yep — those context-preserving features are there to solve the purpose problem. But today, they only exist in the Imbox. If you set aside a stickied thread, the sticky becomes invisible, and you can't add a sticky in Set Aside at all. Notes to self also aren't styled in Set Aside; they just look like threads I've replied to. So making these features available in Set Aside is part of the solution.
+
+## Breaking up the catchall
+
+The best way to organize a junk drawer is to divide it up into sensible sections. They should be specific enough to avoid becoming mini-catchalls, but flexible enough that you can quickly put things away without thinking too hard about where they fit best.
+
+### A bit of design process
+
+*In a real Basecamp pitch, I'd probably edit this down to be less in-the-weeds, but for this project it seems pertinent to explain how my idea evolved.*
+
+Figuring out what the sections should be was the toughest part of this design problem. I had ideas, but I wanted to make sure they held up against others' experience. I asked my wife, my mom, and a friend to walk me through their email systems, explaining why each item was in their inbox, especially those they'd already read. And I thought about my own habit of marking threads Unseen in HEY, which seemed like part of the Set Aside problem.
+
+Clear patterns emerged:
+- Emails that were straight-up todos.
+- Emails that were trailheads: things that required research before response, that led to other tasks, that required phone calls during business hours, etc.
+- Emails related to upcoming events: travel stuff, Zoom links, tickets and reservations. They didn't want to get rid of these until after the event happened.
+- Emails that might lead to doing something soon: notification of a sale, product recommendations, new releases.
+- Emails saved for reference: schedules, important attachments, gift cards, hotel recommendations, stuff for ongoing projects.
+- Emails saved to "read later": long articles, newsletters, videos, links from contacts, weekly crosswords.
+- Emails that they just didn't want to deal with right now; pure procrastination.
+
+This seemed to validate my intuition that Set Aside should be broken into context-based categories — things like *Todos*, *Travel*, *Event-related*, *Shopping*, *Reference*, *Read Later*.
+
+I did some sketches. I pulled up my research (and my own email) to step through the use case: into which category would I set aside each email I'd noted?
+
+That's when I found the holes in this concept. Email with a plane ticket: *Travel* or *Event-related* ? Is a schedule *Event-related* or *For Reference* ? More broadly, isn't *Travel* always *Event-related* ? Maybe I had too many categories. Or too few — what if people could just create their own? But that doesn't seem like a "HEY Way" crisp point of view. It might devolve Set Aside into a folder forest. And isn't that what Labels are for anyway?
+
+I went back to my list of ideas and tried the next one, time-based sections: *Now*, *Soon*, *Later*, and *Whenever*. These categories made decisions about where to put my example emails really easy, and they were a nice overlay on the context supplied by Stickies, Notes to Self, and Labels.
+
+## Here's how it works
+
+### Setting things aside
+
+In the bulk selection popup, and in the action bar at the bottom of `/topic/<id>` , we add a little "more" arrow to the Set Aside button. Just like the Yes button in The Screener, you can still just click Set Aside and be done.
+
+^^[image]: set aside buttons^^
+
+But if you click the little arrow, you get a new popup that lets you be a little more specific:
+
+^^[image]: set aside popup^^
+
+When you pick one of these options, the topic moves to the corresponding section of Set Aside. And just like clicking on today's Set Aside button, if you're in bulk selection, it ends; if you're on a topic, we take you back to the Imbox.
+
+On the keyboard, `A` still sets a message aside, but `shift-A` opens the popup, and then you can arrow-key `up` and `down` and make your choice with `return`.
+
+
+### The Set Aside board
+
+In the Set Aside board, the section on top — just plain "Set Aside" — is where things go if you click the Set Aside button and don't use the new popup. Just like today, they're sorted by when you set them aside, most recent first.
+
+But below that section, we now have four new sections, each with a divider and an icon: For Now, For Soon, For Later, and For Whenever. These are sorted like the section on top, most recently set aside first. Simple.
+
+^^[image: set aside sections]^^
+
+You can move topics between sections on the board by selecting them as above. Nice to have: drag and drop to move them, on devices with mice and on tablets. This opens the door to dragging cards around *within* sections for custom sorting, but that feels out of scope for this project.
+
+This might encourage people to set more stuff aside than before, so on small screens, we introduce a bit of navigation to jump-scroll down the page to the start of each section.
+
+^^[image: set aside subnav]^^
+
+The email preview cards have a few enhancements.
+- Notes to self are rendered with the blue gradient styling we see in the Imbox and `/topic/id` , so they're easier to distinguish from topics you've replied to. Notes to self add helpful context about what to do next on a thread, so it's important to see them in Set Aside.
+- For the same reason, Stickies are no longer just for the Imbox; they show up here, too, so you can remember why you set that message aside.
+- And to encourage people to take advantage of this, email cards also get a new affordance for adding a sticky without having to bulk select. Hopefully this isn't too much visual clutter; maybe on desktop this only appears on hover, though that might be weird too.
+
+^^[image: email card features]^^
+
+Finally, at the top of the Set Aside board, there's a new "Filter by Label" button. This takes better advantage of another existing layer of context, so you can do things like quickly surface all the "Travel" emails you've set aside.
+
+^^[image: filter by label]^^
+
+When you click the button, you get the same popup that you see when assigning a label, but without the "+ New" field.
+
+When you select a label, the popup goes away, the email list gets filtered, and the button text changes to say "Filtering by <label_name>" with a big X for clearing the filter. Clicking anywhere on the button clears the filter, so you have to clear the current filter before you can select a new one. And you can only filter by one label at a time.
+
+^^[image: clear filter]^^
+
+Maybe this button `position:sticky` to the top as you scroll down the page.
+
+Filtering doesn't persist between visits to Set Aside, so you can't get stuck in a state where you forgot you'd filtered and wonder where the hell all the things you set aside went. This means filtering also doesn't affect the little Set Aside tray in the Imbox.
+
+### The Imbox tray
+
+Nothing changes about the Imbox tray. It still just lists all your Set Asides, from all sections, in order.
+
+Nice to have: emails that are set aside to a particular section display that section's icon on their tray card. Emails that are just "plain" set aside don't get this special treatment.
+
+## Why I like this idea
+
+Early in this project, I wrote down some assumptions/principles to guide my ideas:
+- **Don’t break the existing workflow.**<br/>
+  Users should still be able to just “Set Aside” with no secondary action, and the worst state that should lead to is the current one.
+- **Set Aside isn’t meant to be permanent.**<br/>
+  There’s an implicit sense that Set Aside is temporary, if not an explicit goal to keep it empty. But things can be set aside for long term — things you need a year from now, for example.
+- **Simple mechanisms with flexible applications > Big Idea features.**<br/>
+  My classic example here is Spaces & Exposé vs. Mission Control. The former pair were separate, straightforward actions for organizing your digital workspace. Each affected the system's state in a clear-cut way, and they were completely independent functions. This is what made them great: you could use them together, layering them to great effect, and still know what was going on. But Mission Control, an attempt to merge the two features into one thing, has always felt like a complete mess. Complicated, unpredictable, and impossible to get your head around.
+
+  The lesson is that power in a workflow comes from playing simple mechanisms off of each other, rather than from grand visions that try to solve everything.
+
+The last one is most important. I applied that philosophy in this project by building on what was already there rather than trying to replace it with something totally different. (And I had plenty of zany ideas to tempt me; I'll save those for the discussion.)
+
+I think it worked: the problem with Set Aside is about loss of context, and HEY is rich with features that provide it. The solution is to layer them in where they aren't currently available — and to add one more layer to help break things up further. Each layer is crisp and easy to understand, and people don't need to learn anything new to build a workflow that makes Set Aside far more useful. They can also totally ignore the new layer and keep using Set Aside the way they're used to if that's all they need.
+
+## OK, now go check out the prototype.
+
+<p class="bigText">You made it this far; now <a href="https://jz-basecamp.herokuapp.com">go play with the goods.</a> &nbsp;:)</p>
+
+<p class="bigText">And you can <a href="https://github.com/jakezien/basecamp">look through the code on my repo.</a><br/>Make sure to read the <span style="font-variant: all-small-caps">README</span> for a fun fact.</p>
