@@ -98,7 +98,7 @@ const TagRiver = (props) => {
     let offsets = []
     for (let i in refs.current) {
       widths[i] =  refs.current[i].current.offsetWidth
-      offsets[i] = widths[i]/2
+      offsets[i] = widths[i]/2 * (i%2? 1 : -1)
     }
     console.log('widths', widths, 'offsets', offsets)
     setRowWidths(widths)
@@ -132,7 +132,10 @@ const TagRiver = (props) => {
 
   const setXVals = () => {
     for (let i=0; i<4; i++) {
-      xVals[i] = useTransform(timeline, [0,1], [0, rowOffsets[i]])
+      let mVal = i%2 
+      ? useTransform(timeline, [0,1], [0, rowOffsets[i]])
+      : useTransform(timeline, [0,1], [0, rowOffsets[i]])
+      xVals[i] = mVal
     }
   }
 
