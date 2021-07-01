@@ -1,7 +1,10 @@
-import React from "react"
+import React, {useState, useEffect} from "react"
 import { Link, graphql } from "gatsby"
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image";
 import { MDXRenderer } from "gatsby-plugin-mdx"
+import Lightbox from 'react-image-lightbox';
+import NoScroll from 'no-scroll';
+
 import Layout from "./layout"
 import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
@@ -19,6 +22,64 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
   const imgNodes = data.allFile.nodes
   const coverImage = getImage(imgNodes.filter(node => node.name.includes("cover"))[0])
 
+  let padding;
+
+  if (typeof window !== 'undefined') {
+    padding = window.innerWidth > 767 ? 64 : 8
+  }
+
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+  const [lightboxPadding, setlightboxPadding] = useState(padding)
+
+  const handleImageClick = (e) => {
+    NoScroll.on()
+    let index = parseInt(e.target.getAttribute('index'))
+    console.log(index, imgNodes[index])
+    console.log(index, imgNodes.length - index)
+    setLightboxIndex(imgNodes.length - index)
+    setLightboxOpen(true)
+  }
+
+  const handleLightboxPrevClick = () => {
+    console.log(lightboxIndex)
+    let newIndex = (lightboxIndex - 1 + imgNodes.length) % imgNodes.length
+    console.log(lightboxIndex, newIndex, imgNodes.length)
+    setLightboxIndex(newIndex);
+  }
+
+  const handleLightboxNextClick = () => {
+    console.log(lightboxIndex)
+    let newIndex = lightboxIndex + 1
+    console.log(lightboxIndex, newIndex, imgNodes.length)
+    setLightboxIndex(newIndex)
+  }
+
+  const handleWindowResize = () => {
+    let padding = window.innerWidth > 767 ? 64 : 8
+    setlightboxPadding(padding);
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.addEventListener('resize', handleWindowResize)
+
+
+    //TODO : gatsbyimages don't load until they're in view, so how do we solve this?
+    document.querySelectorAll('figure .gatsby-image-wrapper').forEach((e, i) => {
+      console.log(i, e)
+      e.setAttribute('index', i)
+      e.onclick = handleImageClick
+      e.style.cursor = 'pointer'
+    })
+    // document.querySelectorAll('figure img').forEach((e) => {
+    //   e.onclick = handleImageClick
+    //   e.style.cursor = 'pointer'
+    // })
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  })
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -49,6 +110,19 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
       </Container>
       <PostFooterNav pageContext={pageContext} />
 
+      {lightboxOpen && (
+        <Lightbox
+          mainSrc={getSrc(imgNodes[lightboxIndex])}
+          nextSrc={getSrc(imgNodes[(lightboxIndex + 1)])}
+          prevSrc={getSrc(imgNodes[(lightboxIndex - 1)])}
+          onCloseRequest={() => {setLightboxOpen(false); NoScroll.off(); }}
+          onMovePrevRequest={handleLightboxPrevClick}
+          onMoveNextRequest={handleLightboxNextClick}
+          clickOutsideToClose={true}
+          imagePadding={lightboxPadding}
+          wrapperClassName={(lightboxIndex===0 ? 'firstImage ' : '') + (lightboxIndex===imgNodes.length-1 ? 'lastImage ' : '')}
+        />
+      )}
 
     </Layout>
   );
