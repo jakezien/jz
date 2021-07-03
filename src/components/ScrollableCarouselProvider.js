@@ -25,11 +25,13 @@ const ScrollableCarouselProvider = (props) => {
     }
 
   return (
-    <CarouselProvider {...props} {...bind()}>
-        {props.children}
-        <ButtonBack ref={ backButtonRef } />
-        <ButtonNext ref={ nextButtonRef }/>
-    </CarouselProvider>
+    <figure>
+      <CarouselProvider {...props} {...bind()}>
+          {props.children}
+          <ButtonBack ref={ backButtonRef } />
+          <ButtonNext ref={ nextButtonRef }/>
+      </CarouselProvider>
+    </figure>
   )
 }
 
