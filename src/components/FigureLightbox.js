@@ -40,6 +40,7 @@ const FigureLightbox = () => {
 	}
 
 	const handleImageClick = (e) => {
+		if (e.target.closest('.isDragging')) return
 	  let index = parseInt(e.target.closest('[index]').getAttribute('index'))
 	  console.log(index, imgList.current[index])
 	  setLightboxIndex(index)
