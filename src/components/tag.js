@@ -6,7 +6,6 @@ import TagList from './tagList'
 const StyledSpan = styled.span`
   background: ${props => props.theme.bg5};
   border: 1px solid ${props => props.theme.bg7};
-  box-shadow: ${props => props.theme.isDark ? '0 1px 0 rgba(0,0,0,.66), inset 0 1px 0 rgba(255,255,255, .2)' : '0 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255, .66)'}; 
   text-shadow: ${props => props.theme.isDark ? '0 -1px 0 rgba(0,0,0,.66);' : '0 1px 0 rgba(255,255,255,.66)'};
   padding: ${rhythm(.2)} ${rhythm(.5)};
   margin: ${rhythm(.15)} ${rhythm(.1)};
