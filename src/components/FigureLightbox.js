@@ -96,8 +96,8 @@ const FigureLightbox = () => {
 			    mainSrc={getSrcForIndex(lightboxIndex)}
 			    nextSrc={getSrcForIndex(lightboxIndex + 1)}
 			    onCloseRequest={() => {
-			    	setLightboxOpen(false); NoScroll.off(); }
-			    }
+			    	setLightboxOpen(false); NoScroll.off(); 
+			    }}
 			    onMovePrevRequest={handleLightboxPrevClick}
 			    onMoveNextRequest={handleLightboxNextClick}
 			    clickOutsideToClose={true}

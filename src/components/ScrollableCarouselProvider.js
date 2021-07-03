@@ -13,7 +13,9 @@ const ScrollableCarouselProvider = (props) => {
       onWheelStart: state => handleScroll(state),
       onDragStart: state => handleDragStart(state),
       onDragEnd: state => handleDragEnd(state)
-    }, {})
+    }, {
+      drag: {threshold:10}
+    })
 
     const handleScroll = (state) => {
       if (state.direction[0] < -0.25 ) {
