@@ -9,6 +9,10 @@ export function imageByName(props, name) {
   return getImage(props.images.filter(node => node.name.includes(name))[0])
 }
 
+export function getImageWithFilename(images, filename) {
+  return getImage(images.filter(node => node.name.includes(filename))[0])
+}
+
 
 export function chunkArray(array, chunkSize) {
   let results = [];

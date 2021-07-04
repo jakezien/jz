@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from "react"
 import { Link, graphql } from "gatsby"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image";
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import Lightbox from 'react-image-lightbox';
 import NoScroll from 'no-scroll';
 
 import Layout from "./layout"
@@ -10,11 +9,11 @@ import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
 import { imageByName, testFunc } from "../utils/functions";
 
-
 import Container from "../components/container"
 import WidthBleeder from "../components/widthBleeder"
 import PostFooterNav from "../components/postFooterNav"
 import FigureLightbox from "../components/FigureLightbox"
+import {ImagesContextProvider} from "../components/imagesContext"
 
 const WorkPostTemplate = ({ data, pageContext, location }) => {
   const post = data.mdx
@@ -22,8 +21,8 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
   const imgNodes = data.allFile.nodes
   const coverImage = getImage(imgNodes.filter(node => node.name.includes("cover"))[0])
 
-
   return (
+    <ImagesContextProvider images={imgNodes}>
     <Layout location={location} title={siteTitle}>
       <SEO
         title={post.frontmatter.title}
@@ -55,6 +54,7 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
       <FigureLightbox />
 
     </Layout>
+    </ImagesContextProvider>
   );
 }
 export default WorkPostTemplate

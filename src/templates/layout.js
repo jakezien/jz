@@ -17,6 +17,7 @@ import FlexContainer from "../components/flexContainer";
 import Section from "../components/section";
 import Inset from "../components/inset";
 import TagList from "../components/tagList";
+import JzImage from "../components/JzImage";
 import { imageByName, testFunc } from "../utils/functions";
 
 import Header from '../components/header'
@@ -28,7 +29,7 @@ const Layout = withTheme((props) => {
   const { location, title, children, theme } = props
   const { changeThemeSetting, themeSetting } = useStyledDarkMode();
 
-  const shortcodes = { TagList, Section, Link, Inset, GatsbyImage, StaticImage, imageByName, getImage, FlexContainer, WidthBleeder, ScrollableCarouselProvider, Slider, Slide, DotGroup  }
+  const shortcodes = { JzImage, TagList, Section, Link, Inset, GatsbyImage, StaticImage, imageByName, getImage, FlexContainer, WidthBleeder, ScrollableCarouselProvider, Slider, Slide, DotGroup  }
 
   function setThemeToSystemTheme(e) {
     // let newTheme = e ? ThemeSetting.DARK : ThemeSetting.LIGHT;

@@ -20,11 +20,15 @@ In 2016, Floored, the quirky startup I’d helped build for 4 years, was acquire
 We soon found that with them went our power to recruit technologists, as well as something more troubling: our team's sense of self. I recognized this unmooring as an identity crisis, and self-initiated a project to solve it. 
 
 <figure>
-<div className="two-up">
-<GatsbyImage image={imageByName(props, 'recruiting-cbre', true)} alt="A sampling of CBRE's broker-centric recruiting materials." />
-<GatsbyImage image={imageByName(props, 'recruiting-tech', true)} alt="A sampling of recruiting materials from tech companies." />
-</div>
-<figcaption>Recruiting images from CBRE, left, and top tech companies, right. They depict very different work-worlds.</figcaption>
+  <JzImage filename="recruiting-cbre" alt="poops"/>
+</figure>
+
+<figure>
+  <div className="two-up">
+    <JzImage filename='recruiting-cbre' alt="A sampling of CBRE's broker-centric recruiting materials." />
+    <JzImage filename='recruiting-tech' alt="A sampling of recruiting materials from tech companies." />
+  </div>
+  <figcaption>Recruiting images from CBRE, left, and top tech companies, right. They depict very different work-worlds.</figcaption>
 </figure>
 
 
@@ -34,70 +38,70 @@ We needed a new identity, and it had many jobs to do: to celebrate and befit thi
 - **Pitched the brand in a one-on-one session with CEO Bob Sulentic,** who approved the work enthusiastically, including special praise for my presentation skill, storytelling and slides.
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'bob-the-builder', true)} alt="CBRE CEO Bob Sulentic poses for a smile at the NYC CBRE Build office, in front of a glass wall covered in our circuitmap brand graphics." />
-      <figcaption>CBRE CEO Bob Sulentic poses for a smile at the NYC CBRE Build office.</figcaption>
+  <JzImage filename='bob-the-builder' alt="CBRE CEO Bob Sulentic poses for a smile at the NYC CBRE Build office, in front of a glass wall covered in our circuitmap brand graphics." />
+  <figcaption>CBRE CEO Bob Sulentic poses for a smile at the NYC CBRE Build office.</figcaption>
 </figure>
 
 - Interviewed dozens of people across CBRE and the globe — including brokers, IT professionals, managers, makers of maps and presentations, C-level executives, and tech recruits who rejected our offers — to learn what makes CBRE unique, its values, and its point of view on technology.
 - Summarized and presented my findings to peers and executives. The results were that CBRE offered a uniquely great value proposition for technologists: to have the best of both worlds, startup and corporate. We could draw on the resources of an enormous company with troves of data and global reach to do product work with the goal of, as one CBRE executive put it, “changing the organization’s DNA”. And if we succeeded in using technology to change the way CBRE operated, then we’d effectively be changing an entire industry. 
 
 <figure style="text-align: center">
-      <img src='./brand-research.gif' style="margin-bottom: 0; max-height:18em;" className="shadow"/>
-      <figcaption>Slides from my  brand research presentation.</figcaption>
+  <img src='./brand-research.gif' style="margin-bottom: 0; max-height:18em;" className="shadow"/>
+  <figcaption>Slides from my  brand research presentation.</figcaption>
 </figure>
 
 - Led by the research, I chose _build_ as the center of the new identity. It’s a word common to the worlds of real estate and technology: both kinds of developers go to work every day to build something. 
 
 <figure style="text-align: center">
-      <img src='./cre-tech-build.gif' style="margin-bottom: 0; max-height:18em;" className="shadow"/>
-      <figcaption>Slides about the rationale behind the "build" identity.</figcaption>
+  <img src='./cre-tech-build.gif' style="margin-bottom: 0; max-height:18em;" className="shadow"/>
+  <figcaption>Slides about the rationale behind the "build" identity.</figcaption>
 </figure>
 
 
 - Working with CBRE’s global heads of marketing and technology, I iterated on visual concepts that fused elements of real estate and tech, extending CBRE’s existing brand and values for a new audience.
 
 <figure>
-      <GatsbyImage className="shadow" image={imageByName(props, 'posters0', true)} alt="" />
-      <GatsbyImage className="shadow" image={imageByName(props, 'posters1', true)} alt="" />
-      <figcaption>A whole bunch of posters I created in visual exploration of the nascent Build brand.</figcaption>
+  <JzImage filename='posters0' alt="" />
+  <JzImage filename='posters1' alt="" />
+  <figcaption>A whole bunch of posters I created in visual exploration of the nascent Build brand.</figcaption>
 </figure>
 
 
 - Created a unique and extensible illustration style and personally vector-drew at least a hundred hours’ worth of characters, icons, and one incredibly complicated pattern.
 
 <WidthBleeder style={{marginBottom:0}}>
-<ScrollableCarouselProvider
-      naturalSlideWidth={900}
-      naturalSlideHeight={600}
-      totalSlides={5}
-      visibleSlides={1}
-      step={1}
-      isIntrinsicHeight={true}
->
-      <Slider classNameTray="center">
-            <Slide index={0}>
-                  <video loop autoplay playsinline muted width="100%">
-                        <source src="./party.mp4" type="video/mp4" />
-                  </video>
-                  <figcaption>Animation by <a href="https://www.terrahenderson.com" target="_blank">Terra Henderson.</a></figcaption>
-            </Slide>
-            <Slide index={1}>
-                  <GatsbyImage className="shadow" image={imageByName(props, 'style-guide')} alt="Pages from the Build brand style guide."/>
-            </Slide>
-            <Slide index={2}>
-                  <video loop autoplay playsinline muted width="100%">
-                        <source src="./builder-gifs.mp4" type="video/mp4" />
-                  </video>
-                  <figcaption>Animation by <a href="https://www.terrahenderson.com" target="_blank">Terra Henderson.</a></figcaption>
-            </Slide>
-            <Slide index={3}>
-                  <GatsbyImage image={imageByName(props, 'swag', true)} alt="Build swag, including duffel bags and enamel pins."/>
-            </Slide>
-            <Slide index={4}>
-                  <GatsbyImage image={imageByName(props, 'slides', true)} alt="Slide templates with various Build graphics."/>
-            </Slide>
-      </Slider>
-      <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
+  <ScrollableCarouselProvider
+  naturalSlideWidth={900}
+  naturalSlideHeight={600}
+  totalSlides={5}
+  visibleSlides={1}
+  step={1}
+  isIntrinsicHeight={true}
+  >
+  <Slider classNameTray="center">
+    <Slide index={0}>
+      <video loop autoplay playsinline muted width="100%">
+        <source src="./party.mp4" type="video/mp4" />
+      </video>
+      <figcaption>Animation by <a href="https://www.terrahenderson.com" target="_blank">Terra Henderson.</a></figcaption>
+    </Slide>
+    <Slide index={1}>
+      <JzImage filename='style-guide' alt="Pages from the Build brand style guide." className="shadow"/>
+    </Slide>
+    <Slide index={2}>
+      <video loop autoplay playsinline muted width="100%">
+        <source src="./builder-gifs.mp4" type="video/mp4" />
+      </video>
+      <figcaption>Animation by <a href="https://www.terrahenderson.com" target="_blank">Terra Henderson.</a></figcaption>
+    </Slide>
+    <Slide index={3}>
+      <JzImage filename='swag' alt="Build swag, including duffel bags and enamel pins." />
+    </Slide>
+    <Slide index={4}>
+      <JzImage filename='slides' alt="Slide templates with various Build graphics." />
+    </Slide>
+  </Slider>
+  <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
 </ScrollableCarouselProvider>
 </WidthBleeder>
 <figcaption>Some of the final Build brand materials.</figcaption>
@@ -109,26 +113,26 @@ We needed a new identity, and it had many jobs to do: to celebrate and befit thi
 
 
 <WidthBleeder style={{marginBottom:0}}>
-<ScrollableCarouselProvider
-      naturalSlideWidth={900}
-      naturalSlideHeight={600}
-      totalSlides={3}
-      visibleSlides={1}
-      step={1}
-      isIntrinsicHeight={true}
->
-      <Slider classNameTray="center">
-            <Slide index={0}>
-                  <GatsbyImage image={imageByName(props, 'office1', true)} alt="" />
-            </Slide>
-            <Slide index={1}>
-                  <GatsbyImage image={imageByName(props, 'signs', true)} alt="" />
-            </Slide>
-            <Slide index={2}>
-                  <GatsbyImage image={imageByName(props, 'office0', true)} alt="" />
-            </Slide>
-      </Slider>
-      <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
+  <ScrollableCarouselProvider
+  naturalSlideWidth={900}
+  naturalSlideHeight={600}
+  totalSlides={3}
+  visibleSlides={1}
+  step={1}
+  isIntrinsicHeight={true}
+  >
+  <Slider classNameTray="center">
+    <Slide index={0}>
+      <JzImage filename='office1' alt="" />
+    </Slide>
+    <Slide index={1}>
+      <JzImage filename='signs' alt="" />
+    </Slide>
+    <Slide index={2}>
+      <JzImage filename='office0' alt="" />
+    </Slide>
+  </Slider>
+  <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
 </ScrollableCarouselProvider>
 </WidthBleeder>
 <figcaption>Scenes from the CBRE Build NYC office.</figcaption>
@@ -137,21 +141,21 @@ We needed a new identity, and it had many jobs to do: to celebrate and befit thi
 - The new identity did its job: it positioned us within CBRE as a software innovation lab, not an IT department; it galvanized our team as mission-driven technologists with a big opportunity to make change in a corporate environment; and it gave CBRE a voice that to communicate that opportunity to recruits, who responded with excitement CBRE had never previously been able to stir up.
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'booths', true)} alt="" />
-      <figcaption>CBRE's booths at college recruiting fairs, before and after the Build brand was introduced.</figcaption>
+  <JzImage filename='booths' alt="" />
+  <figcaption>CBRE's booths at college recruiting fairs, before and after the Build brand was introduced.</figcaption>
 </figure>
 
 - Got written up positively on _Brand New_, the design world’s foremost branding blog, and checking off a personal bucket list item.
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'brand-new', true)} alt="CBRE Build featured on Brand New's website." />
+  <JzImage filename='brand-new' alt="CBRE Build featured on Brand New's website." />
 </figure>
 
 - The brand took on a life of its own, spreading as technologists across the company breathed their spirit into the identity. Before long, you could find Build in Dallas, Seattle, and India; and in media as varied as papercraft, 3D printing, and even felting.
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'brand-life', true)} alt="" />
-      <figcaption>Builders bringing the brand alive in varied media.</figcaption>
+  <JzImage filename='brand-life' alt="" />
+  <figcaption>Builders bringing the brand alive in varied media.</figcaption>
 </figure>
 
 
