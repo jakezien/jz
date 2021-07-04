@@ -18,6 +18,10 @@ const StyledOuterDiv = styled.div`
   height: ${props => props.height || 'auto'};
   max-height: ${props => props.maxHeight || 'auto'};
   left: calc(-1 * ${hPaddingPx}px);
+  overflow-x: hidden;
+  overflow-y: visible;
+
+  
   
   @media screen and (min-width: 768px) and (max-width: ${wideMaxWidthPx}px) {
     left: calc(-1 * ${wideHPaddingPx}px) !important; 
