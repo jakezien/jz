@@ -46,8 +46,12 @@ const GlobalStyle = createGlobalStyle`
       border-radius: 0 !important;
   }
 
-  figure .gatsby-image-wrapper:not(:last-of-type) {
+  figure .jz-image:not(:last-of-type) {
     margin-bottom: ${rhythm(1)}
+  }
+
+  .ril__outer {
+    backdrop-filter: blur(24px)
   }
 
   @keyframes rotate {

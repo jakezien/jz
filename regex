@@ -1,0 +1,1 @@
+<GatsbyImage.*(?:imageByName\(.*(['"].*['"])).*(?:alt\s*=\s*(".*")).*\/>

@@ -13,13 +13,13 @@ type: product
 
 <TagList className='compact'>
 
-- Ideation and iteration
-- Sketching and physical prototyping
-- Presenting an idea in multiple formats 
-- 3D modeling
-- Being in the right place at the right time
-- Being openminded to others' feedback and iteration
-- Giving credit where it's really due
+  - Ideation and iteration
+  - Sketching and physical prototyping
+  - Presenting an idea in multiple formats 
+  - 3D modeling
+  - Being in the right place at the right time
+  - Being openminded to others' feedback and iteration
+  - Giving credit where it's really due
 
 </TagList>
 
@@ -27,48 +27,48 @@ type: product
 As a rising high school senior in summer 2006, I sketched a concept power strip that could extend to fit adapters of any size. 
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'power-strip-sketch', true)} alt="My original sketch of the extendable power strip." />
-      <div className="two-up">
-            <GatsbyImage image={imageByName(props, 'power-strip-board', true)} alt="My presentation board for the extendable power strip." />
-            <GatsbyImage image={imageByName(props, 'power-strip-model', true)} alt="My very poorly made physical model of the power strip." />
-      </div>
-      <figcaption>My original sketch, presentation board, and physical prototype of the extendable power strip.</figcaption>
+  <JzImage filename='power-strip-sketch' alt="My original sketch of the extendable power strip." />
+  <div className="two-up">
+    <JzImage filename='power-strip-board' alt="My presentation board for the extendable power strip." />
+    <JzImage filename='power-strip-model' alt="My very poorly made physical model of the power strip." />
+  </div>
+  <figcaption>My original sketch, presentation board, and physical prototype of the extendable power strip.</figcaption>
 </figure>
 
 I knew the idea had teeth. But I didn't know how to bring it to fruition — until I heard about Quirky, the startup “invention platform” that developed products from crowdsourced ideas. Bored in class in 2010, I paid $99 to submit “The Usable Power Strip”. It was the best hundred bucks I ever spent.
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'submission', true)} alt="A screenshot of my submission on quirky.com." />
+  <JzImage filename='submission' alt="A screenshot of my submission on quirky.com." />
 </figure>
 
 <figure>
-      <WidthBleeder style={{marginBottom:0}}>
-      <ScrollableCarouselProvider
-            naturalSlideWidth={700}
-            naturalSlideHeight={560}
-            totalSlides={4}
-            visibleSlides={1}
-            step={1}
-            isIntrinsicHeight={true}
-      >
-            <Slider classNameTray="center">
-                  <Slide index={0}>
-                        <GatsbyImage image={imageByName(props, 'Power_Strip_Hero', true)} alt="" />
-                  </Slide>
-                  <Slide index={1}>
-                        <GatsbyImage image={imageByName(props, 'Power_Strip_Face', true)} alt="" />
-                  </Slide>
-                  <Slide index={2}>
-                        <GatsbyImage image={imageByName(props, 'Power_Strip_Plug', true)} alt="" />
-                  </Slide>
-                  <Slide index={3}>
-                        <GatsbyImage image={imageByName(props, 'Power_Strip_Modular', true)} alt="" className="shadow"/>
-                  </Slide>
-            </Slider>
-            <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
-      </ScrollableCarouselProvider>
-      </WidthBleeder>
-      <figcaption>My submission on quirky.com, and the renderings I included with it.</figcaption>
+  <WidthBleeder style={{marginBottom:0}}>
+    <ScrollableCarouselProvider
+    naturalSlideWidth={700}
+    naturalSlideHeight={560}
+    totalSlides={4}
+    visibleSlides={1}
+    step={1}
+    isIntrinsicHeight={true}
+    >
+    <Slider classNameTray="center">
+      <Slide index={0}>
+        <JzImage filename='Power_Strip_Hero' alt="" />
+      </Slide>
+      <Slide index={1}>
+        <JzImage filename='Power_Strip_Face' alt="" />
+      </Slide>
+      <Slide index={2}>
+        <JzImage filename='Power_Strip_Plug' alt="" />
+      </Slide>
+      <Slide index={3}>
+        <JzImage filename='Power_Strip_Modular' alt="" className="shadow" />
+      </Slide>
+    </Slider>
+    <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
+  </ScrollableCarouselProvider>
+</WidthBleeder>
+<figcaption>My submission on quirky.com, and the renderings I included with it.</figcaption>
 </figure>
 
 In the following months, I collaborated directly with Quirky's founder, designers, engineers, and online community as my concept made its way off the page and into reality. In under a year, my sketch became a shipping product, sold at Target, Bed Bath & Beyond, and Home Depot. 
@@ -79,45 +79,45 @@ Quirky calls me Pivot Power's "inventor,” but the credit for my idea's success
 Pivot Power launched in summer 2011 and immediately became Quirky's bestselling, best-known product, a status it has firmly held ever since. It landed Quirky (and me) in the pages of [_Wired_](https://www.wired.com/2010/06/quirky-jointed-power-strip-is-a-creative-outlet/), [_Inc_](http://www.inc.com/magazine/201310/josh-dean/is-quirky-the-worlds-most-creative-manufacturer.html), and the [New York _Times_](https://www.nytimes.com/2015/02/15/technology/quirky-tests-the-crowd-based-creative-process.html), and across the tech [blogosphere](https://www.engadget.com/2010-06-29-community-developed-pivot-power-strip-now-available-to-order.html). Its promise earned Quirky distribution in big-box retail, including a flashy launch with Bed Bath & Beyond, where shoppers could find an entire Quirky aisle. 
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'bbb-window0', true)} alt="Pivot Power's launch display in the window of the flagship Bed Bath & Beyond on 6th Avenue in Manhattan." />
-      <GatsbyImage image={imageByName(props, 'bbb-window3', true)} alt="A better look at the window display." />
-      <GatsbyImage image={imageByName(props, 'bbb-aisle', true)} alt="The Quirky aisle inside Bed Bath and Beyond, stacked to the ceiling with Pivot Powers." />
-      <figcaption>Pivot Power starred in Quirky's launch at Bed Bath & Beyond, taking over the front window of their enormous store on 6th Avenue in Manhattan.</figcaption>
+  <JzImage filename='bbb-window0' alt="Pivot Power's launch display in the window of the flagship Bed Bath & Beyond on 6th Avenue in Manhattan." />
+  <JzImage filename='bbb-window3' alt="A better look at the window display." />
+  <JzImage filename='bbb-aisle' alt="The Quirky aisle inside Bed Bath and Beyond, stacked to the ceiling with Pivot Powers." />
+  <figcaption>Pivot Power starred in Quirky's launch at Bed Bath & Beyond, taking over the front window of their enormous store on 6th Avenue in Manhattan.</figcaption>
 </figure>
 
 Pivot Power's success rocketed Quirky from a startup with a small team to a potential “unicorn” with a staff of hundreds. It spawned a family, including mini, rugged, and smarthome editions, and was the only Quirky product to be given a sleek "2.0" redesign. It even survived Quirky's 2015 bankruptcy. At a daylong auction of Quirky’s assets, Pivot Power generated a bidding war that proved it the most valuable item on offer. It was bought by Aliph Brands, who today sells Pivot Power through licensing to manufacturers.
 
 <figure>
-      <WidthBleeder style={{marginBottom:0}}>
-      <ScrollableCarouselProvider
-            naturalSlideWidth={900}
-            naturalSlideHeight={600}
-            totalSlides={5}
-            visibleSlides={1}
-            step={1}
-            isIntrinsicHeight={true}
-      >
-            <Slider classNameTray="center">
-                  <Slide index={0}>
-                        <GatsbyImage image={imageByName(props, 'pp-colors', true)} alt="" />
-                  </Slide>
-                  <Slide index={1}>
-                        <GatsbyImage image={imageByName(props, 'pp-junior', true)} alt="" />
-                  </Slide>
-                  <Slide index={2}>
-                        <GatsbyImage image={imageByName(props, 'pp-2', true)} alt="" />
-                  </Slide>
-                  <Slide index={3}>
-                        <GatsbyImage image={imageByName(props, 'pp-smart', true)} alt="" />
-                  </Slide>
-                  <Slide index={4}>
-                        <GatsbyImage image={imageByName(props, 'pp-extensions', true)} alt="" />
-                  </Slide>
-            </Slider>
-            <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
-      </ScrollableCarouselProvider>
-      </WidthBleeder>
-      <figcaption>Marketing images from Quirky showcasing various members of the Pivot Power family.</figcaption>
+  <WidthBleeder style={{marginBottom:0}}>
+    <ScrollableCarouselProvider
+    naturalSlideWidth={900}
+    naturalSlideHeight={600}
+    totalSlides={5}
+    visibleSlides={1}
+    step={1}
+    isIntrinsicHeight={true}
+    >
+    <Slider classNameTray="center">
+      <Slide index={0}>
+        <JzImage filename='pp-colors' alt="" />
+      </Slide>
+      <Slide index={1}>
+        <JzImage filename='pp-junior' alt="" />
+      </Slide>
+      <Slide index={2}>
+        <JzImage filename='pp-2' alt="" />
+      </Slide>
+      <Slide index={3}>
+        <JzImage filename='pp-smart' alt="" />
+      </Slide>
+      <Slide index={4}>
+        <JzImage filename='pp-extensions' alt="" />
+      </Slide>
+    </Slider>
+    <DotGroup showAsSelectedForCurrentSlideOnly={true}/>
+  </ScrollableCarouselProvider>
+</WidthBleeder>
+<figcaption>Marketing images from Quirky showcasing various members of the Pivot Power family.</figcaption>
 </figure>
 
 ## Honors, Awards and Patents
@@ -128,8 +128,8 @@ Pivot Power's success rocketed Quirky from a startup with a small team to a pote
 - Sold (for a time) at the MoMA Design Store
 
 <figure>
-      <GatsbyImage image={imageByName(props, 'moma', true)} alt="" />
-      <figcaption>Pivot Power on display at the MoMA Design Store.</figcaption>
+  <JzImage filename='moma' alt="" />
+  <figcaption>Pivot Power on display at the MoMA Design Store.</figcaption>
 </figure>
 
 
