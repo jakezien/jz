@@ -59,7 +59,8 @@
     "react-use-gesture": "^9.1.2",
     "react-visibility-sensor": "^5.1.1",
     "styled-components": "^5.2.1",
-    "typography": "^0.16.19"
+    "typography": "^0.16.19",
+    "gatsby-plugin-exif": "./plugins/gatsby-plugin-exif"
   },
   "devDependencies": {
     "gh-pages": "^3.1.0",

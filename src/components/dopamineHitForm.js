@@ -1,0 +1,94 @@
+import React, { useState } from "react"
+import styled from "styled-components"
+import { firestore } from "../../firebase.js"
+
+const DopamineHitBox = styled.div`
+  input,
+  textarea {
+    display: block;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    font-family: "Hind", sans-serif;
+    font-weight: 400;
+    padding: 10px 12px 8px;
+    width: 100%;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum";
+  }
+  input[type="text"] {
+    width: 50%;
+  }
+  label {
+    display: block;
+    margin-bottom: 20px;
+  }
+`
+
+const DopamineHitForm = ({ filename }) => {
+  let storedData = JSON.parse(localStorage.getItem(filename))
+  console.log('storedData', JSON.parse(localStorage.getItem(filename)))
+
+  const [hitId, setHitId] = useState(storedData?.dopamineHit)
+
+  const handleDopamineHitSubmission = async e => {
+    e.preventDefault()
+    let dHit = {
+      time: new Date(),
+    }
+
+    let ref = await firestore
+    .collection(`jgPosts/${filename}/dopamineHits`)
+    .add(dHit)
+    .catch(err => console.error)
+
+    await firestore
+    .collection(`jgPosts`)
+    .doc(filename)
+    .set({create: 'create'})
+    .catch(err => console.error)
+
+    setHitId(ref.id)
+    updateLocalStorage(ref.id)
+  }
+
+  const handleDopamineHitDeletion = async e => {
+    e.preventDefault()
+
+    let ref = await firestore
+    .collection(`jgPosts/${filename}/dopamineHits`)
+    .doc(hitId)
+    .delete()
+    .catch(err => console.error)
+
+    setHitId(null)
+    updateLocalStorage(null)
+  }
+
+  const updateLocalStorage = (id) => {
+    let newData = {
+      dopamineHit: id
+    }
+    let mergedData = {...storedData, ...newData}
+    console.log(mergedData)
+    localStorage.setItem(filename, JSON.stringify(mergedData))
+    storedData = JSON.parse(localStorage.getItem(filename))
+  }
+
+  return (
+    <DopamineHitBox>
+      <form onSubmit={e => handleDopamineHitSubmission(e)}>
+        <button type="submit" disabled={hitId ? true : false}>
+          Add Dopamine Hit
+        </button>
+      </form>
+      <form onSubmit={e => handleDopamineHitDeletion(e)}>
+        <button type="submit" disabled={hitId ? false : true}>
+          Remove Dopamine Hit
+        </button>
+      </form>
+    </DopamineHitBox>
+  )
+}
+
+export default DopamineHitForm

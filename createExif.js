@@ -57,7 +57,7 @@ function createNodes(exifData, iptcData, node, actions, createNodeId) {
     node,
     name: 'exif',
     value: exif
-  })
+  }, 'gatsby-plugin-exif')
 
   // create new nodes from all exif data
   // allowing to be queried with imageExif & AllImageExif

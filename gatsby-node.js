@@ -1,11 +1,11 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { createExif } = require(`./createExif`)
-
+const { graphql } = require('graphql');
 
 exports.createPages = async ({ graphql, actions }) => {
 
-  const { createPage } = actions
+  const { createPage, createNodeField } = actions
 
   // ———— WORK PAGES ———— //
   const workPostTemplate = path.resolve(`./src/templates/work-post.js`)
@@ -104,6 +104,47 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   })
 
+
+  // ————————————— JAKESTAGRAM IMAGES ————————————— //
+  
+  const jakestagramResult = await graphql(`
+    {
+      allFile(
+        filter: {absolutePath: {glob: "**/jakestagram/*"}}
+        sort: {fields: fields___exif___iptc___date_time, order: DESC}
+      ) {
+        nodes {
+          fields {
+            exif {
+              iptc {
+                date_time
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  if (jakestagramResult.errors) {
+    throw jakestagramResult.errors
+  }
+
+  // Add index to nodes.
+  const photos = jakestagramResult.data.allFile.nodes
+
+  photos.forEach((node, index) => {
+    const photoIndex = photos.length - index
+    // console.log(photoIndex, node.fields.exif.iptc.date_time)
+    node.fields.photoIndex = photoIndex
+    // console.log(node)
+
+    // createNodeField({
+    //   name: `slug`,
+    //   node,
+    //   value: photoIndex
+    // })
+  })
 }
 
 exports.onCreateNode = ({ node, actions, getNode, createNodeId }) => {
@@ -141,5 +182,11 @@ exports.onCreateNode = ({ node, actions, getNode, createNodeId }) => {
 
   if (node.internal.mediaType === 'image/jpeg' && node.absolutePath.includes('jakestagram')) {
     createExif(node, actions, createNodeId)
+    
+    createNodeField({
+      node,
+      name: `photoIndex`,
+      value: 1
+    })
   }
 }
