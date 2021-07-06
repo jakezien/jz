@@ -3,25 +3,8 @@ import styled from "styled-components"
 import { firestore } from "../../firebase.js"
 
 const DopamineHitBox = styled.div`
-  input,
-  textarea {
-    display: block;
-    background-color: #fff;
-    border: 2px solid #ddd;
-    font-size: 16px;
-    font-family: "Hind", sans-serif;
-    font-weight: 400;
-    padding: 10px 12px 8px;
-    width: 100%;
-    font-variant-numeric: lining-nums;
-    font-feature-settings: "lnum";
-  }
-  input[type="text"] {
-    width: 50%;
-  }
-  label {
-    display: block;
-    margin-bottom: 20px;
+  button[disabled] {
+    display:none;
   }
 `
 

@@ -247,18 +247,18 @@ const Jakestagram = ({ data, location }) => {
               <ImageRow key={i}>
                 <StyledGatsbyImage image={getImage(listChunk[0])} alt="" index={allPosts.length - (i*3 + 0)} onClick={handleImageClick}/>
                 <ImageMetadata image={listChunk[0]} />
-                <ImageComments image={listChunk[0]} />
                 <ImageDopamineHits image={listChunk[0]} />
+                <ImageComments image={listChunk[0]} />
                 
                 <StyledGatsbyImage image={getImage(listChunk[1])} alt="" index={allPosts.length - (i*3 + 1)} onClick={handleImageClick}/>
                 <ImageMetadata image={listChunk[1]} />
-                <ImageComments image={listChunk[1]} />
                 <ImageDopamineHits image={listChunk[1]} />
+                <ImageComments image={listChunk[1]} />
 
                 <StyledGatsbyImage image={getImage(listChunk[2])} alt="" index={allPosts.length - (i*3 + 2)} onClick={handleImageClick}/>
                 <ImageMetadata image={listChunk[2]} />
-                <ImageComments image={listChunk[2]} />
                 <ImageDopamineHits image={listChunk[2]} />
+                <ImageComments image={listChunk[2]} />
               </ImageRow>
           )})}
           <VisibilitySensor 

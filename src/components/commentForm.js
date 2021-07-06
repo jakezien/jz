@@ -3,25 +3,27 @@ import styled from "styled-components"
 import { firestore } from "../../firebase.js"
 
 const CommentBox = styled.div`
-  input,
-  textarea {
+  
+
+  input, textarea {
     display: block;
-    background-color: #fff;
     border: 2px solid #ddd;
-    font-size: 16px;
-    font-family: "Hind", sans-serif;
-    font-weight: 400;
-    padding: 10px 12px 8px;
-    width: 100%;
-    font-variant-numeric: lining-nums;
-    font-feature-settings: "lnum";
+    max-width: 100%;
+    padding: 0.25em .5em;
+    margin-bottom: .5em;
   }
-  input[type="text"] {
-    width: 50%;
+
+  textarea {
+    min-height: 4em;
+    margin-bottom: 1em;
   }
+
   label {
     display: block;
-    margin-bottom: 20px;
+  }
+
+  button: {
+    height:
   }
 `
 
@@ -91,7 +93,7 @@ const CommentForm = ({ filename }) => {
             name="comment"
             required="required"
             cols="45"
-            rows="8"
+            rows="4"
           ></textarea>
         </label>
         <button type="submit" className="btn">

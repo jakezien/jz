@@ -6,9 +6,19 @@ import { rhythm } from "../utils/typography"
 import DopamineHitForm from "./dopamineHitForm"
 
 const StyledDiv = styled.div`
-
+  display: flex;
+  align-items: baseline;
+  
   .grid & {
     display: none
+  }
+  
+  p {
+    margin: 0 1em .5em 0
+  }
+  
+  form {
+    margin: 0
   }
 `
 

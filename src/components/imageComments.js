@@ -15,6 +15,7 @@ const StyledDiv = styled.div`
 const ImageComments = ({image}) => {
   let filename = image?.name
   const [comments, setComments] = useState([])
+  const [showForm, setShowForm] = useState(false)
 
   const storedData = localStorage.getItem(filename)
   // console.log('storedData', storedData)
@@ -35,7 +36,13 @@ const ImageComments = ({image}) => {
 
   return (
     <StyledDiv className="comments">
-      <CommentForm filename={filename}/>
+      {!showForm && <button onClick={() => setShowForm(!showForm)}>Add Comment</button>}
+      {showForm && 
+        <div>
+          <CommentForm filename={filename}/>
+          <button onClick={() => setShowForm(!showForm)}>Cancel</button>
+        </div>
+      }
       {comments.map((comment, i) => { 
         return (
           <div key={i}>
