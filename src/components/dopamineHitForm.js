@@ -9,8 +9,8 @@ const DopamineHitBox = styled.div`
 `
 
 const DopamineHitForm = ({ filename }) => {
-  let storedData = JSON.parse(localStorage.getItem(filename))
-  console.log('storedData', JSON.parse(localStorage.getItem(filename)))
+  let storedData = JSON.parse(localStorage?.getItem(filename))
+  console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
 
   const [hitId, setHitId] = useState(storedData?.dopamineHit)
 
@@ -54,8 +54,8 @@ const DopamineHitForm = ({ filename }) => {
     }
     let mergedData = {...storedData, ...newData}
     console.log(mergedData)
-    localStorage.setItem(filename, JSON.stringify(mergedData))
-    storedData = JSON.parse(localStorage.getItem(filename))
+    localStorage?.setItem(filename, JSON.stringify(mergedData))
+    storedData = JSON.parse(localStorage?.getItem(filename))
   }
 
   return (

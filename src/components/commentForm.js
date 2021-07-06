@@ -28,8 +28,8 @@ const CommentBox = styled.div`
 `
 
 const CommentForm = ({ filename }) => {
-  let storedData = JSON.parse(localStorage.getItem(filename))
-  console.log('storedData', JSON.parse(localStorage.getItem(filename)))
+  let storedData = JSON.parse(localStorage?.getItem(filename))
+  console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
 
   const [name, setName] = useState("")
   const [body, setBody] = useState("")
@@ -67,8 +67,8 @@ const CommentForm = ({ filename }) => {
     }
     let mergedData = {...storedData, ...newData}
     console.log(mergedData)
-    localStorage.setItem(filename, JSON.stringify(mergedData))
-    storedData = JSON.parse(localStorage.getItem(filename))
+    localStorage?.setItem(filename, JSON.stringify(mergedData))
+    storedData = JSON.parse(localStorage?.getItem(filename))
   }
 
   return (
