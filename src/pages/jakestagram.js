@@ -12,13 +12,9 @@ import NoScroll from 'no-scroll';
 
 import Layout from "../templates/layout"
 import Container from '../components/container'
-import JakestagramImage from '../components/jakestagramImage'
-import ImageMetadata from '../components/imageMetadata'
-import ImageComments from '../components/imageComments'
-import ImageDopamineHits from '../components/imageDopamineHits'
+import JgImage from '../components/jgImage'
+import JgPostsDisplay from '../components/jgPostsDisplay'
 import Logo from '../../static/svg/logo-jakestagram.svg'
-import GridIcon from '../../static/svg/icon-grid.svg'
-import ListIcon from '../../static/svg/icon-list.svg'
 
 
 // ————————— STYLED COMPONENTS —————————— //
@@ -55,75 +51,13 @@ import ListIcon from '../../static/svg/icon-list.svg'
     }  
   `
 
-
-  const FeedStyleToggle = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-bottom: ${rhythm(1)};
-    border-top: 1px solid ${props => props.theme.bg4};
-    button {
-      flex: 0 0 25%;
-      padding: 0;
-      cursor: pointer;
-      border: 0;
-      background: ${props => props.theme.bg0};
-      svg {
-        pointer-events: none;
-        position: relative;
-        border: 0;
-        padding: ${rhythm(.5)} ${rhythm(.25)};
-        width: auto;
-        max-width: ${rhythm(1.5)};
-        height: ${rhythm(1.5)};
-        box-sizing: content-box;
-        g * {
-          stroke: ${props => props.theme.bg5} !important;
-        }
-      }
-      &.active, &:hover, &:active {
-        svg {
-          top: -1px;
-          border-top: 1px solid ${props => props.theme.yellow};
-          g * {
-            stroke: ${props => props.theme.yellow} !important;
-          }
-      }
-    }
-  `
-
-  const ImageWrapper = styled.div``
-
   const ImageRow = styled.div`
-    ${ImageWrapper}.grid & { 
+    .grid & { 
       display: flex;
       margin-bottom: 3px;
       @media (min-width: 768px) {
         margin-bottom: 28px;
       }
-    }
-  `
-
-  const StyledGatsbyImage = styled(GatsbyImage)`
-    cursor: pointer;
-    ${ImageWrapper}.grid & {  
-      flex: 1 0 0%;
-      margin-right:3px;
-      > div:first-child {
-        padding-top: 100% !important;
-      }
-      &:not(:last-of-type) {
-        margin-bottom: 0;
-      }
-      &:last-of-type {
-        margin-right: 0;
-      }
-      @media (min-width: 768px) {
-        margin-right: 28px;
-      }
-    }
-
-    ${ImageWrapper}.list & { 
-      flex: 1 0 100%;
     }
   `
 
@@ -149,7 +83,6 @@ const Jakestagram = ({ data, location }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
   const [lightboxPadding, setlightboxPadding] = useState(padding)
-  const [displayStyle, setDisplayStyle] = useState('grid')
 
   // ————————————— HANDLERS ————————————— //
     
@@ -165,12 +98,6 @@ const Jakestagram = ({ data, location }) => {
       console.log(index, allPosts.length - index)
       setLightboxIndex(allPosts.length - index)
       setLightboxOpen(true)
-    }
-
-    const handleButtonClick = (e) => {
-      let name = e.target.getAttribute('name')
-      console.log(e.target)
-      setDisplayStyle(name)
     }
 
     const handleLightboxPrevClick = () => {
@@ -225,53 +152,39 @@ const Jakestagram = ({ data, location }) => {
       <SEO title="Jakestagram" />
       <section>
         <StyledContainer>
+
           <Header>
-            <div><StyledLogo/></div>
+            <div>
+              <StyledLogo/>
+            </div>
             <div>
               <p>jakezien</p>
               <p><span><strong>{allPosts.length}</strong> posts</span></p>
               <p>{tags.join(' ')}</p>
             </div>
           </Header>
-          <FeedStyleToggle>
-            <button name="grid" className={displayStyle==='grid' ? 'active':''} onClick={handleButtonClick}>
-              <GridIcon/>
-            </button>
-            <button name="list" className={displayStyle==='list' ? 'active':''} onClick={handleButtonClick}>
-              <ListIcon/>
-            </button>
-          </FeedStyleToggle>
-          <ImageWrapper className={displayStyle}>
-          {chunkArray(list, 3).map((listChunk, i) => { 
-            return (
-              <ImageRow key={i}>
-                <StyledGatsbyImage image={getImage(listChunk[0])} alt="" index={allPosts.length - (i*3 + 0)} onClick={handleImageClick}/>
-                <ImageMetadata image={listChunk[0]} />
-                <ImageDopamineHits image={listChunk[0]} />
-                <ImageComments image={listChunk[0]} />
-                
-                <StyledGatsbyImage image={getImage(listChunk[1])} alt="" index={allPosts.length - (i*3 + 1)} onClick={handleImageClick}/>
-                <ImageMetadata image={listChunk[1]} />
-                <ImageDopamineHits image={listChunk[1]} />
-                <ImageComments image={listChunk[1]} />
 
-                <StyledGatsbyImage image={getImage(listChunk[2])} alt="" index={allPosts.length - (i*3 + 2)} onClick={handleImageClick}/>
-                <ImageMetadata image={listChunk[2]} />
-                <ImageDopamineHits image={listChunk[2]} />
-                <ImageComments image={listChunk[2]} />
-              </ImageRow>
-          )})}
-          <VisibilitySensor 
-            onChange={handleVisibilityChange} 
-            partialVisibility={true}
-            offset={{bottom:-300}} 
-            scrollCheck={true}
-            scrollThrottle={10}
-            resizeCheck={true}
-          >
-            {hasMore ? <p>Loading…</p> : <p>That's all there is</p>}
-          </VisibilitySensor>
-          </ImageWrapper>
+          <JgPostsDisplay>
+            {chunkArray(list, 3).map((listChunk, i) => { 
+              return (
+                <ImageRow key={i}>
+                  <JgImage imageNode={listChunk[0]} alt="" index={allPosts.length - (i*3 + 0)} onClick={handleImageClick}/>
+                  <JgImage imageNode={listChunk[1]} alt="" index={allPosts.length - (i*3 + 1)} onClick={handleImageClick}/>
+                  <JgImage imageNode={listChunk[2]} alt="" index={allPosts.length - (i*3 + 2)} onClick={handleImageClick}/>
+                </ImageRow>
+            )})}
+
+            <VisibilitySensor 
+              onChange={handleVisibilityChange} 
+              partialVisibility={true}
+              offset={{bottom:-300}} 
+              scrollCheck={true}
+              scrollThrottle={10}
+              resizeCheck={true}
+            >
+              {hasMore ? <p>Loading…</p> : <p>That's all there is</p>}
+            </VisibilitySensor>
+          </JgPostsDisplay>
 
           {lightboxOpen && (
             <Lightbox
