@@ -17,7 +17,9 @@ const ImageComments = ({image}) => {
   const [comments, setComments] = useState([])
   const [showForm, setShowForm] = useState(false)
 
-  const storedData = localStorage?.getItem(filename)
+  let storedData;
+  if (typeof localStorage !== undefined)
+    storedData = localStorage?.getItem(filename)
   // console.log('storedData', storedData)
   
   useEffect(() => {
