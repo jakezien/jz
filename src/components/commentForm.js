@@ -29,7 +29,7 @@ const CommentBox = styled.div`
 
 const CommentForm = ({ filename }) => {
   let storedData;
-  if (typeof localStorage !== undefined) {
+  if (typeof window !== "undefined") {
     storedData = JSON.parse(localStorage?.getItem(filename))
     console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
   }
@@ -70,7 +70,7 @@ const CommentForm = ({ filename }) => {
     }
     let mergedData = {...storedData, ...newData}
     console.log(mergedData)
-    if (typeof localStorage !== undefined) {
+    if (typeof window !== "undefined") {
       localStorage?.setItem(filename, JSON.stringify(mergedData))
       storedData = JSON.parse(localStorage?.getItem(filename))
     }

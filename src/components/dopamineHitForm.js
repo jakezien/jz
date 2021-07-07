@@ -11,7 +11,7 @@ const DopamineHitBox = styled.div`
 const DopamineHitForm = ({ filename }) => {
   let storedData;
 
-  if (typeof localStorage !== "undefined") {
+  if (typeof window !== "undefined") {
     let storedData = JSON.parse(localStorage?.getItem(filename))
     console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
   }
@@ -59,8 +59,8 @@ const DopamineHitForm = ({ filename }) => {
     let mergedData = {...storedData, ...newData}
     console.log(mergedData)
 
-    if (typeof localStorage !== undefined) {
-      localStorage?.setItem(filename, JSON.stringify(mergedData))
+    if (typeof window !== "undefined") {
+      localStorage.setItem(filename, JSON.stringify(mergedData))
       storedData = JSON.parse(localStorage?.getItem(filename))
     }
   }
