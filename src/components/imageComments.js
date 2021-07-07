@@ -4,8 +4,23 @@ import styled from "styled-components"
 import { firestore } from "../../firebase.js"
 import { rhythm } from "../utils/typography"
 import CommentForm from "./commentForm"
+import CommentIcon from '../../static/svg/icon-comment.svg'
+
 
 const StyledDiv = styled.div`
+
+  button {
+    background: transparent;
+    border: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.5rem;
+    height: ${rhythm(2)};
+
+    &:hover {
+      background: ${props => props.theme.yellowHover};
+    }
+  }
 
   .grid & {
     display: none
@@ -40,7 +55,7 @@ const ImageComments = ({image}) => {
 
   return (
     <StyledDiv className="comments">
-      {!showForm && <button onClick={() => setShowForm(!showForm)}>Add Comment</button>}
+      {!showForm && <button onClick={() => setShowForm(!showForm)}><CommentIcon/></button>}
       {showForm && 
         <div>
           <CommentForm filename={filename}/>

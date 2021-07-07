@@ -6,7 +6,6 @@ import { rhythm } from "../utils/typography"
 import DopamineHitForm from "./dopamineHitForm"
 
 const StyledDiv = styled.div`
-  display: flex;
   align-items: baseline;
   
   .grid & {
@@ -18,7 +17,19 @@ const StyledDiv = styled.div`
   }
   
   form {
-    margin: 0
+    margin: 0;
+    button {
+      background: transparent;
+      border: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 0.5rem;
+      height: ${rhythm(2)};
+  
+      &:hover {
+        background: ${props => props.theme.yellowHover};
+      }
+    }
   }
 `
 
@@ -41,8 +52,8 @@ const ImageDopamineHits = ({image}) => {
 
   return (
     <StyledDiv className="dopamine-hits">
-      <p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>
       <DopamineHitForm filename={filename} />
+      <p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>
     </StyledDiv>
   )
   

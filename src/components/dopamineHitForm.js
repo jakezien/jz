@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { firestore } from "../../firebase.js"
+import DopamineIcon from '../../static/svg/icon-dopamine.svg'
+
 
 const DopamineHitBox = styled.div`
   button[disabled] {
@@ -69,7 +71,7 @@ const DopamineHitForm = ({ filename }) => {
     <DopamineHitBox>
       <form onSubmit={e => handleDopamineHitSubmission(e)}>
         <button type="submit" disabled={hitId ? true : false}>
-          Add Dopamine Hit
+          <DopamineIcon />
         </button>
       </form>
       <form onSubmit={e => handleDopamineHitDeletion(e)}>

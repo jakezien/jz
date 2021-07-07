@@ -23,6 +23,11 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding-left: .5em;
   }
+
+  button, .button {
+    cursor: pointer;
+  }
+
   @media screen and (min-width: 768px) {
     ul {
       padding-left: 0;
