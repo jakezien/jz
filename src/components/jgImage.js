@@ -3,11 +3,15 @@ import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 
-import ImageMetadata from './imageMetadata'
-import ImageComments from './imageComments'
-import ImageDopamineHits from './imageDopamineHits'
+
+import JgImageFooter from './jgImageFooter'
+import JgImageComments from './jgImageComments'
+
+const StyledJgImageFooter = styled(JgImageFooter)``
 
 const JgPost = styled.div`
+  position: relative;
+
   .grid & {
     flex: 1 0 0%;
     margin-right:3px;
@@ -17,8 +21,18 @@ const JgPost = styled.div`
       > div:first-child {
         padding-top: 100% !important;
       }
-      &:hover {
-        opacity: 0.7
+    }
+
+    ${StyledJgImageFooter} {
+      opacity: 0;
+    }
+
+    &:hover {
+      .gatsby-image-wrapper {
+        opacity: 0.7;
+      }
+      ${StyledJgImageFooter} {
+        opacity: 1;
       }
     }
 
@@ -48,9 +62,8 @@ const JgImage = (props) => {
   return (
     <JgPost>
       <GatsbyImage image={getImage(imageNode)} {...otherProps} />
-      <ImageMetadata image={imageNode} />
-      <ImageDopamineHits image={imageNode} />
-      <ImageComments image={imageNode} />
+      <StyledJgImageFooter imageNode={imageNode} />
+      <JgImageComments imageNode={imageNode} />
     </JgPost>
   )
 }

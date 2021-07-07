@@ -27,8 +27,8 @@ const StyledDiv = styled.div`
   }
 `
 
-const ImageComments = ({image}) => {
-  let filename = image?.name
+const JgImageComments = ({imageNode}) => {
+  let filename = imageNode?.name
   const [comments, setComments] = useState([])
   const [showForm, setShowForm] = useState(false)
 
@@ -55,7 +55,7 @@ const ImageComments = ({image}) => {
 
   return (
     <StyledDiv className="comments">
-      {!showForm && <button onClick={() => setShowForm(!showForm)}><CommentIcon/></button>}
+      {!showForm && <button onClick={() => setShowForm(!showForm)}>Add a comment</button>}
       {showForm && 
         <div>
           <CommentForm filename={filename}/>
@@ -74,4 +74,4 @@ const ImageComments = ({image}) => {
   )
 }
 
-export default ImageComments;
+export default JgImageComments;

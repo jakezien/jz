@@ -8,10 +8,6 @@ import DopamineHitForm from "./dopamineHitForm"
 const StyledDiv = styled.div`
   align-items: baseline;
   
-  .grid & {
-    display: none
-  }
-  
   p {
     margin: 0 1em .5em 0
   }
@@ -33,8 +29,8 @@ const StyledDiv = styled.div`
   }
 `
 
-const ImageDopamineHits = ({image}) => {
-  let filename = image?.name
+const JgImageDopamineHits = ({imageNode}) => {
+  let filename = imageNode?.name
   const [dopamineHits, setDopamineHits] = useState([])
   
   useEffect(() => {
@@ -53,10 +49,11 @@ const ImageDopamineHits = ({image}) => {
   return (
     <StyledDiv className="dopamine-hits">
       <DopamineHitForm filename={filename} />
-      <p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>
+      {/*<p>{dopamineHits.length}</p>*/}
+      {/*<p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>*/}
     </StyledDiv>
   )
   
 }
 
-export default ImageDopamineHits;
+export default JgImageDopamineHits;

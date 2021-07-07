@@ -22,7 +22,7 @@ const StyledDiv = styled.div`
 
 `
 
-const ImageMetadata = ({image}) => {
+const JgImageMetadata = ({image}) => {
   let make = image?.fields.exif.image.Make
   let model = image?.fields.exif.image.Model
   let utcDate = image?.fields.exif.exif.DateTimeOriginal
@@ -35,4 +35,4 @@ const ImageMetadata = ({image}) => {
   )
 }
 
-export default ImageMetadata;
+export default JgImageMetadata;
