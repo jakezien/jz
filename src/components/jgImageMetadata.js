@@ -22,10 +22,10 @@ const StyledDiv = styled.div`
 
 `
 
-const JgImageMetadata = ({image}) => {
-  let make = image?.fields.exif.image.Make
-  let model = image?.fields.exif.image.Model
-  let utcDate = image?.fields.exif.exif.DateTimeOriginal
+const JgImageMetadata = ({imageNode}) => {
+  let make = imageNode?.fields.exif.image.Make
+  let model = imageNode?.fields.exif.image.Model
+  let utcDate = imageNode?.fields.exif.exif.DateTimeOriginal
   let displayDate = utcDate ? moment.utc(utcDate).format('MMM D, YYYY h:mm A') : ''
   
   return (

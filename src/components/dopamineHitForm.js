@@ -10,8 +10,9 @@ const DopamineHitBox = styled.div`
   }
 `
 
-const DopamineHitForm = ({ filename }) => {
+const DopamineHitForm = ( filename ) => {
   let storedData;
+  console.log(filename)
 
   if (typeof window !== "undefined") {
     let storedData = JSON.parse(localStorage?.getItem(filename))

@@ -6,7 +6,8 @@ import { rhythm } from "../utils/typography"
 import DopamineHitForm from "./dopamineHitForm"
 
 const StyledDiv = styled.div`
-  align-items: baseline;
+  display: flex;
+  align-items: center;
   
   p {
     margin: 0 1em .5em 0
@@ -31,6 +32,7 @@ const StyledDiv = styled.div`
 
 const JgImageDopamineHits = ({imageNode}) => {
   let filename = imageNode?.name
+  console.log('dopehits', filename)
   const [dopamineHits, setDopamineHits] = useState([])
   
   useEffect(() => {
@@ -49,7 +51,7 @@ const JgImageDopamineHits = ({imageNode}) => {
   return (
     <StyledDiv className="dopamine-hits">
       <DopamineHitForm filename={filename} />
-      {/*<p>{dopamineHits.length}</p>*/}
+      <span>{dopamineHits.length}</span>
       {/*<p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>*/}
     </StyledDiv>
   )

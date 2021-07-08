@@ -19,17 +19,25 @@ const StyledDiv = styled.div`
     &:hover {
       background: ${props => props.theme.yellowHover};
     }
+
+    svg * {
+    	stroke: ${props => props.theme.isDark ? props.theme.textTint : props.theme.textShade} !important;
+    }
   }
 
   .grid & {
     position: absolute;
     width: 100%;
     bottom: 0;
+    justify-content: space-between;
+    pointer-events: none;
 
     button {
-    	height:${rhythm(1.25)}
     	svg {
     		height:100%;
+    		* {
+	    		stroke: white !important;
+    		}
     	}
     }
   }
@@ -37,6 +45,7 @@ const StyledDiv = styled.div`
 
 
 const JgImageActions = ({imageNode}) => {
+	console.log('actions', imageNode)
 
 	return (
 		<StyledDiv>

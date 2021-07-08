@@ -8,11 +8,12 @@ const StyledDiv = styled.div`
 	justify-content: space-between;
 `
 const JgImageFooter = ({imageNode, className}) => {  
+	console.log('footer', imageNode)
 
   return (
     <StyledDiv className={className}>
-    	<JgImageActions image={imageNode}/>
-    	<JgImageMetadata image={imageNode}/>
+    	<JgImageActions imageNode={imageNode}/>
+    	<JgImageMetadata imageNode={imageNode}/>
     </StyledDiv>
   )
 }
