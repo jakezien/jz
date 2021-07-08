@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
-
+import { JgImageContextProvider } from "./jgImageContext"
 
 import JgImageFooter from './jgImageFooter'
 import JgImageComments from './jgImageComments'
@@ -68,9 +68,11 @@ const JgImage = (props) => {
 
   return (
     <JgPost>
-      <GatsbyImage image={getImage(imageNode)} {...otherProps} />
-      <StyledJgImageFooter imageNode={imageNode} />
-      <JgImageComments imageNode={imageNode} />
+      <JgImageContextProvider imageNode={imageNode}>
+        <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+        <StyledJgImageFooter imageNode={imageNode} />
+        <JgImageComments imageNode={imageNode} />
+      </JgImageContextProvider>
     </JgPost>
   )
 }
