@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, useContext} from "react"
 import moment from 'moment'
 import styled from "styled-components"
 import { firestore } from "../../firebase.js"
 import { rhythm } from "../utils/typography"
 import DopamineHitForm from "./dopamineHitForm"
+import { JgImageContext } from '../components/jgImageContext.js'
+
 
 const StyledDiv = styled.div`
   display: flex;
@@ -30,27 +32,13 @@ const StyledDiv = styled.div`
   }
 `
 
-const JgImageDopamineHits = ({imageNode}) => {
-  let filename = imageNode?.name
-  console.log('dopehits', filename)
-  const [dopamineHits, setDopamineHits] = useState([])
-  
-  useEffect(() => {
-    const cleanUp = firestore
-      .collection(`jgPosts/${filename}/dopamineHits`)
-      .onSnapshot(snapshot => {
-        const posts = snapshot.docs
-        .map(doc => {
-          return { id: doc.id, ...doc.data() }
-        })
-        setDopamineHits(posts)
-      })
-    return () => cleanUp()
-  }, [filename])
+const JgImageDopamineHits = (props) => {
+
+  let { dopamineHits } = useContext(JgImageContext)
 
   return (
     <StyledDiv className="dopamine-hits">
-      <DopamineHitForm filename={filename} />
+      <DopamineHitForm />
       <span>{dopamineHits.length}</span>
       {/*<p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>*/}
     </StyledDiv>

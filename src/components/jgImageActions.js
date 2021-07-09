@@ -44,12 +44,12 @@ const StyledDiv = styled.div`
 `
 
 
-const JgImageActions = ({imageNode}) => {
-	console.log('actions', imageNode)
+const JgImageActions = (props) => {
+	// console.log('actions', imageNode)
 
 	return (
 		<StyledDiv>
-			<JgImageDopamineHits imageNode={imageNode}/>
+			<JgImageDopamineHits />
 			<button><CommentIcon/></button>
 		</StyledDiv>
 	)

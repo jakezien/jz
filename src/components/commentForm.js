@@ -31,7 +31,7 @@ const CommentForm = ({ filename }) => {
   let storedData;
   if (typeof window !== "undefined") {
     storedData = JSON.parse(localStorage?.getItem(filename))
-    console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
+    // console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
   }
 
   const [name, setName] = useState("")

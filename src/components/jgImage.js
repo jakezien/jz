@@ -70,8 +70,8 @@ const JgImage = (props) => {
     <JgPost>
       <JgImageContextProvider imageNode={imageNode}>
         <GatsbyImage image={getImage(imageNode)} {...otherProps} />
-        <StyledJgImageFooter imageNode={imageNode} />
-        <JgImageComments imageNode={imageNode} />
+        <StyledJgImageFooter />
+        {/*<JgImageComments imageNode={imageNode} />*/}
       </JgImageContextProvider>
     </JgPost>
   )
