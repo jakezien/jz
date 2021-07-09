@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import { getFirestore, collection, query, orderBy, getDocs, addDoc } from "firebase/firestore"
 import { firebaseApp } from "../../firebase.js"
 
@@ -14,7 +14,7 @@ const JgImageContextProvider = ({imageNode, children}) => {
   const dopamineHitsQuery = query(dopamineHitsFbRef, orderBy('time', 'desc'));
 
   const comments = useRef()
-  const dopamineHits = useRef()
+  const [dopamineHits, setDopamineHits] = useState()
   const localData = useRef()
 
   let commentDocs = []
@@ -36,6 +36,8 @@ const JgImageContextProvider = ({imageNode, children}) => {
     dopamineHitsSnapshot.forEach((doc) => {
       dopamineHitsDocs.push({[doc.id]: doc.data()})
     })
+
+    setDopamineHits(dopamineHitsDocs)
   }
 
   const addDopamineHit = async () => {
@@ -101,18 +103,20 @@ const JgImageContextProvider = ({imageNode, children}) => {
     console.log('localData.current', localData.current)
   }
 
-  getPostData().then(() => {
-    comments.current = commentDocs
-    dopamineHits.current = dopamineHitsDocs 
-    console.log(imageNode.name, 'commentsRef', comments.current)
-    console.log(imageNode.name, 'dopamineHitsRef', dopamineHits.current)
-  })
+  useEffect(() => {  
+    getPostData().then(() => {
+      comments.current = commentDocs
+      setDopamineHits(dopamineHitsDocs)
+      console.log(imageNode.name, 'commentsRef', comments.current)
+      console.log(imageNode.name, 'dopamineHitsState', dopamineHits)
+    })
+  }, [])
 
   return (
     <Provider value={{
       imageNode: imageNode, 
       comments: comments.current, 
-      dopamineHits: dopamineHits.current,
+      dopamineHits: dopamineHits,
       addDopamineHit: addDopamineHit,
       removeDopamineHit: removeDopamineHit
     }}>
