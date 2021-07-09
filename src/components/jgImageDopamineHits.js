@@ -39,7 +39,7 @@ const JgImageDopamineHits = (props) => {
   return (
     <StyledDiv className="dopamine-hits">
       <DopamineHitForm />
-      <span>{dopamineHits.length}</span>
+      <span>{dopamineHits?.length}</span>
       {/*<p>{dopamineHits.length === 1 ? dopamineHits.length + ' hit' : dopamineHits.length + ' hits'} of dopamine</p>*/}
     </StyledDiv>
   )

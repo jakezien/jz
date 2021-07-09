@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react'
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"
+import { getFirestore, collection, query, orderBy, getDocs, addDoc } from "firebase/firestore"
 import { firebaseApp } from "../../firebase.js"
 
 let JgImageContext
@@ -7,23 +7,24 @@ let { Provider } = (JgImageContext = React.createContext())
 
 const JgImageContextProvider = ({imageNode, children}) => {
 
+  const db = getFirestore(firebaseApp)
+  const commentsFbRef = collection(db, `jgPosts/${imageNode.name}/comments`)
+  const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
+  const commentsQuery = query(commentsFbRef, orderBy('time', 'desc'));
+  const dopamineHitsQuery = query(dopamineHitsFbRef, orderBy('time', 'desc'));
+
   const comments = useRef()
   const dopamineHits = useRef()
-  const storedData = useRef()
+  const localData = useRef()
 
   let commentDocs = []
   let dopamineHitsDocs = []
 
-  if (typeof window !== "undefined") {
-    storedData.current = JSON.parse(localStorage?.getItem(imageNode.name))
-    // console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
-  }
+  const getPostData = async () => {   
 
-  const getPostData = async () => {    
-    const db = getFirestore(firebaseApp)
-
-    const commentsQuery = query(collection(db, `jgPosts/${imageNode.name}/comments`));
-    const dopamineHitsQuery = query(collection(db, `jgPosts/${imageNode.name}/dopamineHits`));
+    if (typeof window !== "undefined") {
+      localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
+    } 
 
     const commentsSnapshot = await getDocs(commentsQuery)
     const dopamineHitsSnapshot = await getDocs(dopamineHitsQuery)
@@ -39,49 +40,65 @@ const JgImageContextProvider = ({imageNode, children}) => {
 
   const addDopamineHit = async () => {
     console.log('addhit')
-    // let dHit = {
-    //   time: new Date(),
-    // }
+    let newHit = {
+      time: new Date(),
+    }
 
-    // let ref = await firestore
-    // .collection(`jgPosts/${filename}/dopamineHits`)
-    // .add(dHit)
-    // .catch(err => console.error)
+    let newHitFbRef = await addDoc(dopamineHitsFbRef, newHit)
 
-    // await firestore
-    // .collection(`jgPosts`)
-    // .doc(filename)
-    // .set({create: 'create'})
-    // .catch(err => console.error)
+    updateLocalStorage('dopamineHit', newHitFbRef)
 
-    // setHitId(ref.id)
-    // updateLocalStorage(ref.id)
+    // ————————————— OLD CODE ————————————— //
+      
+      // let ref = await firestore
+      // .collection(`jgPosts/${filename}/dopamineHits`)
+      // .add(dHit)
+      // .catch(err => console.error)
+
+      // await firestore
+      // .collection(`jgPosts`)
+      // .doc(filename)
+      // .set({create: 'create'})
+      // .catch(err => console.error)
+
+      // setHitId(ref.id)
+      // updateLocalStorage(ref.id)
   }
 
   const removeDopamineHit = async () => {
     console.log('removehit')
 
-    // let ref = await firestore
-    // .collection(`jgPosts/${filename}/dopamineHits`)
-    // .doc(hitId)
-    // .delete()
-    // .catch(err => console.error)
+    // ————————————— OLD CODE ————————————— //
+      
+      // let ref = await firestore
+      // .collection(`jgPosts/${filename}/dopamineHits`)
+      // .doc(hitId)
+      // .delete()
+      // .catch(err => console.error)
 
-    // setHitId(null)
-    // updateLocalStorage(null)
+      // setHitId(null)
+      // updateLocalStorage(null)
   }
 
-  const updateLocalStorage = (id) => {
-    // let newData = {
-    //   dopamineHit: id
-    // }
-    // let mergedData = {...storedData, ...newData}
-    // // console.log(mergedData)
+  const updateLocalStorage = (docType, docRef) => {
+    if (typeof window === "undefined") return
 
-    // if (typeof window !== "undefined") {
-    //   localStorage.setItem(filename, JSON.stringify(mergedData))
-    //   storedData = JSON.parse(localStorage?.getItem(filename))
-    // }
+    let newData;
+
+    if (docType === 'dopamineHit') {
+      newData = {dopamineHit: docRef.id}
+    }
+
+    if (docType === 'comment') {
+
+    }
+
+    let mergedData = {...localData.current, ...newData}
+    console.log('mergedData', mergedData)
+
+    localStorage.setItem(imageNode.name, JSON.stringify(mergedData))
+    localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
+    console.log('localData.current', localData.current)
   }
 
   getPostData().then(() => {
@@ -94,8 +111,8 @@ const JgImageContextProvider = ({imageNode, children}) => {
   return (
     <Provider value={{
       imageNode: imageNode, 
-      comments:comments.current, 
-      dopamineHits:dopamineHits.current,
+      comments: comments.current, 
+      dopamineHits: dopamineHits.current,
       addDopamineHit: addDopamineHit,
       removeDopamineHit: removeDopamineHit
     }}>
