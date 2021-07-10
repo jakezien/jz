@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
-import { getFirestore, collection, query, orderBy, getDocs, addDoc } from "firebase/firestore"
+import { getFirestore, collection, query, orderBy, getDocs, addDoc, onSnapshot } from "firebase/firestore"
 import { firebaseApp } from "../../firebase.js"
 
 let JgImageContext
@@ -12,13 +12,12 @@ const JgImageContextProvider = ({imageNode, children}) => {
   const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
   const commentsQuery = query(commentsFbRef, orderBy('time', 'desc'));
   const dopamineHitsQuery = query(dopamineHitsFbRef, orderBy('time', 'desc'));
+  let unsubscribeComments, unsubscribeDopamineHits
 
-  const comments = useRef()
+  const [comments, setComments] = useState()
   const [dopamineHits, setDopamineHits] = useState()
   const localData = useRef()
 
-  let commentDocs = []
-  let dopamineHitsDocs = []
 
   const getPostData = async () => {   
 
@@ -26,18 +25,9 @@ const JgImageContextProvider = ({imageNode, children}) => {
       localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
     } 
 
-    const commentsSnapshot = await getDocs(commentsQuery)
-    const dopamineHitsSnapshot = await getDocs(dopamineHitsQuery)
+    unsubscribeComments = onSnapshot(commentsQuery, {next: onCommentsChange, error: console.warn})
+    unsubscribeDopamineHits = onSnapshot(dopamineHitsQuery, {next: onDopamineHitsChange, error: console.warn})
 
-    commentsSnapshot.forEach((doc) => {
-      commentDocs.push({[doc.id]: doc.data()})
-    })
-
-    dopamineHitsSnapshot.forEach((doc) => {
-      dopamineHitsDocs.push({[doc.id]: doc.data()})
-    })
-
-    setDopamineHits(dopamineHitsDocs)
   }
 
   const addDopamineHit = async () => {
@@ -82,6 +72,25 @@ const JgImageContextProvider = ({imageNode, children}) => {
       // updateLocalStorage(null)
   }
 
+  const onCommentsChange = (newSnapshot) => {
+    console.log('onCommentsChange', newSnapshot)
+    let commentDocs = []
+    newSnapshot.forEach((doc) => {
+      commentDocs.push({[doc.id]: doc.data()})
+    })
+    setComments(commentDocs)
+  }
+
+  const onDopamineHitsChange = (newSnapshot) => {
+    console.log('onDopamineHitsChange', newSnapshot)
+    let dopamineHitsDocs = [];
+    newSnapshot.forEach((doc) => {
+      dopamineHitsDocs.push({[doc.id]: doc.data()})
+    })
+
+    setDopamineHits(dopamineHitsDocs)
+  }
+
   const updateLocalStorage = (docType, docRef) => {
     if (typeof window === "undefined") return
 
@@ -103,19 +112,15 @@ const JgImageContextProvider = ({imageNode, children}) => {
     console.log('localData.current', localData.current)
   }
 
+  //TODO: cleanup?
   useEffect(() => {  
-    getPostData().then(() => {
-      comments.current = commentDocs
-      setDopamineHits(dopamineHitsDocs)
-      console.log(imageNode.name, 'commentsRef', comments.current)
-      console.log(imageNode.name, 'dopamineHitsState', dopamineHits)
-    })
+    getPostData()
   }, [])
 
   return (
     <Provider value={{
       imageNode: imageNode, 
-      comments: comments.current, 
+      comments: comments, 
       dopamineHits: dopamineHits,
       addDopamineHit: addDopamineHit,
       removeDopamineHit: removeDopamineHit
