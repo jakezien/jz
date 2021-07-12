@@ -4,6 +4,7 @@ import { rhythm, scale } from "../utils/typography"
 import { CarouselStyles } from "../styles/carouselStyles"
 import { LightboxStyles } from "../styles/lightboxStyles"
 import { LinkStyles } from "../styles/linkStyles"
+import { ButtonStyles } from "../styles/buttonStyles"
 import { SpecificCarouselStyles } from "../styles/specificCarouselStyles"
 import { ThemeStyles } from "../styles/themeStyles"
 import { TwoUpStyles } from "../styles/twoUpStyles"
@@ -14,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
   ${CarouselStyles}
   ${LightboxStyles}
   ${LinkStyles}
+  ${ButtonStyles}
   ${SpecificCarouselStyles}
   ${ThemeStyles}
   ${TwoUpStyles}
@@ -22,10 +24,6 @@ const GlobalStyle = createGlobalStyle`
   ul {
     margin: 0;
     padding-left: .5em;
-  }
-
-  button, .button {
-    cursor: pointer;
   }
 
   @media screen and (min-width: 768px) {

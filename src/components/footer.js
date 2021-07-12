@@ -13,6 +13,7 @@ const StyledFooter = styled.footer`
   z-index: 0;
   background: ${props => props.theme.yellow};
   color: ${props => props.theme.textOnYellow};
+  padding-bottom: ${ rhythm(1.5) };
 `
 const StyledDiv = styled.div`
   display: flex;
