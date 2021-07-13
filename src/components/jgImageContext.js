@@ -5,7 +5,7 @@ import { firebaseApp } from "../../firebase.js"
 let JgImageContext
 let { Provider } = (JgImageContext = React.createContext())
 
-const JgImageContextProvider = ({imageNode, children}) => {
+const JgImageContextProvider = ({imageNode, index, children}) => {
 
   const db = getFirestore(firebaseApp)
   const commentsFbRef = collection(db, `jgPosts/${imageNode.name}/comments`)
@@ -76,7 +76,7 @@ const JgImageContextProvider = ({imageNode, children}) => {
     console.log('onCommentsChange', newSnapshot)
     let commentDocs = []
     newSnapshot.forEach((doc) => {
-      commentDocs.push({[doc.id]: doc.data()})
+      commentDocs.push({id:doc.id, ...doc.data()})
     })
     setComments(commentDocs)
   }
@@ -115,11 +115,16 @@ const JgImageContextProvider = ({imageNode, children}) => {
   //TODO: cleanup?
   useEffect(() => {  
     getPostData()
+    return () => {
+      unsubscribeComments()
+      unsubscribeDopamineHits()
+    }
   }, [])
 
   return (
     <Provider value={{
-      imageNode: imageNode, 
+      imageNode: imageNode,
+      index: index, 
       comments: comments, 
       dopamineHits: dopamineHits,
       addDopamineHit: addDopamineHit,

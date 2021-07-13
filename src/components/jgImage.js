@@ -1,9 +1,11 @@
-import React from "react"
+import React, { useContext } from "react"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
+import { JgContext } from './jgContext'
 import { JgImageContextProvider } from "./jgImageContext"
 
+import JgClickInterceptor from './jgClickInterceptor'
 import JgImageFooter from './jgImageFooter'
 import JgImageComments from './jgImageComments'
 
@@ -64,16 +66,20 @@ import JgImageComments from './jgImageComments'
 
 const JgImage = (props) => {
   
-  let {imageNode, ...otherProps} = props
+  let {imageNode, index, ...otherProps} = props
+  let { handleImageClick } = useContext(JgContext)
+
 
   return (
-    <JgPost>
-      <JgImageContextProvider imageNode={imageNode}>
-        <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+    <JgImageContextProvider imageNode={imageNode} index={index}>
+      <JgPost>
+        <JgClickInterceptor>
+          <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+        </JgClickInterceptor>
         <StyledJgImageFooter />
-        {/*<JgImageComments imageNode={imageNode} />*/}
-      </JgImageContextProvider>
-    </JgPost>
+        <JgImageComments />
+      </JgPost>
+    </JgImageContextProvider>
   )
 }
 

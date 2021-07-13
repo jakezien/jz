@@ -7,13 +7,14 @@ import { chunkArray } from "../utils/functions"
 import styled from "styled-components"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import VisibilitySensor from 'react-visibility-sensor'
-import Lightbox from 'react-image-lightbox';
 import NoScroll from 'no-scroll';
 
 import Layout from "../templates/layout"
 import Container from '../components/container'
+import { JgContextProvider } from '../components/jgContext'
 import JgImage from '../components/jgImage'
 import JgPostsDisplay from '../components/jgPostsDisplay'
+import JgLightbox from '../components/jgLightbox'
 import Logo from '../../static/svg/logo-jakestagram.svg'
 
 
@@ -80,9 +81,6 @@ const Jakestagram = ({ data, location }) => {
   const [list, setList] = useState([...allPosts.slice(0, loadAmt)])
   const [loadMore, setLoadMore] = useState(false)
   const [hasMore, setHasMore] = useState(allPosts.length > loadAmt)
-  const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [lightboxIndex, setLightboxIndex] = useState(0)
-  const [lightboxPadding, setlightboxPadding] = useState(padding)
 
   // ————————————— HANDLERS ————————————— //
     
@@ -92,59 +90,37 @@ const Jakestagram = ({ data, location }) => {
       }
     }
 
-    const handleImageClick = (e) => {
-      NoScroll.on()
-      let index = parseInt(e.target.getAttribute('index'))
-      console.log(index, allPosts.length - index)
-      setLightboxIndex(allPosts.length - index)
-      setLightboxOpen(true)
+    // const handleImageClick = (e) => {
+    //   NoScroll.on()
+    //   let index = parseInt(e.target.getAttribute('index'))
+    //   console.log(index, allPosts.length - index)
+    //   setLightboxIndex(allPosts.length - index)
+    //   setLightboxOpen(true)
+    // }
+
+    const imageClicked = (context) => {
+      console.log(context)
     }
 
-    const handleLightboxPrevClick = () => {
-      console.log(lightboxIndex)
-      let newIndex = (lightboxIndex - 1 + list.length) % list.length
-      console.log(lightboxIndex, newIndex, list.length)
-      setLightboxIndex(newIndex);
-    }
+  // ————————————— LOAD ON SCROLL ————————————— //
+      
+    useEffect(() => {
+      if (loadMore && hasMore) {
+        console.log('load more')
+        const currentLength = list.length
+        const isMore = currentLength < allPosts.length
+        const nextResults = isMore 
+          ? allPosts.slice(currentLength, currentLength + loadAmt)
+          : []
+        setList([...list, ...nextResults])
+        setLoadMore(false)
+      }
+    }, [loadMore, hasMore])
 
-    const handleLightboxNextClick = () => {
-      console.log(lightboxIndex)
-      if (lightboxIndex === list.length - 2) setLoadMore(true)
-      let newIndex = lightboxIndex + 1
-      console.log(lightboxIndex, newIndex, list.length)
-      setLightboxIndex(newIndex)
-    }
-
-    const handleWindowResize = () => {
-      let padding = window.innerWidth > 767 ? 64 : 8
-      setlightboxPadding(padding);
-    }
-
-  useEffect(() => {
-    if (loadMore && hasMore) {
-      console.log('load more')
-      const currentLength = list.length
-      const isMore = currentLength < allPosts.length
-      const nextResults = isMore 
-        ? allPosts.slice(currentLength, currentLength + loadAmt)
-        : []
-      setList([...list, ...nextResults])
-      setLoadMore(false)
-    }
-  }, [loadMore, hasMore])
-
-  useEffect(() => {
-    const isMore = list.length < allPosts.length
-    setHasMore(isMore)
-  }, [list])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    window.addEventListener('resize', handleWindowResize)
-    return () => {
-      window.removeEventListener('resize', handleWindowResize)
-    }
-  })
+    useEffect(() => {
+      const isMore = list.length < allPosts.length
+      setHasMore(isMore)
+    }, [list])
 
 
   return (
@@ -164,41 +140,31 @@ const Jakestagram = ({ data, location }) => {
             </div>
           </Header>
 
-          <JgPostsDisplay>
-            {chunkArray(list, 3).map((listChunk, i) => { 
-              return (
-                <ImageRow key={i}>
-                  <JgImage imageNode={listChunk[0]} alt="" index={allPosts.length - (i*3 + 0)} onClick={handleImageClick}/>
-                  <JgImage imageNode={listChunk[1]} alt="" index={allPosts.length - (i*3 + 1)} onClick={handleImageClick}/>
-                  <JgImage imageNode={listChunk[2]} alt="" index={allPosts.length - (i*3 + 2)} onClick={handleImageClick}/>
-                </ImageRow>
-            )})}
+          <JgContextProvider>
+            <JgPostsDisplay>
+              {chunkArray(list, 3).map((listChunk, i) => { 
+                return (
+                  <ImageRow key={i}>
+                    <JgImage imageNode={listChunk[0]} alt="" index={allPosts.length - (i*3 + 0)}/>
+                    <JgImage imageNode={listChunk[1]} alt="" index={allPosts.length - (i*3 + 1)}/>
+                    <JgImage imageNode={listChunk[2]} alt="" index={allPosts.length - (i*3 + 2)}/>
+                  </ImageRow>
+              )})}
 
-            <VisibilitySensor 
-              onChange={handleVisibilityChange} 
-              partialVisibility={true}
-              offset={{bottom:-300}} 
-              scrollCheck={true}
-              scrollThrottle={10}
-              resizeCheck={true}
-            >
-              {hasMore ? <p>Loading…</p> : <p>That's all there is</p>}
-            </VisibilitySensor>
-          </JgPostsDisplay>
+              <VisibilitySensor 
+                onChange={handleVisibilityChange} 
+                partialVisibility={true}
+                offset={{bottom:-300}} 
+                scrollCheck={true}
+                scrollThrottle={10}
+                resizeCheck={true}
+              >
+                {hasMore ? <p>Loading…</p> : <p>That's all there is</p>}
+              </VisibilitySensor>
+            </JgPostsDisplay>
 
-          {lightboxOpen && (
-            <Lightbox
-              mainSrc={getSrc(list[lightboxIndex])}
-              nextSrc={getSrc(list[(lightboxIndex + 1)])}
-              prevSrc={getSrc(list[(lightboxIndex - 1)])}
-              onCloseRequest={() => {setLightboxOpen(false); NoScroll.off(); }}
-              onMovePrevRequest={handleLightboxPrevClick}
-              onMoveNextRequest={handleLightboxNextClick}
-              clickOutsideToClose={true}
-              imagePadding={lightboxPadding}
-              wrapperClassName={(lightboxIndex===0 ? 'firstImage ' : '') + (lightboxIndex===allPosts.length-1 ? 'lastImage ' : '')}
-            />
-          )}
+            <JgLightbox list={list} setLoadMore={setLoadMore} allPosts={allPosts} />
+          </JgContextProvider>
         </StyledContainer>
       </section>
     </Layout>
