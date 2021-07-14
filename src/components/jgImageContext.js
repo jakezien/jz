@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
-import { getFirestore, collection, query, orderBy, getDocs, addDoc, onSnapshot } from "firebase/firestore"
+import { getFirestore, collection, query, orderBy, getDocs, addDoc, setDoc, onSnapshot } from "firebase/firestore"
 import { firebaseApp } from "../../firebase.js"
 
 let JgImageContext
@@ -36,7 +36,9 @@ const JgImageContextProvider = ({imageNode, index, children}) => {
       time: new Date(),
     }
 
+
     let newHitFbRef = await addDoc(dopamineHitsFbRef, newHit)
+    await setDoc(dopamineHitsFbRef.parent, {create: 'create'})
 
     updateLocalStorage('dopamineHit', newHitFbRef)
 
@@ -73,7 +75,7 @@ const JgImageContextProvider = ({imageNode, index, children}) => {
   }
 
   const onCommentsChange = (newSnapshot) => {
-    console.log('onCommentsChange', newSnapshot)
+    // console.log('onCommentsChange', newSnapshot)
     let commentDocs = []
     newSnapshot.forEach((doc) => {
       commentDocs.push({id:doc.id, ...doc.data()})
@@ -82,7 +84,7 @@ const JgImageContextProvider = ({imageNode, index, children}) => {
   }
 
   const onDopamineHitsChange = (newSnapshot) => {
-    console.log('onDopamineHitsChange', newSnapshot)
+    // console.log('onDopamineHitsChange', newSnapshot)
     let dopamineHitsDocs = [];
     newSnapshot.forEach((doc) => {
       dopamineHitsDocs.push({[doc.id]: doc.data()})

@@ -1,16 +1,17 @@
-import React, { useContext } from 'react'
+import React, { useContext, forwardRef } from 'react'
 import styled from 'styled-components'
 import JgImageComments from './jgImageComments'
 
-const JgImageDetail = (context) => {
+const JgImageDetail = forwardRef((props, ref) => {
 
-	useContext(context)
+	// let imageContext = useContext(context)
 
   return (
-		<div>
+		<div className="JG-IMAGE_DETAIL" ref={ref}>
+			<h1 style={{background:'yellow'}}>HELLO</h1>
 			<JgImageComments/>
 		</div>    
   )
-}
+})
 
 export default JgImageDetail;

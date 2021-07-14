@@ -11,7 +11,13 @@ const JgLightbox = ({list, setLoadMore, allPosts}) => {
 	  padding = window.innerWidth > 767 ? 64 : 8
 	}
 
-	let { lightboxOpen, setLightboxOpen } = useContext(JgContext)
+	let { 
+		lightboxOpen, 
+		setLightboxOpen, 
+		prevCustomContent, 
+		mainCustomContent, 
+		nextCustomContent 
+	} = useContext(JgContext)
 	const [lightboxIndex, setLightboxIndex] = useState(0)
 	const [lightboxPadding, setlightboxPadding] = useState(padding)
 
@@ -49,9 +55,9 @@ const JgLightbox = ({list, setLoadMore, allPosts}) => {
     <>
 	    {lightboxOpen && (
 	      <Lightbox
-	        mainSrc={getSrc(list[lightboxIndex])}
-	        nextSrc={getSrc(list[(lightboxIndex + 1)])}
-	        prevSrc={getSrc(list[(lightboxIndex - 1)])}
+	        prevCustomContent={prevCustomContent}
+	        mainCustomContent={mainCustomContent}
+	        nextCustomContent={nextCustomContent}
 	        onCloseRequest={() => {setLightboxOpen(false); NoScroll.off(); }}
 	        onMovePrevRequest={handleLightboxPrevClick}
 	        onMoveNextRequest={handleLightboxNextClick}
