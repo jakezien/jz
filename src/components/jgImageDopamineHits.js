@@ -1,10 +1,9 @@
 import React, {useEffect, useState, useContext} from "react"
 import moment from 'moment'
 import styled from "styled-components"
-import { firestore } from "../../firebase.js"
 import { rhythm } from "../utils/typography"
 import DopamineHitForm from "./dopamineHitForm"
-import { JgImageContext } from '../components/jgImageContext.js'
+import { JgContext } from '../components/jgContext.js'
 
 
 const StyledDiv = styled.div`
@@ -32,9 +31,15 @@ const StyledDiv = styled.div`
   }
 `
 
-const JgImageDopamineHits = (props) => {
+const JgImageDopamineHits = ({imageNode, postsState}) => {
 
-  let { dopamineHits } = useContext(JgImageContext)
+  let { getDopamineHits } = useContext(JgContext)
+  const [dopamineHits, setDopamineHits] = useState()
+
+  useEffect(() => {
+    setDopamineHits(getDopamineHits(imageNode.name))
+    console.log('dopamineHits', imageNode.name, dopamineHits)
+  }, postsState)
 
   return (
     <StyledDiv className="dopamine-hits">

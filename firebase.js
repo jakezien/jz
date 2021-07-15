@@ -1,6 +1,3 @@
-import firebase from "firebase/compat/app"
-import "firebase/compat/firestore"
-
 import { initializeApp } from "firebase/app"
 
 const firebaseConfig = {
@@ -12,10 +9,4 @@ const firebaseConfig = {
   appId: "1:701178121381:web:c46bf932124314ebf3514c"
 }
 
-firebase.initializeApp(firebaseConfig)
-
-
-export const firestore = firebase.firestore()
-export default firebase
-
-export const firebaseApp = initializeApp(firebaseConfig, 'v9')
+export const firebaseApp = initializeApp(firebaseConfig)

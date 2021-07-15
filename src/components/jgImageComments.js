@@ -1,11 +1,10 @@
 import React, {useEffect, useState, useContext} from "react"
 import moment from 'moment'
 import styled from "styled-components"
-import { firestore } from "../../firebase.js"
 import { rhythm } from "../utils/typography"
-import CommentForm from "./commentForm"
+// import CommentForm from "./commentForm"
 import CommentIcon from '../../static/svg/icon-comment.svg'
-import { JgImageContext } from './jgImageContext'
+import { JgContext } from './jgContext'
 
 
 
@@ -31,31 +30,11 @@ const StyledDiv = styled.div`
 
 const JgImageComments = (props) => {
 
-  let { imageNode, comments } = useContext(JgImageContext)
+  let { imageNode } = props
+  let { getComments } = useContext(JgContext)
+  let comments = getComments(imageNode.name)
 
-  // let filename = imageNode?.name
-  // const [comments, setComments] = useState([])
-  // const [showForm, setShowForm] = useState(false)
-
-  // let storedData;
-
-  // if (typeof window !== "undefined") {
-  //   storedData = localStorage.getItem(filename)
-  // }
-  // console.log('storedData', storedData)
-  
-  // useEffect(() => {
-  //   const cleanUp = firestore
-  //     .collection(`jgPosts/${filename}/comments`)
-  //     .onSnapshot(snapshot => {
-  //       const posts = snapshot.docs
-  //       .reverse().map(doc => {
-  //         return { id: doc.id, ...doc.data() }
-  //       })
-  //       setComments(posts)
-  //     })
-  //   return () => cleanUp()
-  // }, [filename])
+  //TODO edit and delete local comments
 
 
   return (

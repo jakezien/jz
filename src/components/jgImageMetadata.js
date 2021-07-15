@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import moment from 'moment'
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
-import { JgImageContext } from './jgImageContext'
 
 const StyledSpan = styled.span`
   display: block;
@@ -19,9 +18,7 @@ const StyledSpan = styled.span`
   }
 `
 
-const JgImageMetadata = (props) => {
-
-  const { imageNode } = useContext(JgImageContext)
+const JgImageMetadata = ({imageNode}) => {
 
   let make = imageNode?.fields.exif.image.Make
   let model = imageNode?.fields.exif.image.Model

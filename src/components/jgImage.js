@@ -3,9 +3,8 @@ import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import { JgContext } from './jgContext'
-import { JgImageContextProvider } from "./jgImageContext"
 
-import JgClickInterceptor from './jgClickInterceptor'
+// import JgClickInterceptor from './jgClickInterceptor'
 import JgImageFooter from './jgImageFooter'
 import JgImageComments from './jgImageComments'
 import JgImageDetail from './jgImageDetail'
@@ -60,11 +59,6 @@ import JgImageDetail from './jgImageDetail'
     }
   `
 
-// TODO: create a context that talks to firestore and 
-// holds the imagenode data, and have everyone inside the 
-// post subscribe to it. Passing the node all over the place
-// is getting terrible.
-
 const JgImage = (props) => {
   
   let {imageNode, index, ...otherProps} = props
@@ -72,16 +66,16 @@ const JgImage = (props) => {
   let imageDetailRef = useRef()
 
   return (
-    <JgImageContextProvider imageNode={imageNode} index={index}>
+
       <JgPost>
         <div onClick={() => handleImageClick(imageDetailRef)}>
           <GatsbyImage image={getImage(imageNode)} {...otherProps} />
         </div>
-        <StyledJgImageFooter />
-        <JgImageDetail ref={imageDetailRef}/>
-        <JgImageComments />
+        <StyledJgImageFooter imageNode={imageNode}/>
+        {/*<JgImageDetail ref={imageDetailRef}/>*/}
+        <JgImageComments imageNode={imageNode}/>
       </JgPost>
-    </JgImageContextProvider>
+
   )
 }
 

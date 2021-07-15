@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react"
 import styled from "styled-components"
-import { firestore } from "../../firebase.js"
 import DopamineIcon from '../../static/svg/icon-dopamine.svg'
-import { JgImageContext } from './jgImageContext'
+import { JgContext } from './jgContext'
 
 const StyledDiv = styled.div`
   button[disabled] {
@@ -12,7 +11,7 @@ const StyledDiv = styled.div`
 
 const DopamineHitForm = (props) => {
 
-  const {addDopamineHit, removeDopamineHit} = useContext(JgImageContext);
+  const {addDopamineHit, removeDopamineHit} = useContext(JgContext);
 
   const [hasHit, setHasHit] = useState(false)
 

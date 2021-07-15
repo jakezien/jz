@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { firebaseApp } from "../../firebase.js"
 import { getFirestore, collection, collectionGroup, query, orderBy, getDocs, addDoc, onSnapshot } from "firebase/firestore"
 import JgImageDetail from './jgImageDetail'
@@ -16,32 +16,49 @@ let { Provider } = (JgContext = React.createContext())
 const JgContextProvider = ({children}) => {
 
   const posts = useRef()
+  const [postsState, setPostsState] = useState()
+  const [nextComments, setNextComments] = useState()
+  const [nextHits, setNextHits] = useState()
+  const [shouldUpdate, setShouldUpdate] = useState(false)
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
   const postsQuery = query(postsDbRef)
-  // const collectionGroupQuery = collectionGroup(db, 'dopamineHits')
-  // const commentsFbRef = collection(db, `jgPosts/${imageNode.name}/comments`)
-  // const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
-  // const commentsQuery = query(commentsFbRef, orderBy('time', 'desc'));
-  // const dopamineHitsQuery = query(dopamineHitsFbRef, orderBy('time', 'desc'));
-  let unsubscribePosts, unsubscribeComments, unsubscribeDopamineHits
+  let unsubscribePosts
+
+  // ————————————— OLD CODE ————————————— //
+    // const collectionGroupQuery = collectionGroup(db, 'dopamineHits')
+    // const commentsFbRef = collection(db, `jgPosts/${imageNode.name}/comments`)
+    // const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
+    // const commentsQuery = query(commentsFbRef, orderBy('time', 'desc'));
+    // const dopamineHitsQuery = query(dopamineHitsFbRef, orderBy('time', 'desc'));
+    // let unsubscribePosts, unsubscribeComments, unsubscribeDopamineHits
 
   const getPostsData = async () => {   
-
+    unsubscribePosts ? unsubscribePosts() : '' 
     unsubscribePosts = onSnapshot(postsQuery, {next: onPostsChange, error: console.warn})
+    // ————————————— OLD CODE ————————————— //
+      
+      // if (typeof window !== "undefined") {
+      //   localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
+      // } 
 
-    // if (typeof window !== "undefined") {
-    //   localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
-    // } 
-
-    // unsubscribeComments = onSnapshot(commentsQuery, {next: onCommentsChange, error: console.warn})
-    // unsubscribeDopamineHits = onSnapshot(dopamineHitsQuery, {next: onDopamineHitsChange, error: console.warn})
-
+      // unsubscribeComments = onSnapshot(commentsQuery, {next: onCommentsChange, error: console.warn})
+      // unsubscribeDopamineHits = onSnapshot(dopamineHitsQuery, {next: onDopamineHitsChange, error: console.warn})
   }
 
   const onPostsChange = (newSnapshot) => {
-    console.log('onPostsChange', newSnapshot)
+    console.log('onPostsChange', newSnapshot, newSnapshot.docChanges())
+    
+    // unsubscribe from old snapshots before replacing them
+    // TODO: would be better to process docChanges only
+    if (posts.current) {
+      Object.keys(posts.current).forEach(postId => {
+        posts.current[postId].unsubscribeComments.call()
+        posts.current[postId].unsubscribeHits.call()
+      })
+    }
+
     let newPosts = {}
     newSnapshot.forEach((doc) => {
       let post = {};
@@ -53,30 +70,136 @@ const JgContextProvider = ({children}) => {
     })
 
     // console.log(posts)
+    console.log('onPostsChange', newPosts)
+    setPostsState(newPosts)
+    console.log('postsState', postsState)
     posts.current = newPosts;
   }
 
-  getPostsData()
+  useEffect(() => {
+    getPostsData()
+    return () => {
+      unsubscribePosts()
+    }
+  }, [])
+
+
 
   const onCommentsChange = (next) => {
-    let postId = next.query._query.path.segments[1]
-    console.log('comments', postId, next.docChanges())
+    setNextComments(next)
   }
 
-  const onHitsChange = (next) => {
-    let postId = next.query._path.segments[1]
-    let post = posts.current[postId]
+  useEffect(() => {
+    if (!nextComments) return
+    let postId = nextComments.query._query.path.segments[1]
+    console.log('onCommentsChange', postsState[postId])
+    let oldPost = postsState[postId]
 
     let newDocs = []
-    next.forEach( doc => newDocs.push({id:doc.id, ...doc.data()}) )
-    post['hits'] = newDocs;
+    nextComments.forEach( doc => newDocs.push({id:doc.id, ...doc.data()}) )
+    oldPost['comments'] = newDocs;
+    let newPost = {[postId]: {...oldPost}}
+    let newPosts = {...postsState, newPost}
+    setPostsState(newPosts)
+  }, [nextComments])
+  
 
-    console.log(postId, posts.current[postId])
+
+  const onHitsChange = (next) => {
+    setNextHits(next)
   }
 
+  useEffect(() => {
+    if (!nextHits) return
+    let postId = nextHits.query._path.segments[1]
+    console.log('onHitsChange', postsState[postId])
+    let oldPost = postsState[postId]
+
+    let newDocs = []
+    nextHits.forEach( doc => newDocs.push({id:doc.id, ...doc.data()}) )
+    oldPost['hits'] = newDocs;
+    let newPost = {[postId]: {...oldPost}}
+    let newPosts = {...postsState, ...newPost}
+    setPostsState(newPosts)
+  }, [nextHits])
+  
 
 
 
+
+
+  const updateLocalStorage = (docType, docRef) => {
+    if (typeof window === "undefined") return
+
+    let newData;
+
+    if (docType === 'dopamineHit') {
+      newData = {dopamineHit: docRef.id}
+    }
+
+    if (docType === 'comment') {
+
+    }
+
+    let mergedData = {...localData.current, ...newData}
+    console.log('mergedData', mergedData)
+
+    localStorage.setItem(imageNode.name, JSON.stringify(mergedData))
+    localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
+    console.log('localData.current', localData.current)
+  }
+
+  const addDopamineHit = async (e) => {
+    // const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
+
+    console.log('addhit')
+    let newHit = {
+      time: new Date(),
+    }
+
+
+    // let newHitFbRef = await addDoc(dopamineHitsFbRef, newHit)
+    // await setDoc(dopamineHitsFbRef.parent, {create: 'create'})
+
+    // updateLocalStorage('dopamineHit', newHitFbRef)
+  }
+
+  const removeDopamineHit = async () => {
+    console.log('removehit')
+
+    // ————————————— OLD CODE ————————————— //
+      
+      // let ref = await firestore
+      // .collection(`jgPosts/${filename}/dopamineHits`)
+      // .doc(hitId)
+      // .delete()
+      // .catch(err => console.error)
+
+      // setHitId(null)
+      // updateLocalStorage(null)
+  }
+
+  const addComment = async () => {
+
+  }
+
+  const modifyComment = async () => {
+    
+  }
+
+  const removeComment = async () => {
+    
+  }
+
+  const getDopamineHits = (name) => {
+    // console.log(posts.current?.[name].hits)
+    return postsState?.[name]?.hits
+  }
+
+  const getComments = (name) => {
+    // return posts.current?.[name]?.comments
+    return postsState?.[name]?.comments
+  }
 
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [prevContext, setPrevContext] = useState()
@@ -101,10 +224,16 @@ const JgContextProvider = ({children}) => {
   		handleImageClick: handleImageClick,
   		lightboxOpen: lightboxOpen,
   		setLightboxOpen: setLightboxOpen,
+      addDopamineHit: addDopamineHit,
+      removeDopamineHit: removeDopamineHit,
+      addComment: addComment,
+      modifyComment: modifyComment,
+      removeComment: removeComment,
+      getDopamineHits: getDopamineHits,
+      getComments: getComments,
   		setContexts: setContexts,
-  		// prevCustomContent: <JgImageDetail context={prevContext} />,
   		mainCustomContent: imageDetail,
-  		// nextCustomContent: <JgImageDetail context={nextContext} />
+      postsState: postsState
   	}}>
   		{children}
   	</Provider>
