@@ -63,16 +63,14 @@ const JgImage = (props) => {
   
   let {imageNode, index, ...otherProps} = props
   let { handleImageClick } = useContext(JgContext)
-  let imageDetailRef = useRef()
 
   return (
 
       <JgPost>
-        <div onClick={() => handleImageClick(imageDetailRef)}>
+        <div onClick={() => handleImageClick(imageNode)}>
           <GatsbyImage image={getImage(imageNode)} {...otherProps} />
         </div>
         <StyledJgImageFooter imageNode={imageNode}/>
-        {/*<JgImageDetail ref={imageDetailRef}/>*/}
         <JgImageComments imageNode={imageNode}/>
       </JgPost>
 

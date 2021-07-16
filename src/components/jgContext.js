@@ -6,12 +6,6 @@ import JgImageDetail from './jgImageDetail'
 let JgContext
 let { Provider } = (JgContext = React.createContext())
 
-// OK, here's what needs to happen
-// This context handles all firebase stuff
-// Move image context handlers out of individual images and have one subscription to the whole collection
-// On pageload, we load the first bunch of images, with dopamine hits, comment count, most recent 2 comments
-// When an image is clicked, load all its comments
-// 
 
 const JgContextProvider = ({children}) => {
 
@@ -19,20 +13,13 @@ const JgContextProvider = ({children}) => {
   const [postsState, setPostsState] = useState()
   const [nextComments, setNextComments] = useState()
   const [nextHits, setNextHits] = useState()
-  const [shouldUpdate, setShouldUpdate] = useState(false)
+  const [lightboxNode, setLighboxNode] = useState()
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
   const postsQuery = query(postsDbRef)
   let unsubscribePosts
 
-  // ————————————— OLD CODE ————————————— //
-    // const collectionGroupQuery = collectionGroup(db, 'dopamineHits')
-    // const commentsFbRef = collection(db, `jgPosts/${imageNode.name}/comments`)
-    // const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
-    // const commentsQuery = query(commentsFbRef, orderBy('time', 'desc'));
-    // const dopamineHitsQuery = query(dopamineHitsFbRef, orderBy('time', 'desc'));
-    // let unsubscribePosts, unsubscribeComments, unsubscribeDopamineHits
 
   const getPostsData = async () => {   
     unsubscribePosts ? unsubscribePosts() : '' 
@@ -42,9 +29,6 @@ const JgContextProvider = ({children}) => {
       // if (typeof window !== "undefined") {
       //   localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
       // } 
-
-      // unsubscribeComments = onSnapshot(commentsQuery, {next: onCommentsChange, error: console.warn})
-      // unsubscribeDopamineHits = onSnapshot(dopamineHitsQuery, {next: onDopamineHitsChange, error: console.warn})
   }
 
   const onPostsChange = (newSnapshot) => {
@@ -80,6 +64,7 @@ const JgContextProvider = ({children}) => {
     getPostsData()
     return () => {
       unsubscribePosts()
+      //TODO: cleanup other subscriptions?
     }
   }, [])
 
@@ -192,31 +177,24 @@ const JgContextProvider = ({children}) => {
   }
 
   const getDopamineHits = (name) => {
-    // console.log(posts.current?.[name].hits)
     return postsState?.[name]?.hits
   }
 
   const getComments = (name) => {
-    // return posts.current?.[name]?.comments
     return postsState?.[name]?.comments
   }
 
   const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [prevContext, setPrevContext] = useState()
-  const [mainContext, setMainContext] = useState()
-  const [nextContext, setNextContext] = useState()
-  const [imageDetail, setImageDetail] = useState()
 
-  const handleImageClick = (imageDetail) => {
-  	console.log(imageDetail)
-  	// setContexts({context, context, context})
+  const handleImageClick = (imageNode) => {
+  	console.log(imageNode)
+    setLighboxNode(imageNode)
     setLightboxOpen(true)
   }
 
-  const setContexts = ({prev, main, next}) => {
-  	setPrevContext(prev)
-  	setMainContext(main)
-  	setNextContext(next)
+  const getLighboxContent = () => {
+    console.log('getLighboxContent', lightboxNode)
+    return <JgImageDetail imageNode={lightboxNode}/>
   }
 
   return (
@@ -231,8 +209,7 @@ const JgContextProvider = ({children}) => {
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
-  		setContexts: setContexts,
-  		mainCustomContent: imageDetail,
+  		getLighboxContent: getLighboxContent,
       postsState: postsState
   	}}>
   		{children}

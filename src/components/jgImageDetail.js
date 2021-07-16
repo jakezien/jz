@@ -1,17 +1,17 @@
 import React, { useContext, forwardRef } from 'react'
 import styled from 'styled-components'
 import JgImageComments from './jgImageComments'
+import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 
-const JgImageDetail = forwardRef((props, ref) => {
-
-	// let imageContext = useContext(context)
+const JgImageDetail = ({imageNode}) => {
 
   return (
-		<div className="JG-IMAGE_DETAIL" ref={ref}>
-			<h1 style={{background:'yellow'}}>HELLO</h1>
-			<JgImageComments/>
+		<div className="JG-IMAGE_DETAIL">
+			<h1 style={{background:'yellow'}}>{imageNode.name}</h1>
+      <GatsbyImage image={getImage(imageNode)} />
+			<JgImageComments imageNode={imageNode}/>
 		</div>    
   )
-})
+}
 
 export default JgImageDetail;
