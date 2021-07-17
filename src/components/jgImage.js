@@ -2,7 +2,7 @@ import React, { useContext, useRef } from "react"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
-import { JgContext } from './jgContext'
+import { JgDatabaseContext } from './jgDatabaseContext'
 
 // import JgClickInterceptor from './jgClickInterceptor'
 import JgImageFooter from './jgImageFooter'
@@ -61,8 +61,8 @@ import JgImageDetail from './jgImageDetail'
 
 const JgImage = (props) => {
   
-  let {imageNode, index, ...otherProps} = props
-  let { handleImageClick } = useContext(JgContext)
+  let { imageNode, index, ...otherProps } = props
+  let { handleImageClick } = useContext(JgDatabaseContext)
 
   return (
 

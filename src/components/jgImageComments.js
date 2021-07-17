@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 // import CommentForm from "./commentForm"
 import CommentIcon from '../../static/svg/icon-comment.svg'
-import { JgContext } from './jgContext'
+import { JgDatabaseContext } from './jgDatabaseContext'
 
 
 
@@ -31,7 +31,7 @@ const StyledDiv = styled.div`
 const JgImageComments = (props) => {
 
   let { imageNode } = props
-  let { getComments } = useContext(JgContext)
+  let { getComments } = useContext(JgDatabaseContext)
   let comments = getComments(imageNode.name)
 
   //TODO edit and delete local comments

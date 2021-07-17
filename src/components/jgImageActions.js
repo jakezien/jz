@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import JgImageDopamineHits from './jgImageDopamineHits'
 import CommentIcon from '../../static/svg/icon-comment.svg'
 import { rhythm } from "../utils/typography"
-import { JgContext } from '../components/jgContext.js'
+import { JgDatabaseContext } from '../components/jgDatabaseContext.js'
 
 
 const StyledDiv = styled.div`
@@ -48,7 +48,7 @@ const StyledDiv = styled.div`
 
 const JgImageActions = (props) => {
   const {imageNode} = props
-  const {postsState} = React.useContext(JgContext)
+  const {postsState} = React.useContext(JgDatabaseContext)
 
 	return (
 		<StyledDiv>

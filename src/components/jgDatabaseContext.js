@@ -3,17 +3,15 @@ import { firebaseApp } from "../../firebase.js"
 import { getFirestore, collection, collectionGroup, query, orderBy, getDocs, addDoc, onSnapshot } from "firebase/firestore"
 import JgImageDetail from './jgImageDetail'
 
-let JgContext
-let { Provider } = (JgContext = React.createContext())
+let JgDatabaseContext
+let { Provider } = (JgDatabaseContext = React.createContext())
 
-
-const JgContextProvider = ({children}) => {
+const JgDatabaseContextProvider = ({children}) => {
 
   const posts = useRef()
   const [postsState, setPostsState] = useState()
   const [nextComments, setNextComments] = useState()
   const [nextHits, setNextHits] = useState()
-  const [lightboxNode, setLighboxNode] = useState()
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
@@ -184,24 +182,8 @@ const JgContextProvider = ({children}) => {
     return postsState?.[name]?.comments
   }
 
-  const [lightboxOpen, setLightboxOpen] = useState(false)
-
-  const handleImageClick = (imageNode) => {
-  	console.log(imageNode)
-    setLighboxNode(imageNode)
-    setLightboxOpen(true)
-  }
-
-  const getLighboxContent = () => {
-    console.log('getLighboxContent', lightboxNode)
-    return <JgImageDetail imageNode={lightboxNode}/>
-  }
-
   return (
   	<Provider value={{
-  		handleImageClick: handleImageClick,
-  		lightboxOpen: lightboxOpen,
-  		setLightboxOpen: setLightboxOpen,
       addDopamineHit: addDopamineHit,
       removeDopamineHit: removeDopamineHit,
       addComment: addComment,
@@ -209,7 +191,6 @@ const JgContextProvider = ({children}) => {
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
-  		getLighboxContent: getLighboxContent,
       postsState: postsState
   	}}>
   		{children}
@@ -217,4 +198,4 @@ const JgContextProvider = ({children}) => {
   )
 }
 
-export {JgContext, JgContextProvider}
+export {JgDatabaseContext, JgDatabaseContextProvider}

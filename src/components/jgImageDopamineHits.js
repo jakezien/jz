@@ -3,7 +3,7 @@ import moment from 'moment'
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import DopamineHitForm from "./dopamineHitForm"
-import { JgContext } from '../components/jgContext.js'
+import { JgDatabaseContext } from '../components/jgDatabaseContext.js'
 
 
 const StyledDiv = styled.div`
@@ -33,7 +33,7 @@ const StyledDiv = styled.div`
 
 const JgImageDopamineHits = ({imageNode, postsState}) => {
 
-  let { getDopamineHits } = useContext(JgContext)
+  let { getDopamineHits } = useContext(JgDatabaseContext)
   const [dopamineHits, setDopamineHits] = useState()
 
   useEffect(() => {

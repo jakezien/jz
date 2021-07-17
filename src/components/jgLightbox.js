@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { getSrc } from "gatsby-plugin-image"
 import Lightbox from 'react-image-lightbox';
 import NoScroll from 'no-scroll';
-import { JgContext } from './jgContext'
+import { JgDatabaseContext } from './jgDatabaseContext'
+import { JgImagesContext } from './jgImagesContext'
 
-const JgLightbox = ({list, setLoadMore, allPosts}) => {
+const JgLightbox = (props) => {
 
 	let padding;
 	if (typeof window !== 'undefined') {
@@ -15,7 +16,13 @@ const JgLightbox = ({list, setLoadMore, allPosts}) => {
 		lightboxOpen, 
 		setLightboxOpen, 
 		getLighboxContent
-	} = useContext(JgContext)
+	} = useContext(JgDatabaseContext)
+
+	let { 
+		listLength, 
+		allPostsLength, 
+		setLoadMore
+	} = useContext(JgImagesContext)
 
 	const [lightboxIndex, setLightboxIndex] = useState(0)
 	const [lightboxPadding, setlightboxPadding] = useState(padding)
@@ -23,16 +30,16 @@ const JgLightbox = ({list, setLoadMore, allPosts}) => {
 
   const handleLightboxPrevClick = () => {
     console.log(lightboxIndex)
-    let newIndex = (lightboxIndex - 1 + list.length) % list.length
-    console.log(lightboxIndex, newIndex, list.length)
+    let newIndex = (lightboxIndex - 1 + listLength) % listLength
+    console.log(lightboxIndex, newIndex, listLength)
     setLightboxIndex(newIndex);
   }
 
   const handleLightboxNextClick = () => {
     console.log(lightboxIndex)
-    if (lightboxIndex === list.length - 2) setLoadMore(true)
+    if (lightboxIndex === listLength - 2) setLoadMore(true)
     let newIndex = lightboxIndex + 1
-    console.log(lightboxIndex, newIndex, list.length)
+    console.log(lightboxIndex, newIndex, listLength)
     setLightboxIndex(newIndex)
   }
 
@@ -54,7 +61,9 @@ const JgLightbox = ({list, setLoadMore, allPosts}) => {
     <>
 	    {lightboxOpen && (
 	      <Lightbox
+	        prevCustomContent={getLighboxContent()}
 	        mainCustomContent={getLighboxContent()}
+	        nextCustomContent={getLighboxContent()}
 	        onCloseRequest={() => {setLightboxOpen(false); NoScroll.off(); }}
 	        onMovePrevRequest={handleLightboxPrevClick}
 	        onMoveNextRequest={handleLightboxNextClick}
@@ -62,7 +71,7 @@ const JgLightbox = ({list, setLoadMore, allPosts}) => {
 	        imagePadding={lightboxPadding}
 	        wrapperClassName={
 	        	(lightboxIndex === 0  ? 'firstImage ' : '') + 
-	        	(lightboxIndex === allPosts.length-1 ? 'lastImage ' : '')
+	        	(lightboxIndex === allPostsLength-1 ? 'lastImage ' : '')
 	        }
 	      />
 	    )}
