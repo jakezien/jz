@@ -7,8 +7,8 @@ const JgImageDetail = ({imageNode}) => {
 
   return (
 		<div className="JG-IMAGE_DETAIL">
-			<h1 style={{background:'yellow'}}>{imageNode.name}</h1>
-      <GatsbyImage image={getImage(imageNode)} />
+			<h1 style={{background:'yellow'}}>{imageNode?.name}</h1>
+      <GatsbyImage image={getImage(imageNode)} alt=""/>
 			<JgImageComments imageNode={imageNode}/>
 		</div>    
   )

@@ -33,11 +33,15 @@ const JgImagesContextProvider = (props) => {
 
   const getList = () => list
 
+  const getImageNode = (index) => list[props.allPosts.length - index]
+
+
   return (
     <Provider value={{
     	hasMore: hasMore,
     	setLoadMore: setLoadMore,
     	getList: getList,
+      getImageNode: getImageNode,
     	listLength: list.length,
     	allPostsLength: props.allPosts.length,
     }} >

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { getSrc } from "gatsby-plugin-image"
 import Lightbox from 'react-image-lightbox';
 import NoScroll from 'no-scroll';
-import { JgDatabaseContext } from './jgDatabaseContext'
+import { JgLightboxContext } from './jgLightboxContext'
 import { JgImagesContext } from './jgImagesContext'
 
 const JgLightbox = (props) => {
@@ -15,8 +15,10 @@ const JgLightbox = (props) => {
 	let { 
 		lightboxOpen, 
 		setLightboxOpen, 
-		getLighboxContent
-	} = useContext(JgDatabaseContext)
+		getPrevContent,
+		getCurrentContent,
+		getNextContent
+	} = useContext(JgLightboxContext)
 
 	let { 
 		listLength, 
@@ -61,9 +63,9 @@ const JgLightbox = (props) => {
     <>
 	    {lightboxOpen && (
 	      <Lightbox
-	        prevCustomContent={getLighboxContent()}
-	        mainCustomContent={getLighboxContent()}
-	        nextCustomContent={getLighboxContent()}
+	        prevCustomContent={getPrevContent()}
+	        mainCustomContent={getCurrentContent()}
+	        nextCustomContent={getNextContent()}
 	        onCloseRequest={() => {setLightboxOpen(false); NoScroll.off(); }}
 	        onMovePrevRequest={handleLightboxPrevClick}
 	        onMoveNextRequest={handleLightboxNextClick}

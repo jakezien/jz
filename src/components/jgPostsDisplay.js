@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from "styled-components"
 import JgDisplayToggle from './jgDisplayToggle'
 import VisibilitySensor from 'react-visibility-sensor'
@@ -20,7 +20,12 @@ const ImageRow = styled.div`
 const JgPostsDisplay = ({children}) => {
 
 	const [displayStyle, setDisplayStyle] = useState('grid')
-	const { setLoadMore, hasMore, getList, allPostsLength } = React.useContext(JgImagesContext)
+	const { 
+		setLoadMore, 
+		hasMore, 
+		getList, 
+		allPostsLength 
+	} = useContext(JgImagesContext)
 
 	const handleToggleClick = (e) => {
 	  let name = e.target.getAttribute('name')

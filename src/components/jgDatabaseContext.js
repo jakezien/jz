@@ -107,10 +107,6 @@ const JgDatabaseContextProvider = ({children}) => {
   }, [nextHits])
   
 
-
-
-
-
   const updateLocalStorage = (docType, docRef) => {
     if (typeof window === "undefined") return
 

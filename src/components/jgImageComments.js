@@ -32,7 +32,7 @@ const JgImageComments = (props) => {
 
   let { imageNode } = props
   let { getComments } = useContext(JgDatabaseContext)
-  let comments = getComments(imageNode.name)
+  let comments = getComments(imageNode?.name)
 
   //TODO edit and delete local comments
 
