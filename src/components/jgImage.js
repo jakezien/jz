@@ -1,8 +1,11 @@
 import React, { useContext, useRef } from "react"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
+import { navigate } from '@reach/router'
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import { JgLightboxContext } from './jgLightboxContext'
+import VisibilitySensor from 'react-visibility-sensor'
+
 
 // import JgClickInterceptor from './jgClickInterceptor'
 import JgImageFooter from './jgImageFooter'
@@ -12,6 +15,7 @@ import JgImageDetail from './jgImageDetail'
 // ————————————— STYLED COMPONENTS ————————————— //
   
   const StyledJgImageFooter = styled(JgImageFooter)``
+
 
   const JgPost = styled.div`
     position: relative;
@@ -64,14 +68,33 @@ const JgImage = (props) => {
   let { imageNode, index, ...otherProps } = props
   let { handleImageClick } = useContext(JgLightboxContext)
 
+  const handleVisibilityChange = (isVisible) => {
+    console.log(index, isVisible)
+    if (isVisible) {
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', '?post=' + index)
+      }
+    }
+  }
+
   return (
 
       <JgPost>
         <div onClick={() => handleImageClick(index)}>
-          <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+          <VisibilitySensor 
+            onChange={handleVisibilityChange} 
+            partialVisibility={true}
+            minTopValue={500}
+            scrollCheck={true}
+            scrollThrottle={10}
+            resizeCheck={true}
+            active={props.displayStyle === 'list'}
+          >
+            <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+          </VisibilitySensor>
         </div>
         <StyledJgImageFooter imageNode={imageNode}/>
-        <JgImageComments imageNode={imageNode}/>
+        {props.displayStyle === 'list' && <JgImageComments imageNode={imageNode}/>}
       </JgPost>
 
   )

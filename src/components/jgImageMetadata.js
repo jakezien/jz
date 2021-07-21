@@ -10,8 +10,7 @@ const StyledSpan = styled.span`
   font-stretch: condensed;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-top:${rhythm(.25)};
-  margin-bottom:${rhythm(1)};
+  margin: 0;
 
   .grid & {
     display: none

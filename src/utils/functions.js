@@ -13,7 +13,27 @@ export function getImageWithFilename(images, filename) {
   return getImage(images.filter(node => node.name.includes(filename))[0])
 }
 
+export function isElementInViewport(el) {
+  let rect = el.getBoundingClientRect();
 
+  return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth) 
+  );
+}
+
+export function pluralizeLabel(label, list) {
+  if (!list || list.length === 0 ) {
+    return 'No ' + label + 's'
+  }
+  if (list.length === 1 ) {
+    return '1 ' + label
+  }
+  return list.length + ' ' + label + 's'
+}
+  
 export function chunkArray(array, chunkSize) {
   let results = [];
   let clone = array.slice()

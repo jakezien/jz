@@ -33,7 +33,6 @@ const StyledLogo = styled(Logo)`
 const JgHeader = (props) => {
 
 	const { allPostsLength } = useContext(JgImagesContext)  
-	console.log('HEADER ALL POSTS LENGTH', allPostsLength)
 
   return (
     <Header>

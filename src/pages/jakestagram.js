@@ -48,7 +48,6 @@ const Jakestagram = ({ data, location }) => {
 
                 <JgHeader tags={tags} />
                 <JgPostsDisplay />
-                <JgLightbox />
 
               </StyledContainer>
             </section>

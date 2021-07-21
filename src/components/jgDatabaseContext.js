@@ -30,7 +30,7 @@ const JgDatabaseContextProvider = ({children}) => {
   }
 
   const onPostsChange = (newSnapshot) => {
-    console.log('onPostsChange', newSnapshot, newSnapshot.docChanges())
+    // console.log('onPostsChange', newSnapshot, newSnapshot.docChanges())
     
     // unsubscribe from old snapshots before replacing them
     // TODO: would be better to process docChanges only
@@ -52,9 +52,9 @@ const JgDatabaseContextProvider = ({children}) => {
     })
 
     // console.log(posts)
-    console.log('onPostsChange', newPosts)
+    // console.log('onPostsChange', newPosts)
     setPostsState(newPosts)
-    console.log('postsState', postsState)
+    // console.log('postsState', postsState)
     posts.current = newPosts;
   }
 
@@ -75,7 +75,7 @@ const JgDatabaseContextProvider = ({children}) => {
   useEffect(() => {
     if (!nextComments) return
     let postId = nextComments.query._query.path.segments[1]
-    console.log('onCommentsChange', postsState[postId])
+    // console.log('onCommentsChange', postsState[postId])
     let oldPost = postsState[postId]
 
     let newDocs = []
@@ -95,7 +95,7 @@ const JgDatabaseContextProvider = ({children}) => {
   useEffect(() => {
     if (!nextHits) return
     let postId = nextHits.query._path.segments[1]
-    console.log('onHitsChange', postsState[postId])
+    // console.log('onHitsChange', postsState[postId])
     let oldPost = postsState[postId]
 
     let newDocs = []
@@ -121,17 +121,17 @@ const JgDatabaseContextProvider = ({children}) => {
     }
 
     let mergedData = {...localData.current, ...newData}
-    console.log('mergedData', mergedData)
+    // console.log('mergedData', mergedData)
 
     localStorage.setItem(imageNode.name, JSON.stringify(mergedData))
     localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
-    console.log('localData.current', localData.current)
+    // console.log('localData.current', localData.current)
   }
 
   const addDopamineHit = async (e) => {
     // const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
 
-    console.log('addhit')
+    // console.log('addhit')
     let newHit = {
       time: new Date(),
     }
@@ -144,7 +144,7 @@ const JgDatabaseContextProvider = ({children}) => {
   }
 
   const removeDopamineHit = async () => {
-    console.log('removehit')
+    // console.log('removehit')
 
     // ————————————— OLD CODE ————————————— //
       

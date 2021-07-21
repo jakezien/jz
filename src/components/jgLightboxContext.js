@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import JgImageDetail from './jgImageDetail'
 import { JgImagesContext } from './jgImagesContext'
+import JgLightbox from './jgLightbox'
 
 
 let JgLightboxContext
@@ -13,19 +14,40 @@ const JgLightboxContextProvider = ({children}) => {
   const [currentNode, setCurrentNode] = useState()
   const [nextNode, setNextNode] = useState()
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState()
 
-  const { getImageNode } = useContext(JgImagesContext)
+  const { 
+    getImageNode, 
+    allPostsLength, 
+    listLength,
+    setLoadMore 
+  } = useContext(JgImagesContext)
   
   const handleImageClick = (index) => {
-    console.log(index)
-    console.log(getImageNode(index - 1))
-    console.log(getImageNode(index))
-    console.log(getImageNode(index + 1))
-    setPrevNode( getImageNode(index - 1) )
+    setLightboxIndex(index)
+    setPrevNode( getImageNode(index + 1) )
     setCurrentNode( getImageNode(index) )
-    setNextNode( getImageNode(index + 1) )
+    setNextNode( getImageNode(index - 1) )
     //setLightboxOpen(true)
   }
+
+  const handleLightboxPrevClick = () => {
+    setNextNode( currentNode )
+    setCurrentNode( prevNode )
+    setPrevNode( getImageNode(lightboxIndex + 1) )
+    setLightboxIndex(lightboxIndex + 1)
+  }
+
+  const handleLightboxNextClick = () => {
+    setPrevNode(currentNode)
+    setCurrentNode(nextNode)
+    setNextNode( getImageNode(lightboxIndex - 1) )
+    if (allPostsLength - lightboxIndex >= listLength - 2) 
+      setLoadMore(true)
+    setLightboxIndex(lightboxIndex - 1)
+  }
+
+
 
   const getPrevContent = () => {
     console.log('getPrevContent', prevNode)
@@ -40,6 +62,8 @@ const JgLightboxContextProvider = ({children}) => {
     return <JgImageDetail imageNode={nextNode}/>
   }
 
+
+
   useEffect(() => {
     if (currentNode) setLightboxOpen(true)
   }, [currentNode])
@@ -49,11 +73,15 @@ const JgLightboxContextProvider = ({children}) => {
   		handleImageClick: handleImageClick,
   		lightboxOpen: lightboxOpen,
   		setLightboxOpen: setLightboxOpen,
-  		getPrevContent: getPrevContent,
-  		getCurrentContent: getCurrentContent,
-  		getNextContent: getNextContent,
+  		getPrevContent: <JgImageDetail imageNode={prevNode}/>,
+  		getCurrentContent: <JgImageDetail imageNode={currentNode}/>,
+  		getNextContent: <JgImageDetail imageNode={nextNode}/>,
+      handleLightboxPrevClick: handleLightboxPrevClick,
+      handleLightboxNextClick: handleLightboxNextClick,
+      lightboxIndex: lightboxIndex
   	}}>
   		{children}
+      <JgLightbox mainContent={<JgImageDetail imageNode={currentNode}/>}/>
     </Provider>
   )
 }

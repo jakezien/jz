@@ -17,7 +17,10 @@ const JgLightbox = (props) => {
 		setLightboxOpen, 
 		getPrevContent,
 		getCurrentContent,
-		getNextContent
+		getNextContent,
+		handleLightboxPrevClick,
+		handleLightboxNextClick,
+		lightboxIndex
 	} = useContext(JgLightboxContext)
 
 	let { 
@@ -26,24 +29,7 @@ const JgLightbox = (props) => {
 		setLoadMore
 	} = useContext(JgImagesContext)
 
-	const [lightboxIndex, setLightboxIndex] = useState(0)
 	const [lightboxPadding, setlightboxPadding] = useState(padding)
-
-
-  const handleLightboxPrevClick = () => {
-    console.log(lightboxIndex)
-    let newIndex = (lightboxIndex - 1 + listLength) % listLength
-    console.log(lightboxIndex, newIndex, listLength)
-    setLightboxIndex(newIndex);
-  }
-
-  const handleLightboxNextClick = () => {
-    console.log(lightboxIndex)
-    if (lightboxIndex === listLength - 2) setLoadMore(true)
-    let newIndex = lightboxIndex + 1
-    console.log(lightboxIndex, newIndex, listLength)
-    setLightboxIndex(newIndex)
-  }
 
   const handleWindowResize = () => {
     let padding = window.innerWidth > 767 ? 64 : 8
@@ -58,22 +44,26 @@ const JgLightbox = (props) => {
     }
   })
 
+  useEffect(() => {
+  	console.log('mainContent', props.mainContent?.props?.imageNode?.name)
+  }, [lightboxIndex])
+
 
   return (
     <>
 	    {lightboxOpen && (
 	      <Lightbox
-	        prevCustomContent={getPrevContent()}
-	        mainCustomContent={getCurrentContent()}
-	        nextCustomContent={getNextContent()}
-	        onCloseRequest={() => {setLightboxOpen(false); NoScroll.off(); }}
-	        onMovePrevRequest={handleLightboxPrevClick}
-	        onMoveNextRequest={handleLightboxNextClick}
-	        clickOutsideToClose={true}
-	        imagePadding={lightboxPadding}
-	        wrapperClassName={
-	        	(lightboxIndex === 0  ? 'firstImage ' : '') + 
-	        	(lightboxIndex === allPostsLength-1 ? 'lastImage ' : '')
+	        prevCustomContent=<div></div>
+	        mainCustomContent={props.mainContent}
+	        nextCustomContent=<div></div>
+	        onCloseRequest={ () => { setLightboxOpen(false); NoScroll.off(); } }
+	        onMovePrevRequest={ handleLightboxPrevClick }
+	        onMoveNextRequest={ handleLightboxNextClick }
+	        clickOutsideToClose={ true }
+	        imagePadding={ lightboxPadding }
+	        wrapperClassName={ props.className + ' ' +
+	        	(lightboxIndex >= allPostsLength-1 ? 'firstImage ' : '') +
+	        	(lightboxIndex === 0  ? 'lastImage ' : '')
 	        }
 	      />
 	    )}

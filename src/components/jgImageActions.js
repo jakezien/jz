@@ -9,6 +9,7 @@ import { JgDatabaseContext } from '../components/jgDatabaseContext.js'
 const StyledDiv = styled.div`
 
 	display: flex;
+  align-items: center;
 
   button {
     background: transparent;

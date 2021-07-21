@@ -12,12 +12,12 @@ body.ReactModal__Body--open {
 .ril-outer {
   &.firstImage {
     .ril-prev-button {
-      
+      display: none;
     }
   }
   &.lastImage {
     .ril-next-button {
-      
+      display: none;
     }    
   }
 }

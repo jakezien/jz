@@ -38,7 +38,7 @@ const JgImageDopamineHits = ({imageNode, postsState}) => {
 
   useEffect(() => {
     setDopamineHits(getDopamineHits(imageNode.name))
-    console.log('dopamineHits', imageNode.name, dopamineHits)
+    //console.log('dopamineHits', imageNode.name, dopamineHits)
   }, postsState)
 
   return (
