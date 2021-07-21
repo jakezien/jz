@@ -2,6 +2,8 @@ import React from "react"
 import { Link } from "gatsby"
 import { rhythm } from "../utils/typography"
 import styled from "styled-components"
+import JgLogo from '../../static/svg/logo-jakestagram.svg'
+
 
 const StyledUl = styled.ul`
   margin: 0;
@@ -35,7 +37,15 @@ const StyledBr = styled.br`
     display: none;
   }
 `
-
+const StyledJgLogo = styled(JgLogo)`
+  width: 116px;
+  position: relative;
+  z-index: 1;
+  top: 9px;
+  path {
+    fill: #555 !important;
+  }
+`
 
 const SiteNav = (props) => {
 
@@ -66,6 +76,12 @@ const SiteNav = (props) => {
         <StyledLi>
           <StyledLink {...props} className="link" to="/favorites">
             Favorites
+          </StyledLink>
+        </StyledLi>
+
+        <StyledLi>
+          <StyledLink {...props} className="link link--jakestagram" to="/jakestagram">
+            <StyledJgLogo aria-label="Jakestagram"/>
           </StyledLink>
         </StyledLi>
         

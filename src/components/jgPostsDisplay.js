@@ -3,6 +3,7 @@ import styled from "styled-components"
 import JgDisplayToggle from './jgDisplayToggle'
 import VisibilitySensor from 'react-visibility-sensor'
 import { JgImagesContext } from './jgImagesContext'
+import { JgDisplayContext } from './jgDisplayContext'
 import { chunkArray } from "../utils/functions"
 import JgImage from '../components/jgImage'
 
@@ -11,7 +12,7 @@ const ImageRow = styled.div`
     display: flex;
     margin-bottom: 3px;
     @media (min-width: 768px) {
-      margin-bottom: 28px;
+      margin-bottom: 8px;
     }
   }
 `
@@ -19,7 +20,11 @@ const ImageRow = styled.div`
 
 const JgPostsDisplay = ({children}) => {
 
-	const [displayStyle, setDisplayStyle] = useState('grid')
+	const {
+		displayStyle,
+		setDisplayStyle
+	} = useContext(JgDisplayContext)
+
 	const { 
 		setLoadMore, 
 		hasMore, 
@@ -29,7 +34,7 @@ const JgPostsDisplay = ({children}) => {
 
 	const handleToggleClick = (e) => {
 	  let name = e.target.getAttribute('name')
-	  setDisplayStyle(name)
+	  // setDisplayStyle(name)
 	}
 
 	const handleVisibilityChange = (isVisible) => {
@@ -40,7 +45,7 @@ const JgPostsDisplay = ({children}) => {
 
 	return (
 		<div className={displayStyle}>
-			<JgDisplayToggle handleToggleClick={handleToggleClick} />
+			{/*<JgDisplayToggle handleToggleClick={handleToggleClick} />*/}
 			
 			{chunkArray(getList(), 3).map((listChunk, i) => { 
 			  return (

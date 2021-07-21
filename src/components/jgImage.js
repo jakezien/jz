@@ -4,6 +4,7 @@ import { rhythm } from "../utils/typography"
 import { navigate } from '@reach/router'
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import { JgLightboxContext } from './jgLightboxContext'
+import { JgDisplayContext } from './jgDisplayContext'
 import VisibilitySensor from 'react-visibility-sensor'
 
 
@@ -53,7 +54,7 @@ import JgImageDetail from './jgImageDetail'
       }
       
       @media (min-width: 768px) {
-        margin-right: 28px;
+        margin-right: 8px;
       }
     }
     
@@ -66,23 +67,24 @@ import JgImageDetail from './jgImageDetail'
 const JgImage = (props) => {
   
   let { imageNode, index, ...otherProps } = props
-  let { handleImageClick } = useContext(JgLightboxContext)
+  // let { handleImageClick } = useContext(JgLightboxContext)
+  let { displayStyle, handleImageClick, handleImageVisibilityChange, backToGrid, showPosts } = useContext(JgDisplayContext)
 
   const handleVisibilityChange = (isVisible) => {
     console.log(index, isVisible)
     if (isVisible) {
       if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', '?post=' + index)
+        window.history.replaceState(null, '', '/jakestagram/#' + index)
       }
     }
   }
 
   return (
 
-      <JgPost>
+      <JgPost id={'post--'+index}>
         <div onClick={() => handleImageClick(index)}>
           <VisibilitySensor 
-            onChange={handleVisibilityChange} 
+            onChange={(isVisible) => {handleImageVisibilityChange(isVisible, index)}} 
             partialVisibility={true}
             minTopValue={500}
             scrollCheck={true}

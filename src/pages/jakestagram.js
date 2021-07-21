@@ -9,6 +9,7 @@ import Container from '../components/container'
 import { JgDatabaseContextProvider } from '../components/jgDatabaseContext'
 import { JgImagesContextProvider } from '../components/jgImagesContext'
 import { JgLightboxContextProvider } from '../components/jgLightboxContext'
+import { JgDisplayContextProvider } from '../components/jgDisplayContext'
 import JgHeader from '../components/jgHeader'
 import JgPostsDisplay from '../components/jgPostsDisplay'
 import JgLightbox from '../components/jgLightbox'
@@ -39,20 +40,21 @@ const Jakestagram = ({ data, location }) => {
   return (
     <Layout>
       <SEO title="Jakestagram" />
+
       <JgImagesContextProvider allPosts={allPosts}>
         <JgDatabaseContextProvider>
-          <JgLightboxContextProvider>
+          <JgDisplayContextProvider>
+            <JgLightboxContextProvider>
 
-            <section>
-              <StyledContainer>
+              <section>
+                <StyledContainer>
+                  <JgHeader tags={tags} />
+                  <JgPostsDisplay />
+                </StyledContainer>
+              </section>
 
-                <JgHeader tags={tags} />
-                <JgPostsDisplay />
-
-              </StyledContainer>
-            </section>
-
-          </JgLightboxContextProvider>
+            </JgLightboxContextProvider>
+          </JgDisplayContextProvider>
         </JgDatabaseContextProvider>
       </JgImagesContextProvider>
     </Layout>
