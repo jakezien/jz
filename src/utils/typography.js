@@ -71,6 +71,7 @@ const typography = new Typography({
     },
 
     'strong': {
+      fontWeight: 700,
       opacity: 0.9
     },
 

@@ -2,31 +2,27 @@ import React, {useEffect, useState, useContext, useRef} from "react"
 import moment from 'moment'
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
-import { isElementInViewport, pluralizeLabel } from "../utils/functions"
+import { isElementInViewport, numberLabel } from "../utils/functions"
 // import CommentForm from "./commentForm"
 import CommentIcon from '../../static/svg/icon-comment.svg'
 import { JgDatabaseContext } from './jgDatabaseContext'
+import Comment from './comment'
 
 
 
 const StyledDiv = styled.div`
+  
+  padding-top: ${rhythm(.5)};
 
-  button {
-    background: transparent;
-    border: 0;
-    appearance: none;
-    -webkit-appearance: none;
-    padding: 0.5rem;
-    height: ${rhythm(2)};
+  .button--text {
+    margin-bottom: ${rhythm(.5)};
+    opacity: 0.66;
 
     &:hover {
-      background: ${props => props.theme.yellowHover};
+      opacity: 1;
     }
   }
 
-  .grid & {
-    display: none
-  }
 `
 
 const JgImageComments = (props) => {
@@ -63,32 +59,24 @@ const JgImageComments = (props) => {
       }*/}
       {!showAll && (
         <div className="preview">
-          {comments?.slice(0,2).map((comment, i) => { 
-            return (
-              <div key={i}>
-                <p style={{marginBottom:0}}><strong>{comment.name}</strong></p>
-                <p>{comment.body}</p>
-              </div>
-            )
-          })}
-          <button onClick={hidePreview}>
-            {pluralizeLabel('comment', comments)}
-          </button>
+          {comments?.length && (
+            <Comment comment={comments[0]} />
+          )}
+          {comments?.length > 2 && (
+            <>
+              <button className="button button--text" onClick={hidePreview}>
+                {'View all ' + numberLabel('comment', comments)}
+              </button>
+              <Comment comment={comments[comments.length - 1]} />
+            </>
+          )}
         </div>
       )}
     
       {showAll && (
         <div className="all">
-          {comments?.map((comment, i) => { 
-            return (
-              <div key={i}>
-                <p style={{marginBottom:0}}><strong>{comment.name}</strong></p>
-                <p>{comment.body}</p>
-              </div>
-            )
-          })}
-          <button onClick={hideAll}>Hide comments</button>
-
+          {comments?.map((comment, i) => <Comment comment={comment} />)}
+          <button className="button button--text" onClick={hideAll}>Hide comments</button>
         </div>
       )}
     </StyledDiv>

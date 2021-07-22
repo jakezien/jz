@@ -24,7 +24,7 @@ export function isElementInViewport(el) {
   );
 }
 
-export function pluralizeLabel(label, list) {
+export function numberLabel(label, list) {
   if (!list || list.length === 0 ) {
     return 'No ' + label + 's'
   }

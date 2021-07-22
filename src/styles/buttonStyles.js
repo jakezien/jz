@@ -39,4 +39,14 @@ export const ButtonStyles = css`
     }
   }
 
+  .button--text {
+    margin: 0;
+    padding: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    color: ${props => props.theme.text};
+  }
+
 `

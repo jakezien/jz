@@ -43,7 +43,7 @@ const StyledJgLogo = styled(JgLogo)`
   z-index: 1;
   top: 9px;
   path {
-    fill: #555 !important;
+    fill: ${props => props.theme.text};
   }
 `
 
