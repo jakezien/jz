@@ -50,9 +50,9 @@ const JgPostsDisplay = ({children}) => {
 			{chunkArray(getList(), 3).map((listChunk, i) => { 
 			  return (
 			    <ImageRow key={i}>
-			      <JgImage imageNode={listChunk[0]} alt="" index={allPostsLength - (i*3 + 0)} displayStyle={displayStyle}/>
-			      <JgImage imageNode={listChunk[1]} alt="" index={allPostsLength - (i*3 + 1)} displayStyle={displayStyle}/>
-			      <JgImage imageNode={listChunk[2]} alt="" index={allPostsLength - (i*3 + 2)} displayStyle={displayStyle}/>
+			      <JgImage imageNode={listChunk[0]} alt="" index={allPostsLength - (i*3 + 0)}/>
+			      <JgImage imageNode={listChunk[1]} alt="" index={allPostsLength - (i*3 + 1)}/>
+			      <JgImage imageNode={listChunk[2]} alt="" index={allPostsLength - (i*3 + 2)}/>
 			    </ImageRow>
 			)})}
 

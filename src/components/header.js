@@ -2,7 +2,7 @@ import React from "react"
 import SiteNav from './siteNav'
 import styled from "styled-components"
 import { Link } from "gatsby"
-import Monogram from "../../content/assets/monogram.svg"
+import Monogram from "../../static/svg/monogram.svg"
 import { rhythm } from "../utils/typography"
 import Container from "./container"
 

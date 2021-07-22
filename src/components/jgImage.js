@@ -9,6 +9,7 @@ import VisibilitySensor from 'react-visibility-sensor'
 
 
 // import JgClickInterceptor from './jgClickInterceptor'
+import JgImageHeader from './jgImageHeader'
 import JgImageFooter from './jgImageFooter'
 import JgImageComments from './jgImageComments'
 import JgImageDetail from './jgImageDetail'
@@ -60,7 +61,7 @@ import JgImageDetail from './jgImageDetail'
     
     .list & {
       flex: 1 0 100%;
-      margin-bottom:${rhythm(1)};
+      padding-top:${rhythm(1)};
     }
   `
 
@@ -68,7 +69,13 @@ const JgImage = (props) => {
   
   let { imageNode, index, ...otherProps } = props
   // let { handleImageClick } = useContext(JgLightboxContext)
-  let { displayStyle, handleImageClick, handleImageVisibilityChange, backToGrid, showPosts } = useContext(JgDisplayContext)
+  let { 
+    displayStyle,
+    handleImageClick,
+    handleImageVisibilityChange,
+    backToGrid,
+    showPosts 
+  } = useContext(JgDisplayContext)
 
   const handleVisibilityChange = (isVisible) => {
     console.log(index, isVisible)
@@ -81,7 +88,7 @@ const JgImage = (props) => {
 
   return (
 
-      <JgPost id={'post--'+index}>
+      <JgPost id={'post-'+index}>
         <div onClick={() => handleImageClick(index)}>
           <VisibilitySensor 
             onChange={(isVisible) => {handleImageVisibilityChange(isVisible, index)}} 
@@ -90,13 +97,16 @@ const JgImage = (props) => {
             scrollCheck={true}
             scrollThrottle={10}
             resizeCheck={true}
-            active={props.displayStyle === 'list'}
-          >
-            <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+            active={displayStyle === 'list'}
+          > 
+            <div>
+              {displayStyle === 'list' && <JgImageHeader />}
+              <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+            </div>
           </VisibilitySensor>
         </div>
         <StyledJgImageFooter imageNode={imageNode}/>
-        {props.displayStyle === 'list' && <JgImageComments imageNode={imageNode}/>}
+        {displayStyle === 'list' && <JgImageComments imageNode={imageNode}/>}
       </JgPost>
 
   )

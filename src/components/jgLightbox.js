@@ -45,7 +45,7 @@ const JgLightbox = (props) => {
   })
 
   useEffect(() => {
-  	console.log('mainContent', props.mainContent?.props?.imageNode?.name)
+  	// console.log('mainContent', props.mainContent?.props?.imageNode?.name)
   }, [lightboxIndex])
 
 

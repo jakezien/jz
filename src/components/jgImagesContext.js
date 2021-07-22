@@ -13,15 +13,19 @@ const JgImagesContextProvider = (props) => {
   const [loadMore, setLoadMore] = useState(false)
   const [hasMore, setHasMore] = useState(props.allPosts.length > loadAmt)
 
-  useEffect(() => {
-    if (loadMore && hasMore) {
-      console.log('load more')
+  const loadMorePosts = (postsToLoad = loadAmt) => {
+      console.log('loadMorePosts', postsToLoad)
       const currentLength = list.length
       const isMore = currentLength < props.allPosts.length
       const nextResults = isMore 
-        ? props.allPosts.slice(currentLength, currentLength + loadAmt)
+        ? props.allPosts.slice(currentLength, currentLength + postsToLoad)
         : []
       setList([...list, ...nextResults])
+  }
+
+  useEffect(() => {
+    if (loadMore && hasMore) {
+      loadMorePosts()
       setLoadMore(false)
     }
   }, [loadMore, hasMore])
@@ -35,6 +39,14 @@ const JgImagesContextProvider = (props) => {
 
   const getImageNode = (index) => list[props.allPosts.length - index]
 
+  const loadToIndex = (index) => {
+    let lastLoadedPostIndex = props.allPosts.length - list.length
+    if (lastLoadedPostIndex > index) {
+      let delta = lastLoadedPostIndex - index
+      let postsToLoad = loadAmt * Math.ceil(delta/loadAmt)
+      loadMorePosts(postsToLoad)
+    }
+  }
 
   return (
     <Provider value={{
@@ -44,6 +56,7 @@ const JgImagesContextProvider = (props) => {
       getImageNode: getImageNode,
     	listLength: list.length,
     	allPostsLength: props.allPosts.length,
+      loadToIndex: loadToIndex
     }} >
     	{props.children}
   	</Provider>

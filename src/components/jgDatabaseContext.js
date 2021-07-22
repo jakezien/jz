@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { firebaseApp } from "../../firebase.js"
-import { getFirestore, collection, collectionGroup, query, orderBy, getDocs, addDoc, onSnapshot } from "firebase/firestore"
+import { addDoc, collection, getFirestore, onSnapshot, orderBy, query } from "firebase/firestore"
 import JgImageDetail from './jgImageDetail'
 
 let JgDatabaseContext
@@ -12,6 +12,8 @@ const JgDatabaseContextProvider = ({children}) => {
   const [postsState, setPostsState] = useState()
   const [nextComments, setNextComments] = useState()
   const [nextHits, setNextHits] = useState()
+  const [commentsLoaded, setCommentsLoaded] = useState(0)
+  const [firstLoadComplete, setFirstLoadComplete] = useState(false)
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
@@ -84,6 +86,9 @@ const JgDatabaseContextProvider = ({children}) => {
     let newPost = {[postId]: {...oldPost}}
     let newPosts = {...postsState, newPost}
     setPostsState(newPosts)
+    setCommentsLoaded(commentsLoaded + 1)
+    // console.log(commentsLoaded, Object.keys(postsState).length, commentsLoaded === Object.keys(postsState).length -2)
+    // if (!firstLoadComplete && commentsLoaded === Object.keys(postsState).length - 2) setFirstLoadComplete(true)
   }, [nextComments])
   
 
@@ -187,7 +192,8 @@ const JgDatabaseContextProvider = ({children}) => {
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
-      postsState: postsState
+      postsState: postsState,
+      firstLoadComplete: firstLoadComplete,
   	}}>
   		{children}
   	</Provider>

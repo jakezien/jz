@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useLayoutEffect, useContext } from "react"
+import { JgImagesContext } from './jgImagesContext'
+import { JgDatabaseContext } from './jgDatabaseContext'
 
 let JgDisplayContext;
 let { Provider } = (JgDisplayContext = React.createContext())
 
 
 function JgDisplayContextProvider(props) { 
+
   const [displayStyle, setDisplayStyle] = useState('grid')
   const [clickedGridIndex, setClickedGridIndex] = useState()
+  const { loadToIndex } = useContext(JgImagesContext)
+  const { firstLoadComplete } = useContext(JgDatabaseContext)
 
   const backToGrid = () => {
     console.log('backToGrid')
@@ -17,7 +22,7 @@ function JgDisplayContextProvider(props) {
   const showPosts = (index) => {
     setClickedGridIndex(index)
     setDisplayStyle('list')
-    if (window) window.history.pushState(null, '', '/jakestagram/posts/'+index)
+    if (window) window.history.pushState(null, '', '/jakestagram/#post-'+index)
   }
 
   const handlePopState = (e) => {
@@ -48,10 +53,10 @@ function JgDisplayContextProvider(props) {
   }
 
   const handleImageVisibilityChange = (isVisible, index) => {
-    console.log(index, isVisible)
+    // console.log(index, isVisible)
     if (isVisible) {
       if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', '/jakestagram/posts/' + index)
+        window.history.replaceState(null, '', '/jakestagram/#post-' + index)
       }
     }
   }
@@ -67,8 +72,19 @@ function JgDisplayContextProvider(props) {
 
   useEffect(() => {
     if (!clickedGridIndex) return
-    if (document) document.querySelector(`#post--${clickedGridIndex}`).scrollIntoView()
+    if (document) document.querySelector(`#post-${clickedGridIndex}`).scrollIntoView()
   }, [clickedGridIndex])
+
+  useLayoutEffect(() => {
+    if (window && document) {
+      let index = window.location.hash.split('#post-')
+      if (index[1]) {
+        loadToIndex(index[1])
+        setClickedGridIndex(index[1])
+        setDisplayStyle('list')
+      }
+    }
+  }, [])
 
   return (
     <Provider value={{displayStyle, handleImageClick, handleImageVisibilityChange, backToGrid, showPosts}}>
