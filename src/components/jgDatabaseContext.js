@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react'
 import { firebaseApp } from "../../firebase.js"
-import { addDoc, collection, getFirestore, onSnapshot, orderBy, query } from "firebase/firestore"
+import { addDoc, collection, getDocs, getFirestore, orderBy, query } from "firebase/firestore/lite"
 import JgImageDetail from './jgImageDetail'
 
 let JgDatabaseContext
@@ -8,22 +8,24 @@ let { Provider } = (JgDatabaseContext = React.createContext())
 
 const JgDatabaseContextProvider = ({children}) => {
 
-  const posts = useRef()
-  const [postsState, setPostsState] = useState()
+  // const posts = useRef()
+  const [posts, setPosts] = useState()
   const [nextComments, setNextComments] = useState()
   const [nextHits, setNextHits] = useState()
   const [commentsLoaded, setCommentsLoaded] = useState(0)
-  const [firstLoadComplete, setFirstLoadComplete] = useState(false)
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
   const postsQuery = query(postsDbRef)
   let unsubscribePosts
-
+  let newPosts = {}
 
   const getPostsData = async () => {   
-    unsubscribePosts ? unsubscribePosts() : '' 
-    unsubscribePosts = onSnapshot(postsQuery, {next: onPostsChange, error: console.warn})
+    let postDocs = await getDocs(postsQuery)
+
+    postDocs.forEach( (doc) => createPostForDoc(doc) )
+
+
     // ————————————— OLD CODE ————————————— //
       
       // if (typeof window !== "undefined") {
@@ -31,85 +33,31 @@ const JgDatabaseContextProvider = ({children}) => {
       // } 
   }
 
-  const onPostsChange = (newSnapshot) => {
-    // console.log('onPostsChange', newSnapshot, newSnapshot.docChanges())
-    
-    // unsubscribe from old snapshots before replacing them
-    // TODO: would be better to process docChanges only
-    if (posts.current) {
-      Object.keys(posts.current).forEach(postId => {
-        posts.current[postId].unsubscribeComments.call()
-        posts.current[postId].unsubscribeHits.call()
-      })
-    }
+  const createPostForDoc = async (doc) => {
+    let post = {};
+    let commentsQuery = query(collection(db, `jgPosts/${doc.id}/comments`), orderBy('time', 'desc'))
+    let hitsQuery = query(collection(db, `jgPosts/${doc.id}/dopamineHits`))
+    post['commentsQuery'] = commentsQuery
+    post['hitsQuery'] = hitsQuery
 
-    let newPosts = {}
-    newSnapshot.forEach((doc) => {
-      let post = {};
-      post['commentsQuery'] = query(collection(db, `jgPosts/${doc.id}/comments`), orderBy('time', 'desc'))
-      post['hitsQuery'] = query(collection(db, `jgPosts/${doc.id}/dopamineHits`))
-      post['unsubscribeComments'] = onSnapshot(post['commentsQuery'], {next:onCommentsChange, error:console.warn})
-      post['unsubscribeHits'] = onSnapshot(post['hitsQuery'], {next:onHitsChange, error:console.warn})
-      newPosts[doc.id] = post
+    post['comments'] = await getQueryData(commentsQuery)
+    post['hits'] = await getQueryData(hitsQuery)
+    newPosts[doc.id] = post
+    console.log(post.comments)
+    console.log(post.hits)
+    setPosts(newPosts)
+    console.log(posts)
+  }
+
+  const getQueryData = async (query) => {
+    let docs = await getDocs(query)
+
+    let newDocs = []
+    docs.forEach((doc) => {
+      newDocs.push({...doc.data()})
     })
-
-    // console.log(posts)
-    // console.log('onPostsChange', newPosts)
-    setPostsState(newPosts)
-    // console.log('postsState', postsState)
-    posts.current = newPosts;
+    return newDocs
   }
-
-  useEffect(() => {
-    getPostsData()
-    return () => {
-      unsubscribePosts()
-      //TODO: cleanup other subscriptions?
-    }
-  }, [])
-
-
-
-  const onCommentsChange = (next) => {
-    setNextComments(next)
-  }
-
-  useEffect(() => {
-    if (!nextComments) return
-    let postId = nextComments.query._query.path.segments[1]
-    // console.log('onCommentsChange', postsState[postId])
-    let oldPost = postsState[postId]
-
-    let newDocs = []
-    nextComments.forEach( doc => newDocs.push({id:doc.id, ...doc.data()}) )
-    oldPost['comments'] = newDocs;
-    let newPost = {[postId]: {...oldPost}}
-    let newPosts = {...postsState, newPost}
-    setPostsState(newPosts)
-    setCommentsLoaded(commentsLoaded + 1)
-    // console.log(commentsLoaded, Object.keys(postsState).length, commentsLoaded === Object.keys(postsState).length -2)
-    // if (!firstLoadComplete && commentsLoaded === Object.keys(postsState).length - 2) setFirstLoadComplete(true)
-  }, [nextComments])
-  
-
-
-  const onHitsChange = (next) => {
-    setNextHits(next)
-  }
-
-  useEffect(() => {
-    if (!nextHits) return
-    let postId = nextHits.query._path.segments[1]
-    // console.log('onHitsChange', postsState[postId])
-    let oldPost = postsState[postId]
-
-    let newDocs = []
-    nextHits.forEach( doc => newDocs.push({id:doc.id, ...doc.data()}) )
-    oldPost['hits'] = newDocs;
-    let newPost = {[postId]: {...oldPost}}
-    let newPosts = {...postsState, ...newPost}
-    setPostsState(newPosts)
-  }, [nextHits])
   
 
   const updateLocalStorage = (docType, docRef) => {
@@ -176,12 +124,17 @@ const JgDatabaseContextProvider = ({children}) => {
   }
 
   const getDopamineHits = (name) => {
-    return postsState?.[name]?.hits
+    return posts?.[name]?.hits
   }
 
   const getComments = (name) => {
-    return postsState?.[name]?.comments
+    return posts?.[name]?.comments
   }
+
+  useLayoutEffect(() => {
+    getPostsData()
+  }, [])
+
 
   return (
   	<Provider value={{
@@ -192,8 +145,7 @@ const JgDatabaseContextProvider = ({children}) => {
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
-      postsState: postsState,
-      firstLoadComplete: firstLoadComplete,
+      posts: posts,
   	}}>
   		{children}
   	</Provider>

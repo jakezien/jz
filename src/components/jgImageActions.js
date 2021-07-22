@@ -49,11 +49,11 @@ const StyledDiv = styled.div`
 
 const JgImageActions = (props) => {
   const {imageNode} = props
-  const {postsState} = React.useContext(JgDatabaseContext)
+  const {posts} = React.useContext(JgDatabaseContext)
 
 	return (
 		<StyledDiv>
-			<JgImageDopamineHits imageNode={imageNode} postState={postsState} />
+			<JgImageDopamineHits imageNode={imageNode} posts={posts} />
 			<button><CommentIcon/></button>
 		</StyledDiv>
 	)

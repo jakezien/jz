@@ -31,7 +31,7 @@ const StyledDiv = styled.div`
   }
 `
 
-const JgImageDopamineHits = ({imageNode, postsState}) => {
+const JgImageDopamineHits = ({imageNode, posts}) => {
 
   let { getDopamineHits } = useContext(JgDatabaseContext)
   const [dopamineHits, setDopamineHits] = useState()
@@ -39,7 +39,7 @@ const JgImageDopamineHits = ({imageNode, postsState}) => {
   useEffect(() => {
     setDopamineHits(getDopamineHits(imageNode.name))
     //console.log('dopamineHits', imageNode.name, dopamineHits)
-  }, postsState)
+  }, [posts])
 
   return (
     <StyledDiv className="dopamine-hits">

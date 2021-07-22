@@ -73,7 +73,7 @@ module.exports = {
         theme_color: `rgb(255, 194, 41)`,
         crossOrigin: 'anonymous',
         display: `minimal-ui`,
-        icon: `content/assets/monogram.svg`,
+        icon: `static/svg/monogram.svg`,
       },
     },
 
