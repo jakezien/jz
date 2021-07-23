@@ -4,12 +4,18 @@ import JgImageDopamineHits from './jgImageDopamineHits'
 import CommentIcon from '../../static/svg/icon-comment.svg'
 import { rhythm } from "../utils/typography"
 import { JgDatabaseContext } from '../components/jgDatabaseContext.js'
+import DopamineHitForm from "./dopamineHitForm"
+
 
 
 const StyledDiv = styled.div`
 
 	display: flex;
   align-items: center;
+
+  form {
+    margin: 0
+  }
 
   button {
     background: transparent;
@@ -53,7 +59,7 @@ const JgImageActions = (props) => {
 
 	return (
 		<StyledDiv>
-			<JgImageDopamineHits imageNode={imageNode} posts={posts} />
+      <DopamineHitForm />
 			<button><CommentIcon/></button>
 		</StyledDiv>
 	)

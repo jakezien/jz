@@ -5,12 +5,14 @@ import { navigate } from '@reach/router'
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import { JgLightboxContext } from './jgLightboxContext'
 import { JgDisplayContext } from './jgDisplayContext'
+import { JgDatabaseContext } from './jgDatabaseContext'
 import VisibilitySensor from 'react-visibility-sensor'
 
 
 // import JgClickInterceptor from './jgClickInterceptor'
 import JgImageHeader from './jgImageHeader'
 import JgImageFooter from './jgImageFooter'
+import JgDopamineHitsCount from './jgDopamineHitsCount'
 import JgImageComments from './jgImageComments'
 import JgImageDetail from './jgImageDetail'
 
@@ -77,6 +79,7 @@ const JgImage = (props) => {
     showPosts 
   } = useContext(JgDisplayContext)
 
+
   const handleVisibilityChange = (isVisible) => {
     console.log(index, isVisible)
     if (isVisible) {
@@ -106,6 +109,7 @@ const JgImage = (props) => {
           </VisibilitySensor>
         </div>
         <StyledJgImageFooter imageNode={imageNode}/>
+        {displayStyle === 'list' && <JgDopamineHitsCount imageNode={imageNode}/>}
         {displayStyle === 'list' && <JgImageComments imageNode={imageNode}/>}
       </JgPost>
 

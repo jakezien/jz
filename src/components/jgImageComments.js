@@ -12,7 +12,7 @@ import Comment from './comment'
 
 const StyledDiv = styled.div`
   
-  padding-top: ${rhythm(.5)};
+  margin-top: ${rhythm(.5)};
 
   .button--text {
     margin-bottom: ${rhythm(.5)};
@@ -50,16 +50,9 @@ const JgImageComments = (props) => {
 
   return (
     <StyledDiv className="comments" ref={topRef}>
-{/*      {!showForm && <button onClick={() => setShowForm(!showForm)}>Add a comment</button>}
-      {showForm && 
-        <div>
-          <CommentForm filename={filename}/>
-          <button onClick={() => setShowForm(!showForm)}>Cancel</button>
-        </div>
-      }*/}
       {!showAll && (
         <div className="preview">
-          {comments?.length && (
+          {comments?.length > 0 && (
             <Comment comment={comments[0]} />
           )}
           {comments?.length > 2 && (

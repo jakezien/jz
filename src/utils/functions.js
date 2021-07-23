@@ -25,13 +25,17 @@ export function isElementInViewport(el) {
 }
 
 export function numberLabel(label, list) {
-  if (!list || list.length === 0 ) {
+  let length
+  if (typeof list === 'number') length = list;
+  else length = list.length
+
+  if (!length || length === 0 ) {
     return 'No ' + label + 's'
   }
-  if (list.length === 1 ) {
+  if (length === 1 ) {
     return '1 ' + label
   }
-  return list.length + ' ' + label + 's'
+  return length + ' ' + label + 's'
 }
   
 export function chunkArray(array, chunkSize) {

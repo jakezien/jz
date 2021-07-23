@@ -45,6 +45,7 @@ const JgDatabaseContextProvider = ({children}) => {
     newPosts[doc.id] = post
     console.log(post.comments)
     console.log(post.hits)
+    setPosts(null) //TODO this is an ugly hack
     setPosts(newPosts)
     console.log(posts)
   }
