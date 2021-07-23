@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react'
 import { firebaseApp } from "../../firebase.js"
-import { addDoc, collection, getDocs, getFirestore, orderBy, query } from "firebase/firestore/lite"
+import { addDoc, collection, getDoc, getDocs, getFirestore, orderBy, query, setDoc } from "firebase/firestore/lite"
 import JgImageDetail from './jgImageDetail'
 
 let JgDatabaseContext
@@ -33,6 +33,7 @@ const JgDatabaseContextProvider = ({children}) => {
       // } 
   }
 
+
   const createPostForDoc = async (doc) => {
     let post = {};
     let commentsQuery = query(collection(db, `jgPosts/${doc.id}/comments`), orderBy('time', 'desc'))
@@ -43,11 +44,9 @@ const JgDatabaseContextProvider = ({children}) => {
     post['comments'] = await getQueryData(commentsQuery)
     post['hits'] = await getQueryData(hitsQuery)
     newPosts[doc.id] = post
-    console.log(post.comments)
-    console.log(post.hits)
+
     setPosts(null) //TODO this is an ugly hack
     setPosts(newPosts)
-    console.log(posts)
   }
 
   const getQueryData = async (query) => {
@@ -82,22 +81,22 @@ const JgDatabaseContextProvider = ({children}) => {
     // console.log('localData.current', localData.current)
   }
 
-  const addDopamineHit = async (e) => {
-    // const dopamineHitsFbRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
+  const addDopamineHit = async (imageNode) => {
+    const collectionRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
 
-    // console.log('addhit')
     let newHit = {
       time: new Date(),
     }
 
+    let newHitRef = await addDoc(collectionRef, newHit)
+    await setDoc(collectionRef.parent, {create: 'create'})
+    console.log('addhit')
 
-    // let newHitFbRef = await addDoc(dopamineHitsFbRef, newHit)
-    // await setDoc(dopamineHitsFbRef.parent, {create: 'create'})
-
+    createPostForDoc(await getDoc(collectionRef.parent))
     // updateLocalStorage('dopamineHit', newHitFbRef)
   }
 
-  const removeDopamineHit = async () => {
+  const removeDopamineHit = async (imageNode) => {
     // console.log('removehit')
 
     // ————————————— OLD CODE ————————————— //

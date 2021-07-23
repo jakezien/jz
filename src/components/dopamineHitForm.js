@@ -15,30 +15,24 @@ const DopamineHitForm = (props) => {
 
   const [hasHit, setHasHit] = useState(false)
 
-  const handleDopamineHitSubmission = async e => {
-    e.preventDefault()
-    addDopamineHit()
+  const handleAddHit = async e => {
+    addDopamineHit(props.imageNode)
     setHasHit(true)
   }
 
-  const handleDopamineHitDeletion = async e => {
-    e.preventDefault()
-    removeDopamineHit()
+  const handleRemoveHit = async e => {
+    removeDopamineHit(props.imageNode)
     setHasHit(false)
   }
 
   return (
     <StyledDiv>
-      <form onSubmit={e => handleDopamineHitSubmission(e)}>
-        <button type="submit" disabled={hasHit}>
-          <DopamineIcon />
-        </button>
-      </form>
-      <form onSubmit={e => handleDopamineHitDeletion(e)}>
-        <button type="submit" disabled={!hasHit}>
-          Remove Dopamine Hit
-        </button>
-      </form>
+      <button className="button button--icon" disabled={hasHit} onClick={handleAddHit}>
+        <DopamineIcon />
+      </button>
+      <button className="button button--icon" disabled={!hasHit} onClick={handleRemoveHit}>
+        Remove Dopamine Hit
+      </button>
     </StyledDiv>
   )
 }

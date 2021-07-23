@@ -6,6 +6,10 @@ export const ButtonStyles = css`
 
   button, .button {
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    color: ${props => props.theme.text};
   }
 
   .button--cta {
@@ -42,11 +46,26 @@ export const ButtonStyles = css`
   .button--text {
     margin: 0;
     padding: 0;
-    appearance: none;
-    -webkit-appearance: none;
-    border: 0;
     background: transparent;
     color: ${props => props.theme.text};
+  }
+
+  .button--icon {
+    height: ${rhythm(2)};
+    padding: 0.5rem;
+    background: transparent;
+
+    &:hover {
+      background: ${props => props.theme.yellowHover};
+    }
+
+    svg * {
+      stroke: ${
+        props => props.theme.isDark 
+        ? props.theme.textTint 
+        : props.theme.textShade
+      } !important;
+    }
   }
 
 `

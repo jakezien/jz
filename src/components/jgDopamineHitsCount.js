@@ -9,7 +9,6 @@ const JgDopamineHitsCount = ({imageNode}) => {
   let { getDopamineHits } = useContext(JgDatabaseContext)
   let name = imageNode.name
   let length = getDopamineHits(name)?.length
-  console.log(typeof length)
 
   return (
   	<>
