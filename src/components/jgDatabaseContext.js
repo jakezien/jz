@@ -18,7 +18,7 @@ const JgDatabaseContextProvider = ({children}) => {
   const postsDbRef = collection(db, `jgPosts/`)
   const postsQuery = query(postsDbRef)
   let unsubscribePosts
-  let newPosts = {}
+  const newPosts = {}
 
   const getPostsData = async () => {   
     let postDocs = await getDocs(postsQuery)
@@ -35,9 +35,10 @@ const JgDatabaseContextProvider = ({children}) => {
     post['comments'] = await getQueryData(commentsQuery)
     post['hits'] = await getQueryData(hitsQuery)
     newPosts[doc.id] = post
+    console.log('posts', posts, 'newPosts', newPosts)
 
     setPosts(null) //TODO this is an ugly hack
-    setPosts(newPosts)
+    setPosts({...posts, ...newPosts})
   }
 
   const getQueryData = async (query) => {
@@ -109,24 +110,11 @@ const JgDatabaseContextProvider = ({children}) => {
 
     let hitId = localData?.current?.[imageNode.name]?.dopamineHit
     let hitRef = doc(collectionRef, `/${hitId}`)
-    console.log('hitId', hitId, 'hitRef', hitRef)
+    console.log('removeHit', hitId, 'hitRef', hitRef)
     deleteDoc(hitRef)
 
     createPostForDoc(await getDoc(collectionRef.parent))
     updateLocalStorage('dopamineHit', null, imageNode)
-
-    // console.log('removehit')
-
-    // ————————————— OLD CODE ————————————— //
-      
-      // let ref = await firestore
-      // .collection(`jgPosts/${filename}/dopamineHits`)
-      // .doc(hitId)
-      // .delete()
-      // .catch(err => console.error)
-
-      // setHitId(null)
-      // updateLocalStorage(null)
   }
 
   const addComment = async () => {
