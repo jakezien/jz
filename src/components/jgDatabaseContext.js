@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react'
 import { firebaseApp } from "../../firebase.js"
-import { addDoc, collection, getDoc, getDocs, getFirestore, orderBy, query, setDoc } from "firebase/firestore/lite"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc } from "firebase/firestore/lite"
 import JgImageDetail from './jgImageDetail'
 
 let JgDatabaseContext
@@ -10,9 +10,9 @@ const JgDatabaseContextProvider = ({children}) => {
 
   // const posts = useRef()
   const [posts, setPosts] = useState()
-  const [nextComments, setNextComments] = useState()
-  const [nextHits, setNextHits] = useState()
-  const [commentsLoaded, setCommentsLoaded] = useState(0)
+  const localData = useRef(null)
+
+
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
@@ -22,17 +22,8 @@ const JgDatabaseContextProvider = ({children}) => {
 
   const getPostsData = async () => {   
     let postDocs = await getDocs(postsQuery)
-
     postDocs.forEach( (doc) => createPostForDoc(doc) )
-
-
-    // ————————————— OLD CODE ————————————— //
-      
-      // if (typeof window !== "undefined") {
-      //   localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
-      // } 
   }
-
 
   const createPostForDoc = async (doc) => {
     let post = {};
@@ -58,27 +49,44 @@ const JgDatabaseContextProvider = ({children}) => {
     })
     return newDocs
   }
-  
 
-  const updateLocalStorage = (docType, docRef) => {
-    if (typeof window === "undefined") return
+  const getLocalStorage = () => {
+    if (!window) return
+    let data = JSON.parse(localStorage?.getItem('jakestagram'))
+    if (!data) data = {};
+    localData.current = data
+  }
+  
+  const writeLocalStorage = () => {
+
+  }
+
+  const updateLocalStorage = (docType, docRef, imageNode) => {
+    if (!window) return
 
     let newData;
+    let localPostData = localData?.current?.[imageNode.name]
+
+    if (!localPostData) localPostData = {}
+    console.log('localPostData', localData.current, localPostData)
 
     if (docType === 'dopamineHit') {
-      newData = {dopamineHit: docRef.id}
+      localPostData['dopamineHit'] = docRef.id
     }
 
     if (docType === 'comment') {
-
+      let existingComments = localPostData.comments
+      if (existingComments) {
+        localPostData['comments'] = [...existingComments, docRef.id]
+      } else {
+        localPostData['comments'] = [docRef.id]
+      }
     }
 
-    let mergedData = {...localData.current, ...newData}
-    // console.log('mergedData', mergedData)
+    localData.current[imageNode.name] = localPostData
 
-    localStorage.setItem(imageNode.name, JSON.stringify(mergedData))
-    localData.current = JSON.parse(localStorage?.getItem(imageNode.name))
-    // console.log('localData.current', localData.current)
+    localStorage.setItem('jakestagram', JSON.stringify(localData.current))
+    console.log('localData.current', localData.current)
   }
 
   const addDopamineHit = async (imageNode) => {
@@ -93,10 +101,14 @@ const JgDatabaseContextProvider = ({children}) => {
     console.log('addhit')
 
     createPostForDoc(await getDoc(collectionRef.parent))
-    // updateLocalStorage('dopamineHit', newHitFbRef)
+    updateLocalStorage('dopamineHit', newHitRef, imageNode)
   }
 
   const removeDopamineHit = async (imageNode) => {
+    let hitId = localData?.current?.[imageNode.name]?.dopamineHit
+    let hitRef = doc(db, `jgPosts/${imageNode.name}/dopamineHits/${hitId}`)
+    console.log('hitId', hitId, 'hitRef', hitRef)
+    deleteDoc(hitRef)
     // console.log('removehit')
 
     // ————————————— OLD CODE ————————————— //
@@ -133,6 +145,7 @@ const JgDatabaseContextProvider = ({children}) => {
 
   useLayoutEffect(() => {
     getPostsData()
+    getLocalStorage()
   }, [])
 
 
