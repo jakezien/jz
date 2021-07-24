@@ -71,7 +71,7 @@ const JgDatabaseContextProvider = ({children}) => {
     console.log('localPostData', localData.current, localPostData)
 
     if (docType === 'dopamineHit') {
-      localPostData['dopamineHit'] = docRef.id
+      localPostData['dopamineHit'] = docRef?.id
     }
 
     if (docType === 'comment') {
@@ -105,10 +105,16 @@ const JgDatabaseContextProvider = ({children}) => {
   }
 
   const removeDopamineHit = async (imageNode) => {
+    const collectionRef = collection(db, `jgPosts/${imageNode.name}/dopamineHits`)
+
     let hitId = localData?.current?.[imageNode.name]?.dopamineHit
-    let hitRef = doc(db, `jgPosts/${imageNode.name}/dopamineHits/${hitId}`)
+    let hitRef = doc(collectionRef, `/${hitId}`)
     console.log('hitId', hitId, 'hitRef', hitRef)
     deleteDoc(hitRef)
+
+    createPostForDoc(await getDoc(collectionRef.parent))
+    updateLocalStorage('dopamineHit', null, imageNode)
+
     // console.log('removehit')
 
     // ————————————— OLD CODE ————————————— //
