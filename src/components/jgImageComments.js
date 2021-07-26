@@ -55,17 +55,17 @@ const JgImageComments = (props) => {
       {!showAll && (
         <div className="preview">
           {comments?.length > 0 && (
-            <Comment comment={comments[0]} />
+            <Comment imageNode={imageNode} comment={comments[0]} />
           )}
           {comments?.length === 2 && (
-            <Comment comment={comments[1]} />
+            <Comment imageNode={imageNode} comment={comments[1]} />
           )}
           {comments?.length > 2 && (
             <>
               <button className="button button--text" onClick={hidePreview}>
                 {'View all ' + numberLabel('comment', comments)}
               </button>
-              <Comment comment={comments[comments.length - 2]} />
+              <Comment imageNode={imageNode} comment={comments[1]} />
             </>
           )}
         </div>
@@ -73,7 +73,9 @@ const JgImageComments = (props) => {
     
       {showAll && (
         <div className="all">
-          {comments?.map((comment, i, comments) => <Comment comment={comments[comments.length - 1 - i]} />)}
+          {comments?.map((comment, i, comments) => 
+            <Comment imageNode={imageNode} key={comments.length-1-i} comment={comments[comments.length-1-i]} />
+          )}
           <CommentForm imageNode={imageNode}/>
           <button className="button button--text" onClick={hideAll}>Hide comments</button>
         </div>

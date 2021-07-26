@@ -42,6 +42,16 @@ const JgDatabaseContextProvider = ({children}) => {
       post.hits.filter(hit => hit.id === localHit)[0].isLocal = true
     }
 
+    let localComments = localData?.current[doc.id]?.comments
+    if (localComments && localComments.length) {
+      console.log('localComments', localComments)
+      console.log(post.comments)
+      for (let i in localComments) {
+        let match = post.comments.filter(comment => comment.id === localComments[i])
+        if (match.length) match[0].isLocal = true;
+      }
+    }
+
     newPosts[doc.id] = post
     console.log('posts', posts, 'newPosts', newPosts)
 
@@ -70,7 +80,7 @@ const JgDatabaseContextProvider = ({children}) => {
 
   }
 
-  const updateLocalStorage = (docType, docRef, imageNode) => {
+  const updateLocalStorage = (docType, docRef, imageNode, docId) => {
     if (!window) return
 
     let newData;
@@ -86,7 +96,11 @@ const JgDatabaseContextProvider = ({children}) => {
     if (docType === 'comment') {
       let existingComments = localPostData.comments
       if (existingComments) {
-        localPostData['comments'] = [...existingComments, docRef?.id]
+        if (docId) {
+          localPostData['comments'] = existingComments.filter(comment => comment.id !== docId)
+        } else {
+          localPostData['comments'] = [...existingComments, docRef?.id]
+        }
       } else {
         localPostData['comments'] = [docRef?.id]
       }
@@ -121,8 +135,8 @@ const JgDatabaseContextProvider = ({children}) => {
     console.log('removeHit', hitId, 'hitRef', hitRef)
     deleteDoc(hitRef)
 
-    createPostForDoc(await getDoc(collectionRef.parent))
     updateLocalStorage('dopamineHit', null, imageNode)
+    createPostForDoc(await getDoc(collectionRef.parent))
   }
 
   const addComment = async (imageNode, name, body) => {
@@ -142,12 +156,19 @@ const JgDatabaseContextProvider = ({children}) => {
     createPostForDoc(await getDoc(collectionRef.parent))
   }
 
-  const modifyComment = async () => {
+  const editComment = async (imageNode, id) => {
     
   }
 
-  const removeComment = async () => {
-    
+  const removeComment = async (imageNode, id) => {
+    const collectionRef = collection(db, `jgPosts/${imageNode.name}/comments`)
+
+    let commentRef = doc(collectionRef, `/${id}`)
+    console.log('removeComment', id, 'commentRef', commentRef)
+    deleteDoc(commentRef)
+
+    updateLocalStorage('comment', null, imageNode, id)
+    createPostForDoc(await getDoc(collectionRef.parent))
   }
 
   const getLocalDopamineHit = (name) => {
@@ -173,7 +194,7 @@ const JgDatabaseContextProvider = ({children}) => {
       addDopamineHit: addDopamineHit,
       removeDopamineHit: removeDopamineHit,
       addComment: addComment,
-      modifyComment: modifyComment,
+      editComment: editComment,
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
