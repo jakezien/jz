@@ -34,6 +34,14 @@ const JgDatabaseContextProvider = ({children}) => {
 
     post['comments'] = await getQueryData(commentsQuery)
     post['hits'] = await getQueryData(hitsQuery)
+
+    let localHit = localData?.current[doc.id]?.dopamineHit
+    if (localHit) {
+      console.log('localHit', localHit)
+      console.log(post.hits)
+      post.hits.filter(hit => hit.id === localHit)[0].isLocal = true
+    }
+
     newPosts[doc.id] = post
     console.log('posts', posts, 'newPosts', newPosts)
 
@@ -46,7 +54,7 @@ const JgDatabaseContextProvider = ({children}) => {
 
     let newDocs = []
     docs.forEach((doc) => {
-      newDocs.push({...doc.data()})
+      newDocs.push({id:doc.id, ...doc.data()})
     })
     return newDocs
   }
@@ -101,8 +109,8 @@ const JgDatabaseContextProvider = ({children}) => {
     await setDoc(collectionRef.parent, {create: 'create'})
     console.log('addhit')
 
-    createPostForDoc(await getDoc(collectionRef.parent))
     updateLocalStorage('dopamineHit', newHitRef, imageNode)
+    createPostForDoc(await getDoc(collectionRef.parent))
   }
 
   const removeDopamineHit = async (imageNode) => {
@@ -129,6 +137,10 @@ const JgDatabaseContextProvider = ({children}) => {
     
   }
 
+  const getLocalDopamineHit = (name) => {
+    return posts?.[name]?.hits.filter(hit => hit.isLocal)
+  }
+
   const getDopamineHits = (name) => {
     return posts?.[name]?.hits
   }
@@ -152,6 +164,7 @@ const JgDatabaseContextProvider = ({children}) => {
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
+      getLocalDopamineHit: getLocalDopamineHit,
       posts: posts,
   	}}>
   		{children}

@@ -12,7 +12,7 @@ const JgDopamineHitsCount = ({imageNode}) => {
 
   return (
   	<>
-	    { length && 
+	    { length > 0 && 
 	    	<p style={{margin:`${rhythm(.5)} 0`}}>
 	    		<strong>
 	    			{numberLabel('hit', length) + ' of dopamine '}
