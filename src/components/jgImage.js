@@ -92,7 +92,7 @@ const JgImage = (props) => {
   return (
 
       <JgPost id={'post-'+index}>
-        <div onClick={() => handleImageClick(index)}>
+        <div >
           <VisibilitySensor 
             onChange={(isVisible) => {handleImageVisibilityChange(isVisible, index)}} 
             partialVisibility={true}
@@ -104,7 +104,7 @@ const JgImage = (props) => {
           > 
             <div>
               {displayStyle === 'list' && <JgImageHeader />}
-              <GatsbyImage image={getImage(imageNode)} {...otherProps} />
+              <GatsbyImage image={getImage(imageNode)} onClick={() => handleImageClick(index)} {...otherProps} />
             </div>
           </VisibilitySensor>
         </div>

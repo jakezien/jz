@@ -7,6 +7,7 @@ import { isElementInViewport, numberLabel } from "../utils/functions"
 import CommentIcon from '../../static/svg/icon-comment.svg'
 import { JgDatabaseContext } from './jgDatabaseContext'
 import Comment from './comment'
+import CommentForm from './commentForm'
 
 
 
@@ -30,6 +31,7 @@ const JgImageComments = (props) => {
   let { imageNode } = props
   let { getComments } = useContext(JgDatabaseContext)
   let comments = getComments(imageNode?.name)
+
 
   const [showAll, setShowAll] = useState(false)
   const topRef = useRef(null)
@@ -55,12 +57,15 @@ const JgImageComments = (props) => {
           {comments?.length > 0 && (
             <Comment comment={comments[0]} />
           )}
+          {comments?.length === 2 && (
+            <Comment comment={comments[1]} />
+          )}
           {comments?.length > 2 && (
             <>
               <button className="button button--text" onClick={hidePreview}>
                 {'View all ' + numberLabel('comment', comments)}
               </button>
-              <Comment comment={comments[comments.length - 1]} />
+              <Comment comment={comments[comments.length - 2]} />
             </>
           )}
         </div>
@@ -68,7 +73,8 @@ const JgImageComments = (props) => {
     
       {showAll && (
         <div className="all">
-          {comments?.map((comment, i) => <Comment comment={comment} />)}
+          {comments?.map((comment, i, comments) => <Comment comment={comments[comments.length - 1 - i]} />)}
+          <CommentForm imageNode={imageNode}/>
           <button className="button button--text" onClick={hideAll}>Hide comments</button>
         </div>
       )}

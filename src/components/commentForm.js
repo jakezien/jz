@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import styled from "styled-components"
 import { firestore } from "../../firebase.js"
+import { JgDatabaseContext } from './jgDatabaseContext'
 
-const CommentBox = styled.div`
+const StyledDiv = styled.div`
   
 
   input, textarea {
@@ -27,58 +28,23 @@ const CommentBox = styled.div`
   }
 `
 
-const CommentForm = ({ filename }) => {
-  let storedData;
-  if (typeof window !== "undefined") {
-    storedData = JSON.parse(localStorage?.getItem(filename))
-    // console.log('storedData', JSON.parse(localStorage?.getItem(filename)))
-  }
-
+const CommentForm = (props) => {
   const [name, setName] = useState("")
   const [body, setBody] = useState("")
-  const [commentIds, setCommentIds] = useState(storedData?.comments)
 
-  const handleCommentSubmission = async e => {
+  const {addComment} = useContext(JgDatabaseContext);
+  const {imageNode} = props
+
+  const handleAddComment = async e => {
     e.preventDefault()
-    let comment = {
-      name: name,
-      body: body,
-      time: new Date(),
-    }
+    addComment(imageNode, name, body)
     setName("")
     setBody("")
-    // console.log(comment)
-
-    let ref = await firestore
-    .collection(`jgPosts/${filename}/comments`)
-    .add(comment)
-    .catch(err => console.error)
-
-    await firestore
-    .collection(`jgPosts`)
-    .doc(filename)
-    .set({create: 'create'})
-    .catch(err => console.error)
-
-    setCommentIds(commentIds ? [ref.id, ...commentIds] : [ref.id])
-    updateLocalStorage(ref.id)
-  }
-
-  const updateLocalStorage = (id) => {
-    let newData = {
-      comments: commentIds ? [id, ...commentIds] : [id]
-    }
-    let mergedData = {...storedData, ...newData}
-    console.log(mergedData)
-    if (typeof window !== "undefined") {
-      localStorage?.setItem(filename, JSON.stringify(mergedData))
-      storedData = JSON.parse(localStorage?.getItem(filename))
-    }
   }
 
   return (
-    <CommentBox>
-      <form onSubmit={e => handleCommentSubmission(e)}>
+    <StyledDiv>
+      <form onSubmit={e => handleAddComment(e)}>
         <label htmlFor="name">
           Name
           <input
@@ -86,7 +52,7 @@ const CommentForm = ({ filename }) => {
             id="name"
             value={name}
             onChange={e => setName(e.target.value)}
-            required
+            required="required"
           />
         </label>
         <label htmlFor="comment">
@@ -101,11 +67,11 @@ const CommentForm = ({ filename }) => {
             rows="4"
           ></textarea>
         </label>
-        <button type="submit" className="btn">
+        <button type="submit" className="btn" aria-label="Submit your comment">
           Submit
         </button>
       </form>
-    </CommentBox>
+    </StyledDiv>
   )
 }
 

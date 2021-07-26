@@ -86,9 +86,9 @@ const JgDatabaseContextProvider = ({children}) => {
     if (docType === 'comment') {
       let existingComments = localPostData.comments
       if (existingComments) {
-        localPostData['comments'] = [...existingComments, docRef.id]
+        localPostData['comments'] = [...existingComments, docRef?.id]
       } else {
-        localPostData['comments'] = [docRef.id]
+        localPostData['comments'] = [docRef?.id]
       }
     }
 
@@ -125,8 +125,21 @@ const JgDatabaseContextProvider = ({children}) => {
     updateLocalStorage('dopamineHit', null, imageNode)
   }
 
-  const addComment = async () => {
+  const addComment = async (imageNode, name, body) => {
+    console.log('addComment', imageNode, name, body)
+    const collectionRef = collection(db, `jgPosts/${imageNode.name}/comments`)
 
+    let newComment = {
+      name: name,
+      body: body,
+      time: new Date(),
+    }
+
+    let newCommentRef = await addDoc(collectionRef, newComment)
+    await setDoc(collectionRef.parent, {create: 'create'})
+
+    updateLocalStorage('comment', newCommentRef, imageNode)
+    createPostForDoc(await getDoc(collectionRef.parent))
   }
 
   const modifyComment = async () => {
