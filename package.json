@@ -20,7 +20,7 @@
     "dms2dec": "^1.1.0",
     "fast-exif": "^1.0.1",
     "findandreplacedomtext": "^0.4.6",
-    "firebase": "^9.0.0-beta.6",
+    "firebase": "^9.0.0-beta.8",
     "fraction.js": "^4.1.1",
     "gatsby": "^3.0.3",
     "gatsby-cli": "^3.0.0",

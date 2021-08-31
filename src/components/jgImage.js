@@ -11,14 +11,44 @@ import VisibilitySensor from 'react-visibility-sensor'
 
 // import JgClickInterceptor from './jgClickInterceptor'
 import JgImageHeader from './jgImageHeader'
-import JgImageFooter from './jgImageFooter'
 import JgDopamineHitsCount from './jgDopamineHitsCount'
+import DopamineHitForm from "./dopamineHitForm"
+import CommentIcon from '../../static/svg/icon-comment.svg'
 import JgImageComments from './jgImageComments'
 import JgImageDetail from './jgImageDetail'
+import JgImageMetadata from './jgImageMetadata'
+
+
 
 // ————————————— STYLED COMPONENTS ————————————— //
   
-  const StyledJgImageFooter = styled(JgImageFooter)``
+  const ImageFooter = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `
+  const ImageActions = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .grid & {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      justify-content: space-between;
+      pointer-events: none;
+
+      button {
+        svg {
+          height:100%;
+          * {
+            stroke: white !important;
+          }
+        }
+      }
+    }
+  ` 
 
 
   const JgPost = styled.div`
@@ -35,7 +65,7 @@ import JgImageDetail from './jgImageDetail'
         }
       }
 
-      ${StyledJgImageFooter} {
+      ${ImageFooter} {
         opacity: 0;
       }
 
@@ -43,7 +73,7 @@ import JgImageDetail from './jgImageDetail'
         .gatsby-image-wrapper {
           opacity: 0.7;
         }
-        ${StyledJgImageFooter} {
+        ${ImageFooter} {
           opacity: 1;
         }
       }
@@ -75,9 +105,12 @@ const JgImage = (props) => {
     displayStyle,
     handleImageClick,
     handleImageVisibilityChange,
+    showCommentFormButtonClicked,
     backToGrid,
-    showPosts 
+    displayList 
   } = useContext(JgDisplayContext)
+  let commentButton = useRef()
+  let commentIconPortal = useRef()
 
 
   const handleVisibilityChange = (isVisible) => {
@@ -92,7 +125,8 @@ const JgImage = (props) => {
   return (
 
       <JgPost id={'post-'+index}>
-        <div >
+
+        <div>
           <VisibilitySensor 
             onChange={(isVisible) => {handleImageVisibilityChange(isVisible, index)}} 
             partialVisibility={true}
@@ -100,7 +134,7 @@ const JgImage = (props) => {
             scrollCheck={true}
             scrollThrottle={10}
             resizeCheck={true}
-            active={displayStyle === 'list'}
+            active={displayStyle === 'list'} 
           > 
             <div>
               {displayStyle === 'list' && <JgImageHeader />}
@@ -108,9 +142,18 @@ const JgImage = (props) => {
             </div>
           </VisibilitySensor>
         </div>
-        <StyledJgImageFooter imageNode={imageNode}/>
+
+        <ImageFooter imageNode={imageNode}>
+          <ImageActions>
+            <DopamineHitForm imageNode={imageNode}/>
+            <div ref={commentIconPortal}></div>
+          </ImageActions>
+          <JgImageMetadata imageNode={imageNode}/>
+        </ImageFooter>
+
         {displayStyle === 'list' && <JgDopamineHitsCount imageNode={imageNode}/>}
-        {displayStyle === 'list' && <JgImageComments imageNode={imageNode}/>}
+        {displayStyle === 'list' && <JgImageComments imageNode={imageNode} commentIconPortal={commentIconPortal && commentIconPortal.current} />}
+
       </JgPost>
 
   )

@@ -8,7 +8,7 @@ import CommentIcon from '../../static/svg/icon-comment.svg'
 import { JgDatabaseContext } from './jgDatabaseContext'
 import Comment from './comment'
 import CommentForm from './commentForm'
-
+import {createPortal} from 'react-dom'
 
 
 const StyledDiv = styled.div`
@@ -26,9 +26,17 @@ const StyledDiv = styled.div`
 
 `
 
+const JgCommentsButton = () => {
+  return (
+    <button className="button button--icon">
+      <CommentIcon/>
+    </button>
+  )
+}
+
 const JgImageComments = (props) => {
 
-  let { imageNode } = props
+  let { imageNode, commentIconPortal } = props
   let { getComments } = useContext(JgDatabaseContext)
   let comments = getComments(imageNode?.name)
 
@@ -80,6 +88,14 @@ const JgImageComments = (props) => {
           <button className="button button--text" onClick={hideAll}>Hide comments</button>
         </div>
       )}
+
+      {createPortal(
+        <button className="button button--icon" onClick={hidePreview}>
+          <CommentIcon/>
+        </button>,
+        commentIconPortal
+      )}    
+
     </StyledDiv>
   )
 }

@@ -19,7 +19,7 @@ function JgDisplayContextProvider(props) {
     if (window) window.history.back()
   }
 
-  const showPosts = (index) => {
+  const displayList = (index) => {
     setClickedGridIndex(index)
     setDisplayStyle('list')
     if (window) window.history.pushState(null, '', '/jakestagram/#post-'+index)
@@ -42,12 +42,12 @@ function JgDisplayContextProvider(props) {
   const handleImageClick = (index) => {
     switch (displayStyle) {
       case 'grid':
-        showPosts(index)
+        displayList(index)
         break;
   
       case 'list':
         //lightbox stuff
-        console.log('image clicked', index)
+        console.log('list image clicked', index)
         break;
     }
   }
@@ -61,6 +61,10 @@ function JgDisplayContextProvider(props) {
     }
   }
 
+  const displayGrid = () => {
+    setDisplayStyle('grid')
+  }
+
   useEffect(() => {
     if (window) window.onpopstate = handlePopState
     if (document) document.querySelector('.link--jakestagram').onclick = handleNavClick 
@@ -72,7 +76,7 @@ function JgDisplayContextProvider(props) {
 
   useEffect(() => {
     if (!clickedGridIndex) return
-    if (document) document.querySelector(`#post-${clickedGridIndex}`).scrollIntoView()
+    // if (document) document.querySelector(`#post-${clickedGridIndex}`).scrollIntoView()
   }, [clickedGridIndex])
 
   useLayoutEffect(() => {
@@ -87,7 +91,15 @@ function JgDisplayContextProvider(props) {
   }, [])
 
   return (
-    <Provider value={{displayStyle, handleImageClick, handleImageVisibilityChange, backToGrid, showPosts}}>
+    <Provider value={{ 
+      displayStyle, 
+      handleImageClick,
+      handleImageVisibilityChange,
+      showCommentFormButtonClicked,
+      backToGrid,
+      displayList,
+    }}
+    >
       {props.children}
     </Provider>
   )
