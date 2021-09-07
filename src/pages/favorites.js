@@ -62,6 +62,8 @@ export const pageQuery = graphql`{
             subtitle
             type
             imageMargin
+            link
+            linkText
           }
         }
       }

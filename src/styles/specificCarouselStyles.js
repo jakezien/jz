@@ -19,11 +19,17 @@ export const SpecificCarouselStyles = css`
     margin: 0 .5em;
     [class*=card] {
       height: auto;
-      padding-bottom: 1em;
     }
   }
 }
 
+.carousel-slider-story {
+  li {
+    [class*=card] {
+      padding-bottom: 1em;
+    }
+  }
+}
 
 @media screen and (min-width: 480px) and (max-width: 639px) {
   .carousel-tray-story{

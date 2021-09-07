@@ -12,7 +12,7 @@ export const ButtonStyles = css`
     color: ${props => props.theme.text};
   }
 
-  .button--cta {
+  .button--cta, .button--cta-small {
     transition: all 0.1s;
     display: block;
     text-align: center;
@@ -40,6 +40,11 @@ export const ButtonStyles = css`
       border-color: ${props => props.theme.yellow};
       background: ${props => props.theme.bg8};
       box-shadow: ${props => `0 1px 0px rgba(255,255,255,0.33), inset 0 .5px 1px ${props.theme.shadow}`};
+    }
+
+    &.button--cta-small {
+      font-size: ${rhythm(1)};
+      padding: 0;
     }
   }
 

@@ -3,6 +3,11 @@ import styled from 'styled-components'
 import { rhythm } from '../utils/typography'
 import { JgDatabaseContext } from './jgDatabaseContext'
 
+const StyledP = styled.p`
+  display: block;
+  margin-bottom: ${rhythm(.5)};
+`
+
 const Comment = ({imageNode, comment}) => {
 
   const { editComment, removeComment } = useContext(JgDatabaseContext)
@@ -16,7 +21,7 @@ const Comment = ({imageNode, comment}) => {
   }
 
   return (
-    <p style={{marginBottom:rhythm(.5)}}>
+    <StyledP>
       <strong>{comment.name}&nbsp;</strong>
       <span>{comment.body}</span>
       {comment.isLocal && 
@@ -37,7 +42,7 @@ const Comment = ({imageNode, comment}) => {
           </button>
         </span>
       }
-    </p>
+    </StyledP>
   )
 }
 

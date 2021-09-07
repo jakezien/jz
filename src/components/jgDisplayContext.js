@@ -95,7 +95,6 @@ function JgDisplayContextProvider(props) {
       displayStyle, 
       handleImageClick,
       handleImageVisibilityChange,
-      showCommentFormButtonClicked,
       backToGrid,
       displayList,
     }}

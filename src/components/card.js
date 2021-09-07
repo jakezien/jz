@@ -14,6 +14,9 @@ const StyledDiv = styled.div`
   a {
     text-decoration: none;
   }
+  .button {
+    border-radius: 4px;
+  }
 `
 
 const Card = (props) => {

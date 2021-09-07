@@ -4,7 +4,6 @@ import { firestore } from "../../firebase.js"
 import { JgDatabaseContext } from './jgDatabaseContext'
 
 const StyledDiv = styled.div`
-  
 
   input, textarea {
     display: block;
@@ -28,7 +27,7 @@ const StyledDiv = styled.div`
   }
 `
 
-const CommentForm = (props) => {
+const CommentForm = React.forwardRef((props, ref) => {
   const [name, setName] = useState("")
   const [body, setBody] = useState("")
 
@@ -47,7 +46,8 @@ const CommentForm = (props) => {
       <form onSubmit={e => handleAddComment(e)}>
         <label htmlFor="name">
           Name
-          <input
+          <input 
+            ref={ref}
             type="text"
             id="name"
             value={name}
@@ -73,6 +73,6 @@ const CommentForm = (props) => {
       </form>
     </StyledDiv>
   )
-}
+})
 
 export default CommentForm

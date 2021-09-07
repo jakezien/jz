@@ -4,6 +4,10 @@ import { JgDatabaseContext } from './jgDatabaseContext'
 import { rhythm } from '../utils/typography'
 import { numberLabel } from '../utils/functions'
 
+const StyledP = styled.p`
+	margin: ${rhythm(.5)} 0
+`
+
 const JgDopamineHitsCount = ({imageNode}) => {
 
   let { getDopamineHits } = useContext(JgDatabaseContext)
@@ -13,13 +17,15 @@ const JgDopamineHitsCount = ({imageNode}) => {
   return (
   	<>
 	    { length > 0 && 
-	    	<p style={{margin:`${rhythm(.5)} 0`}}>
+
+	    	<StyledP>
 	    		<strong>
 	    			{numberLabel('hit', length) + ' of dopamine '}
 	  			</strong>
 	  			for Jake
-				</p>
+				</StyledP>
 	    }
+
     </>
   )
 }

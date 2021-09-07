@@ -66,6 +66,14 @@ const FavoritePostCard = (props) => {
             <StyledTitle>{post.frontmatter.title}</StyledTitle>
             <p className="bigText">{post.frontmatter.subtitle}</p>
             <MDXRenderer>{post.body}</MDXRenderer>
+              {post.frontmatter.link && 
+                <a href={post.frontmatter.link} 
+                   target='_blank'
+                   className="button button--cta-small"
+                >
+                  {post.frontmatter.linkText || 'Try it'}
+                </a>
+              }
         </StyledDiv>
     </StyledCard>
   );

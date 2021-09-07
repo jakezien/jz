@@ -39,6 +39,7 @@ const JgImageComments = (props) => {
   let { imageNode, commentIconPortal } = props
   let { getComments } = useContext(JgDatabaseContext)
   let comments = getComments(imageNode?.name)
+  const commentRef = useRef(null)
 
 
   const [showAll, setShowAll] = useState(false)
@@ -57,6 +58,15 @@ const JgImageComments = (props) => {
     }
   }
 
+  const focusComments = () => {
+    console.log(commentRef.current.focus)
+    commentRef?.current?.focus()
+  }
+
+  const commentIconClicked = () => {
+    hidePreview()
+    focusComments()
+  }
 
   return (
     <StyledDiv className="comments" ref={topRef}>
@@ -84,13 +94,13 @@ const JgImageComments = (props) => {
           {comments?.map((comment, i, comments) => 
             <Comment imageNode={imageNode} key={comments.length-1-i} comment={comments[comments.length-1-i]} />
           )}
-          <CommentForm imageNode={imageNode}/>
-          <button className="button button--text" onClick={hideAll}>Hide comments</button>
         </div>
       )}
+      <CommentForm ref={commentRef} imageNode={imageNode}/>
+      <button className="button button--text" onClick={hideAll}>Hide comments</button>
 
-      {createPortal(
-        <button className="button button--icon" onClick={hidePreview}>
+      {commentIconPortal && createPortal(
+        <button className="button button--icon" onClick={commentIconClicked}>
           <CommentIcon/>
         </button>,
         commentIconPortal

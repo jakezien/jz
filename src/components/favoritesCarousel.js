@@ -62,6 +62,8 @@ const FavoritesCarousel = (props) => {
 						subtitle
 						type
 						imageMargin
+						link
+						linkText
 					}
 				}
 			}

@@ -38,14 +38,14 @@ const JgDatabaseContextProvider = ({children}) => {
     let localHit = localData?.current[doc.id]?.dopamineHit
     if (localHit) {
       console.log('localHit', localHit)
-      console.log(post.hits)
+      // console.log(post.hits)
       post.hits.filter(hit => hit.id === localHit)[0].isLocal = true
     }
 
     let localComments = localData?.current[doc.id]?.comments
     if (localComments && localComments.length) {
       console.log('localComments', localComments)
-      console.log(post.comments)
+      // console.log(post.comments)
       for (let i in localComments) {
         let match = post.comments.filter(comment => comment.id === localComments[i])
         if (match.length) match[0].isLocal = true;
@@ -53,7 +53,7 @@ const JgDatabaseContextProvider = ({children}) => {
     }
 
     newPosts[doc.id] = post
-    console.log('posts', posts, 'newPosts', newPosts)
+    // console.log('posts', posts, 'newPosts', newPosts)
 
     setPosts(null) //TODO this is an ugly hack
     setPosts({...posts, ...newPosts})
