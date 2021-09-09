@@ -12,14 +12,24 @@ const StyledCard = styled(Card)`
       display: block !important; 
     }
   }
+  > div {
+    display: flex;
+    flex-direction: column;  
+  }
 `
 
 const StyledGatsbyImage = styled(GatsbyImage)`
-  background: ${props => props.theme.bg1};
+  background: ${props => props.theme.bg0};
 `
 
 const StyledDiv = styled.div`
   padding: ${rhythm(0.5)};
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  p:not(.bigText) {
+    flex-grow: 1;
+  }
 `
 
 const StyledTitle = styled.h3`

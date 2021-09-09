@@ -16,10 +16,7 @@ export const SpecificCarouselStyles = css`
   overflow: visible;
 
   li {
-    margin: 0 .5em;
-    [class*=card] {
-      height: auto;
-    }
+    margin: 0 .5em 4px .5em;
   }
 }
 
