@@ -155,7 +155,7 @@ const JgImage = (props) => {
             <div className="image-wrapper">
               {displayStyle === 'list' && <JgImageHeader />}
               <div aria-hidden={true}></div>
-              <img src=""/>
+              <img src="" onClick={() => handleImageClick(index)} {...otherProps}/>
             </div>
           </VisibilitySensor>
         </div>
