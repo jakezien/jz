@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react'
 import { firebaseApp } from "../../firebase.js"
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc } from "firebase/firestore/lite"
 import JgImageDetail from './jgImageDetail'
 
@@ -16,6 +17,9 @@ const JgDatabaseContextProvider = ({children}) => {
 
   const db = getFirestore(firebaseApp)
   const postsDbRef = collection(db, `jgPosts/`)
+  const storage = getStorage()
+
+  const storageRef = ref(storage)
   const postsQuery = query(postsDbRef)
   let unsubscribePosts
   const newPosts = {}
@@ -25,16 +29,40 @@ const JgDatabaseContextProvider = ({children}) => {
     postDocs.forEach( (doc) => createPostForDoc(doc) )
   }
 
+  const getCloudImage = async (name) => {
+    let path = ('/jg/' + name + '.jpg')
+    console.log('getCloudImage!!!', path)
+
+    let downloadURL = await getDownloadURL(ref(storage, path))
+      .catch(err => {console.error(err)})
+    console.log('downloadURL', downloadURL)
+    
+    let selector = `[data-id*="` + name + `"]`
+    console.log(selector)
+    let el = document.querySelector(selector)
+
+    let img = document.createElement('img')
+    img.setAttribute('src', downloadURL)
+
+    el?.appendChild(img)
+    return downloadURL
+  }
+
   const createPostForDoc = async (doc) => {
     let post = {};
     let commentsQuery = query(collection(db, `jgPosts/${doc.id}/comments`), orderBy('time', 'desc'))
     let hitsQuery = query(collection(db, `jgPosts/${doc.id}/dopamineHits`))
+    
     post['commentsQuery'] = commentsQuery
     post['hitsQuery'] = hitsQuery
 
+    post['url'] = await getCloudImage(doc.id)
     post['comments'] = await getQueryData(commentsQuery)
     post['hits'] = await getQueryData(hitsQuery)
 
+
+    // post['url'] = await getImgSrc(doc.id)
+    
     let localHit = localData?.current[doc.id]?.dopamineHit
     if (localHit) {
       console.log('localHit', localHit)
@@ -183,6 +211,11 @@ const JgDatabaseContextProvider = ({children}) => {
     return posts?.[name]?.comments
   }
 
+  const getImgSrc = (name) => {
+    // console.log('getImgSrc', posts, posts?.[name], posts?.[name].url)
+    return posts?.[name]?.url
+  }
+
   useLayoutEffect(() => {
     getPostsData()
     getLocalStorage()
@@ -198,6 +231,8 @@ const JgDatabaseContextProvider = ({children}) => {
       removeComment: removeComment,
       getDopamineHits: getDopamineHits,
       getComments: getComments,
+      getImgSrc: getImgSrc,
+      // getCloudImage: fImage,
       getLocalDopamineHit: getLocalDopamineHit,
       posts: posts,
   	}}>

@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { rhythm } from "../utils/typography"
 import { navigate } from '@reach/router'
@@ -109,6 +109,10 @@ const JgImage = (props) => {
     backToGrid,
     displayList 
   } = useContext(JgDisplayContext)
+
+  let { getImgSrc } = useContext(JgDatabaseContext)
+  
+
   let commentButton = useRef()
   let commentIconPortal = useRef()
 
@@ -122,9 +126,11 @@ const JgImage = (props) => {
     }
   }
 
+
+
   return (
 
-      <JgPost id={'post-'+index}>
+      <JgPost id={'post-'+index} data-id={imageNode.name}>
 
         <div>
           <VisibilitySensor 
@@ -138,6 +144,7 @@ const JgImage = (props) => {
           > 
             <div>
               {displayStyle === 'list' && <JgImageHeader />}
+              
               <GatsbyImage image={getImage(imageNode)} onClick={() => handleImageClick(index)} {...otherProps} />
             </div>
           </VisibilitySensor>
