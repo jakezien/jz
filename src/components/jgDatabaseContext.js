@@ -37,14 +37,12 @@ const JgDatabaseContextProvider = ({children}) => {
       .catch(err => {console.error(err)})
     console.log('downloadURL', downloadURL)
     
-    let selector = `[data-id*="` + name + `"]`
+    let selector = `[data-id*="` + name + `"] .image-wrapper img`
     console.log(selector)
     let el = document.querySelector(selector)
 
-    let img = document.createElement('img')
-    img.setAttribute('src', downloadURL)
+    el?.setAttribute('src', downloadURL)
 
-    el?.appendChild(img)
     return downloadURL
   }
 

@@ -58,8 +58,18 @@ import JgImageMetadata from './jgImageMetadata'
       flex: 1 0 0%;
       margin-right:3px;
       
-      .gatsby-image-wrapper {
-        cursor: pointer;
+      .image-wrapper , .gatsby-image-wrapper {
+        position: relative;
+
+        img {
+          cursor: pointer;
+          position:absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
         > div:first-child {
           padding-top: 100% !important;
         }
@@ -142,10 +152,10 @@ const JgImage = (props) => {
             resizeCheck={true}
             active={displayStyle === 'list'} 
           > 
-            <div>
+            <div className="image-wrapper">
               {displayStyle === 'list' && <JgImageHeader />}
-              
-              <GatsbyImage image={getImage(imageNode)} onClick={() => handleImageClick(index)} {...otherProps} />
+              <div aria-hidden={true}></div>
+              <img src=""/>
             </div>
           </VisibilitySensor>
         </div>
